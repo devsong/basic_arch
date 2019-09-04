@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.gzs.learn</groupId>
+		<artifactId>basic-arch-serial</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>serial-distribute-repository</artifactId>
+	<name>serial-distribute-repository</name>
+	<url>http://maven.apache.org</url>
+
+	<dependencies>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>serial-distribute-inf</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>tk.mybatis</groupId>
+			<artifactId>mapper-spring-boot-starter</artifactId>
+			<version>${mapper-starter.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.github.pagehelper</groupId>
+			<artifactId>pagehelper-spring-boot-starter</artifactId>
+			<version>${pagehelper-starter.version}</version>
+		</dependency>
+	</dependencies>
+</project>

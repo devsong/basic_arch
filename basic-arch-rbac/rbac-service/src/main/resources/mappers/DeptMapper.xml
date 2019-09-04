@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzs.learn.rbac.dao.DeptMapper">
+    <resultMap id="BaseResultMap" type="com.gzs.learn.rbac.po.DeptPo">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="num" jdbcType="INTEGER" property="num" />
+        <result column="pid" jdbcType="INTEGER" property="pid" />
+        <result column="pids" jdbcType="VARCHAR" property="pids" />
+        <result column="simplename" jdbcType="VARCHAR" property="simplename" />
+        <result column="fullname" jdbcType="VARCHAR" property="fullname" />
+        <result column="tips" jdbcType="VARCHAR" property="tips" />
+        <result column="version" jdbcType="INTEGER" property="version" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, num, pid, pids, simplename, fullname, tips, version
+    </sql>
+
+    <select id="tree" resultType="com.gzs.learn.rbac.inf.ZTreeNode">
+        select 
+            id,pid as pId,simplename as name,
+            (CASE WHEN (pId = 0 OR pId IS NULL) THEN 'true' ELSE 'false' END) as isOpen 
+        from
+            sys_dept
+    </select>
+
+    <select id="list" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+            <include refid="Base_Column_List" />
+        from 
+            sys_dept
+        <where>
+            <if test="condition != null and condition != ''">
+                 simplename like CONCAT('%',#{condition},'%') or fullname like CONCAT('%',#{condition},'%')
+            </if>
+        </where>
+        order by 
+            num ASC
+    </select>
+</mapper>
