@@ -22,7 +22,7 @@ public class DeptPo extends Base {
     /**
      * 父部门id
      */
-    private Integer pid;
+    private Long pid;
     /**
      * 父级ids
      */

@@ -1,7 +1,6 @@
 package com.gzs.learn.web.modular.system.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -14,6 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.gzs.learn.rbac.dubbo.DubboRbacRoleService;
+import com.gzs.learn.rbac.inf.RoleDto;
+import com.gzs.learn.rbac.inf.UserDto;
+import com.gzs.learn.rbac.inf.ZTreeNode;
 import com.gzs.learn.web.common.annotion.Permission;
 import com.gzs.learn.web.common.annotion.log.BussinessLog;
 import com.gzs.learn.web.common.constant.CommonResponse;
@@ -25,17 +28,13 @@ import com.gzs.learn.web.common.constant.tips.Tip;
 import com.gzs.learn.web.common.controller.BaseController;
 import com.gzs.learn.web.common.exception.BizExceptionEnum;
 import com.gzs.learn.web.common.exception.BussinessException;
-import com.gzs.learn.web.common.node.ZTreeNode;
-import com.gzs.learn.web.common.persistence.dao.RoleMapper;
-import com.gzs.learn.web.common.persistence.dao.UserMapper;
-import com.gzs.learn.web.common.persistence.model.Role;
-import com.gzs.learn.web.common.persistence.model.User;
 import com.gzs.learn.web.core.cache.CacheKit;
 import com.gzs.learn.web.core.log.LogObjectHolder;
 import com.gzs.learn.web.core.util.Convert;
 import com.gzs.learn.web.core.util.ToolUtil;
-import com.gzs.learn.web.modular.system.convert.RoleWarpper;
 import com.gzs.learn.web.modular.system.service.IRoleService;
+import com.gzs.learn.web.modular.system.service.IUserService;
+import com.gzs.learn.web.modular.system.wrapper.RoleWarpper;
 
 /**
  * 角色控制器
@@ -46,17 +45,16 @@ import com.gzs.learn.web.modular.system.service.IRoleService;
 @Controller
 @RequestMapping("/role")
 public class RoleController extends BaseController {
-
     private static String PREFIX = "/system/role";
 
     @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
-    private RoleMapper roleMapper;
+    private DubboRbacRoleService dubboRbacRoleService;
 
     @Autowired
     private IRoleService roleService;
+
+    @Autowired
+    private IUserService userService;
 
     /**
      * 跳转到角色列表页面
@@ -79,11 +77,11 @@ public class RoleController extends BaseController {
      */
     @Permission
     @RequestMapping(value = "/role_edit/{roleId}")
-    public String roleEdit(@PathVariable Integer roleId, Model model) {
+    public String roleEdit(@PathVariable Long roleId, Model model) {
         if (ToolUtil.isEmpty(roleId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
-        Role role = roleMapper.selectByPrimaryKey(roleId);
+        RoleDto role = dubboRbacRoleService.getRole(roleId);
         model.addAttribute(role);
         model.addAttribute("pName", ConstantFactory.me().getSingleRoleName(role.getPid()));
         model.addAttribute("deptName", ConstantFactory.me().getDeptName(role.getDeptid()));
@@ -96,7 +94,7 @@ public class RoleController extends BaseController {
      */
     @Permission
     @RequestMapping(value = "/role_assign/{roleId}")
-    public String roleAssign(@PathVariable("roleId") Integer roleId, Model model) {
+    public String roleAssign(@PathVariable("roleId") Long roleId, Model model) {
         if (ToolUtil.isEmpty(roleId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
@@ -112,7 +110,7 @@ public class RoleController extends BaseController {
     @RequestMapping(value = "/list")
     @ResponseBody
     public Object list(@RequestParam(required = false) String roleName) {
-        List<Map<String, Object>> roles = roleMapper.selectRoles(super.getPara("roleName"));
+        List<RoleDto> roles = dubboRbacRoleService.searchRoles(roleName);
         return CommonResponse.buildSuccess((List<?>) new RoleWarpper(roles).warp());
     }
 
@@ -123,12 +121,12 @@ public class RoleController extends BaseController {
     @BussinessLog(value = "添加角色", key = "name", dict = Dict.RoleDict)
     @Permission(Const.ADMIN_NAME)
     @ResponseBody
-    public Tip add(@Valid Role role, BindingResult result) {
+    public Tip add(@Valid RoleDto role, BindingResult result) {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         role.setId(null);
-        roleMapper.insert(role);
+        dubboRbacRoleService.insertRole(role);
         return SUCCESS_TIP;
     }
 
@@ -139,11 +137,11 @@ public class RoleController extends BaseController {
     @BussinessLog(value = "修改角色", key = "name", dict = Dict.RoleDict)
     @Permission(Const.ADMIN_NAME)
     @ResponseBody
-    public Tip edit(@Valid Role role, BindingResult result) {
+    public Tip edit(@Valid RoleDto role, BindingResult result) {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
-        roleMapper.updateByPrimaryKeySelective(role);
+        dubboRbacRoleService.updateRole(role);
 
         // 删除缓存
         CacheKit.removeAll(Cache.CONSTANT);
@@ -157,7 +155,7 @@ public class RoleController extends BaseController {
     @BussinessLog(value = "删除角色", key = "roleId", dict = Dict.DeleteDict)
     @Permission(Const.ADMIN_NAME)
     @ResponseBody
-    public Tip remove(@RequestParam Integer roleId) {
+    public Tip remove(@RequestParam Long roleId) {
         if (ToolUtil.isEmpty(roleId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
@@ -166,12 +164,8 @@ public class RoleController extends BaseController {
         if (roleId.equals(Const.ADMIN_ROLE_ID)) {
             throw new BussinessException(BizExceptionEnum.CANT_DELETE_ADMIN);
         }
-
-        // 缓存被删除的角色名称
         LogObjectHolder.me().set(ConstantFactory.me().getSingleRoleName(roleId));
-
-        roleService.delRoleById(roleId);
-
+        dubboRbacRoleService.delRole(roleId);
         // 删除缓存
         CacheKit.removeAll(Cache.CONSTANT);
         return SUCCESS_TIP;
@@ -182,11 +176,11 @@ public class RoleController extends BaseController {
      */
     @RequestMapping(value = "/view/{roleId}")
     @ResponseBody
-    public Tip view(@PathVariable Integer roleId) {
+    public Tip view(@PathVariable Long roleId) {
         if (ToolUtil.isEmpty(roleId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
-        roleMapper.selectByPrimaryKey(roleId);
+        dubboRbacRoleService.getRole(roleId);
         return SUCCESS_TIP;
     }
 
@@ -211,7 +205,7 @@ public class RoleController extends BaseController {
     @RequestMapping(value = "/roleTreeList")
     @ResponseBody
     public List<ZTreeNode> roleTreeList() {
-        List<ZTreeNode> roleTreeList = roleMapper.roleTreeList();
+        List<ZTreeNode> roleTreeList = dubboRbacRoleService.roleTreeList();
         roleTreeList.add(ZTreeNode.createParent());
         return roleTreeList;
     }
@@ -221,15 +215,15 @@ public class RoleController extends BaseController {
      */
     @RequestMapping(value = "/roleTreeListByUserId/{userId}")
     @ResponseBody
-    public List<ZTreeNode> roleTreeListByUserId(@PathVariable Integer userId) {
-        User theUser = userMapper.selectByPrimaryKey(userId);
+    public List<ZTreeNode> roleTreeListByUserId(@PathVariable Long userId) {
+        UserDto theUser = userService.selectByPrimaryKey(userId);
         String roleid = theUser.getRoleid();
         if (ToolUtil.isEmpty(roleid)) {
-            List<ZTreeNode> roleTreeList = roleMapper.roleTreeList();
+            List<ZTreeNode> roleTreeList = dubboRbacRoleService.roleTreeList();
             return roleTreeList;
         } else {
             String[] strArray = Convert.toStrArray(",", roleid);
-            List<ZTreeNode> roleTreeListByUserId = roleMapper.roleTreeListByRoleId(strArray);
+            List<ZTreeNode> roleTreeListByUserId = dubboRbacRoleService.roleTreeListByRoleId(strArray);
             return roleTreeListByUserId;
         }
     }

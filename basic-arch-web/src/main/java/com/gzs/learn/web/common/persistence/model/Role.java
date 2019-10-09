@@ -9,17 +9,12 @@ import lombok.EqualsAndHashCode;
  * <p>
  * 角色表
  * </p>
- *
- * @author stylefeng
- * @since 2017-07-11
  */
 @Table(name = "sys_role")
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class Role extends Base {
-
     private static final long serialVersionUID = 1L;
-
     /**
      * 序号
      */

@@ -24,7 +24,7 @@ public interface MenuMapper extends Mapper<MenuPo> {
      *
      * @return
      */
-    List<MenuPo> selectMenus(@Param("condition") String condition, @Param("level") String level);
+    List<MenuPo> searchMenus(@Param("condition") String condition, @Param("level") String level);
 
     /**
      * 根据条件查询菜单
@@ -33,7 +33,7 @@ public interface MenuMapper extends Mapper<MenuPo> {
      * @date 2017年2月12日 下午9:14:34
      */
     @Select("select menuid from sys_relation where roleid = #{roleId}")
-    List<Integer> getMenuIdsByRoleId(@Param("roleId") Integer roleId);
+    List<Integer> getMenuIdsByRoleId(@Param("roleId") Long roleId);
 
     /**
      * 获取菜单列表树
@@ -59,7 +59,7 @@ public interface MenuMapper extends Mapper<MenuPo> {
      * @date 2017年2月19日 下午4:10:59
      */
     @Delete("delete from sys_relation where menuid = #{menuId}")
-    int deleteRelationByMenu(@Param("menuId")Integer menuId);
+    int deleteRelationByMenu(@Param("menuId")Long menuId);
 
     /**
      * 获取资源url通过角色id
@@ -68,7 +68,7 @@ public interface MenuMapper extends Mapper<MenuPo> {
      * @return
      * @date 2017年2月19日 下午7:12:38
      */
-    List<String> getResUrlsByRoleId(Integer roleId);
+    List<String> getResUrlsByRoleId(Long roleId);
 
     /**
      * 根据角色获取菜单
@@ -77,5 +77,5 @@ public interface MenuMapper extends Mapper<MenuPo> {
      * @return
      * @date 2017年2月19日 下午10:35:40
      */
-    List<MenuNodeDto> getMenusByRoleIds(List<Integer> roleIds);
+    List<MenuNodeDto> getMenusByRoleIds(List<Long> roleIds);
 }

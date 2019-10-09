@@ -22,7 +22,7 @@ public class DictPo extends Base {
     /**
      * 父级字典
      */
-    private Integer pid;
+    private Long pid;
     /**
      * 名称
      */

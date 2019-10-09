@@ -4,77 +4,66 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.gzs.learn.web.common.annotion.DataSource;
-import com.gzs.learn.web.common.constant.DSEnum;
-import com.gzs.learn.web.common.node.MenuNode;
-import com.gzs.learn.web.common.persistence.dao.MenuMapper;
-import com.gzs.learn.web.common.persistence.dao.UserMapper;
-import com.gzs.learn.web.common.persistence.model.User;
-import com.gzs.learn.web.core.datascope.DataScope;
-import com.gzs.learn.web.modular.system.dto.UserSearchDto;
+import com.gzs.learn.rbac.dubbo.DubboRbacMenuService;
+import com.gzs.learn.rbac.dubbo.DubboRbacUserService;
+import com.gzs.learn.rbac.inf.DataScope;
+import com.gzs.learn.rbac.inf.MenuNodeDto;
+import com.gzs.learn.rbac.inf.UserDto;
+import com.gzs.learn.rbac.inf.UserSearchDto;
 import com.gzs.learn.web.modular.system.service.IUserService;
 
-import tk.mybatis.mapper.entity.Example;
-
 @Component
-@DataSource(DSEnum.DATA_SOURCE_GUNS)
-@Transactional
 public class UserServiceImpl implements IUserService {
     @Autowired
-    private UserMapper userMapper;
+    private DubboRbacUserService dubboRbacUserService;
 
     @Autowired
-    private MenuMapper menuMapper;
+    private DubboRbacMenuService dubboRbacMenuService;
 
     @Override
-    public List<User> selectUsers(DataScope dataScope, UserSearchDto userSearchDto) {
-        return userMapper.selectUsers(dataScope, userSearchDto);
+    public List<UserDto> selectUsers(DataScope dataScope, UserSearchDto userSearchDto) {
+        return dubboRbacUserService.search(dataScope, userSearchDto);
     }
 
     @Override
-    public User selectByPrimaryKey(Long userId) {
-        return userMapper.selectByPrimaryKey(userId);
+    public UserDto selectByPrimaryKey(Long userId) {
+        return dubboRbacUserService.getUserById(userId);
     }
 
     @Override
-    public boolean updateByPrimaryKey(User user) {
-        return userMapper.updateByPrimaryKey(user) == 1;
+    public boolean updateByPrimaryKey(UserDto user) {
+        return dubboRbacUserService.updateUser(user) == 1;
     }
 
     @Override
-    public User getByAccount(String account) {
-        Example example = new Example(User.class);
-        example.createCriteria().andEqualTo("account", account);
-        return userMapper.selectOneByExample(example);
+    public UserDto getByAccount(String account) {
+        return dubboRbacUserService.getUserByAccount(account);
     }
 
     @Override
-    public boolean insert(User user) {
-        return userMapper.insertSelective(user) == 1;
+    public boolean insert(UserDto user) {
+        return dubboRbacUserService.insertUser(user) == 1;
     }
 
     @Override
-    public boolean updateByPrimaryKeySelective(User user) {
-        return userMapper.updateByPrimaryKeySelective(user) == 1;
+    public boolean updateByPrimaryKeySelective(UserDto user) {
+        return dubboRbacUserService.updateUser(user) == 1;
     }
 
     @Override
     public boolean setStatus(Long userId, int status) {
-        userMapper.setStatus(userId, status);
-        return true;
+        return dubboRbacUserService.setStatus(userId, status);
     }
 
     @Override
     public boolean setRoles(Long userId, String roleIds) {
-        userMapper.setRoles(userId, roleIds);
-        return true;
+        return dubboRbacUserService.setRoles(userId, roleIds);
     }
 
     @Override
-    public List<MenuNode> getMenusByRoleIds(List<Integer> roleList) {
-        return menuMapper.getMenusByRoleIds(roleList);
+    public List<MenuNodeDto> getMenusByRoleIds(List<Long> roleList) {
+        return dubboRbacMenuService.getMenuIdsByRoleIds(roleList);
     }
 
 }

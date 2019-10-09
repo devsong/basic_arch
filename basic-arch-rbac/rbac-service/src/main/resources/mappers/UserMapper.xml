@@ -15,12 +15,13 @@
         <result column="roleid" jdbcType="VARCHAR" property="roleid" />
         <result column="deptid" jdbcType="INTEGER" property="deptid" />
         <result column="status" jdbcType="INTEGER" property="status" />
-        <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
         <result column="version" jdbcType="INTEGER" property="version" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createtime" />
+        <result column="timestamp" jdbcType="TIMESTAMP" property="timestamp"  />
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,avatar,account,password,salt,name,birthday,sex,email,phone,roleid,deptid,status,createtime,version
+        id,avatar,account,password,salt,name,birthday,sex,email,phone,roleid,deptid,status,version,create_time,timestamp
     </sql>
 
     <select id="selectUsers" resultMap="BaseResultMap" parameterType="java.util.Map">

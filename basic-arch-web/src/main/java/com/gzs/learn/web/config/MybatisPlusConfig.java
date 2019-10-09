@@ -15,7 +15,6 @@ import com.gzs.learn.web.common.aop.AopOrder;
 import com.gzs.learn.web.common.constant.DSEnum;
 import com.gzs.learn.web.config.properties.GunsDataSourceProperties;
 import com.gzs.learn.web.config.properties.LogDataSourceProperties;
-import com.gzs.learn.web.core.datascope.DataScopeInterceptor;
 import com.gzs.learn.web.core.mutidatesource.DynamicDataSource;
 
 import tk.mybatis.spring.annotation.MapperScan;
@@ -84,13 +83,5 @@ public class MybatisPlusConfig {
         dynamicDataSource.setTargetDataSources(map);
         dynamicDataSource.setDefaultTargetDataSource(dataSourceGuns);
         return dynamicDataSource;
-    }
-
-    /**
-     * 数据范围mybatis插件
-     */
-    @Bean
-    public DataScopeInterceptor dataScopeInterceptor() {
-        return new DataScopeInterceptor();
     }
 }

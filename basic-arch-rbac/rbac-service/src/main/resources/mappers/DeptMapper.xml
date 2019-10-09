@@ -10,10 +10,12 @@
         <result column="fullname" jdbcType="VARCHAR" property="fullname" />
         <result column="tips" jdbcType="VARCHAR" property="tips" />
         <result column="version" jdbcType="INTEGER" property="version" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createtime" />
+        <result column="timestamp" jdbcType="TIMESTAMP" property="timestamp" />
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, num, pid, pids, simplename, fullname, tips, version
+        id, num, pid, pids, simplename, fullname, tips, version,create_time,timestamp
     </sql>
 
     <select id="tree" resultType="com.gzs.learn.rbac.inf.ZTreeNode">
@@ -24,7 +26,7 @@
             sys_dept
     </select>
 
-    <select id="list" resultMap="BaseResultMap" parameterType="java.util.Map">
+    <select id="search" resultMap="BaseResultMap" parameterType="java.util.Map">
         select
             <include refid="Base_Column_List" />
         from 

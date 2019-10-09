@@ -18,7 +18,7 @@ import com.gzs.learn.web.common.persistence.model.Notice;
 import com.gzs.learn.web.core.log.LogObjectHolder;
 import com.gzs.learn.web.core.shiro.ShiroKit;
 import com.gzs.learn.web.core.util.ToolUtil;
-import com.gzs.learn.web.modular.system.convert.NoticeWrapper;
+import com.gzs.learn.web.modular.system.wrapper.NoticeWrapper;
 
 import javax.annotation.Resource;
 import java.util.Date;

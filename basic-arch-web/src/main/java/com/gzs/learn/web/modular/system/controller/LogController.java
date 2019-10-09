@@ -18,7 +18,7 @@ import com.gzs.learn.web.common.persistence.model.logs.OperationLog;
 import com.gzs.learn.web.core.support.BeanKit;
 import com.gzs.learn.web.modular.biz.bo.QueryLogBo;
 import com.gzs.learn.web.modular.biz.service.ISystemLogService;
-import com.gzs.learn.web.modular.system.convert.LogWarpper;
+import com.gzs.learn.web.modular.system.wrapper.LogWarpper;
 
 /**
  * 日志管理的控制器

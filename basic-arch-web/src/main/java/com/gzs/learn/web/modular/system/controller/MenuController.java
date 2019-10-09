@@ -1,5 +1,11 @@
 package com.gzs.learn.web.modular.system.controller;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -8,6 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.gzs.learn.rbac.dubbo.DubboRbacMenuService;
+import com.gzs.learn.rbac.dubbo.DubboRbacRoleService;
+import com.gzs.learn.rbac.inf.MenuDto;
+import com.gzs.learn.rbac.inf.ZTreeNode;
 import com.gzs.learn.web.common.annotion.Permission;
 import com.gzs.learn.web.common.annotion.log.BussinessLog;
 import com.gzs.learn.web.common.constant.Const;
@@ -18,19 +28,12 @@ import com.gzs.learn.web.common.constant.tips.Tip;
 import com.gzs.learn.web.common.controller.BaseController;
 import com.gzs.learn.web.common.exception.BizExceptionEnum;
 import com.gzs.learn.web.common.exception.BussinessException;
-import com.gzs.learn.web.common.node.ZTreeNode;
-import com.gzs.learn.web.common.persistence.dao.MenuMapper;
 import com.gzs.learn.web.common.persistence.model.Menu;
 import com.gzs.learn.web.core.log.LogObjectHolder;
 import com.gzs.learn.web.core.support.BeanKit;
+import com.gzs.learn.web.core.util.Convert;
 import com.gzs.learn.web.core.util.ToolUtil;
-import com.gzs.learn.web.modular.system.convert.MenuWarpper;
-import com.gzs.learn.web.modular.system.service.IMenuService;
-
-import javax.annotation.Resource;
-import javax.validation.Valid;
-import java.util.List;
-import java.util.Map;
+import com.gzs.learn.web.modular.system.wrapper.MenuWarpper;
 
 /**
  * 菜单控制器
@@ -44,11 +47,11 @@ public class MenuController extends BaseController {
 
     private static String PREFIX = "/system/menu/";
 
-    @Resource
-    MenuMapper menuMapper;
+    @Autowired
+    private DubboRbacMenuService dubboRbacMenuService;
 
-    @Resource
-    IMenuService menuService;
+    @Autowired
+    private DubboRbacRoleService dubboRbacRoleService;
 
     /**
      * 跳转到菜单列表列表页面
@@ -71,22 +74,22 @@ public class MenuController extends BaseController {
      */
     @Permission(Const.ADMIN_NAME)
     @RequestMapping(value = "/menu_edit/{menuId}")
-    public String menuEdit(@PathVariable Integer menuId, Model model) {
+    public String menuEdit(@PathVariable Long menuId, Model model) {
         if (ToolUtil.isEmpty(menuId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
-        Menu menu = menuMapper.selectByPrimaryKey(menuId);
+        MenuDto menu = dubboRbacMenuService.getMenu(menuId);
 
-        //获取父级菜单的id
+        // 获取父级菜单的id
         Menu temp = new Menu();
         temp.setCode(menu.getPcode());
-        Menu pMenu = menuMapper.selectOne(temp);
+        MenuDto pMenu = dubboRbacMenuService.getMenuByCode(menu.getPcode());
 
-        //如果父级是顶级菜单
+        // 如果父级是顶级菜单
         if (pMenu == null) {
             menu.setPcode("0");
         } else {
-            //设置父级菜单的code为父级菜单的id
+            // 设置父级菜单的code为父级菜单的id
             menu.setPcode(String.valueOf(pMenu.getId()));
         }
 
@@ -104,13 +107,13 @@ public class MenuController extends BaseController {
     @RequestMapping(value = "/edit")
     @BussinessLog(value = "修改菜单", key = "name", dict = Dict.MenuDict)
     @ResponseBody
-    public Tip edit(@Valid Menu menu, BindingResult result) {
+    public Tip edit(@Valid MenuDto menu, BindingResult result) {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
-        //设置父级菜单编号
+        // 设置父级菜单编号
         menuSetPcode(menu);
-        menuMapper.updateByPrimaryKeySelective(menu);
+        dubboRbacMenuService.updateMenu(menu);
         return SUCCESS_TIP;
     }
 
@@ -121,7 +124,7 @@ public class MenuController extends BaseController {
     @RequestMapping(value = "/list")
     @ResponseBody
     public Object list(@RequestParam(required = false) String menuName, @RequestParam(required = false) String level) {
-        List<Map<String, Object>> menus = menuMapper.selectMenus(menuName, level);
+        List<MenuDto> menus = dubboRbacMenuService.searchMenus(menuName, level);
         return super.warpObject(new MenuWarpper(menus));
     }
 
@@ -132,22 +135,21 @@ public class MenuController extends BaseController {
     @RequestMapping(value = "/add")
     @BussinessLog(value = "菜单新增", key = "name", dict = Dict.MenuDict)
     @ResponseBody
-    public Tip add(@Valid Menu menu, BindingResult result) {
+    public Tip add(@Valid MenuDto menu, BindingResult result) {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
 
-        //判断是否存在该编号
+        // 判断是否存在该编号
         String existedMenuName = ConstantFactory.me().getMenuNameByCode(menu.getCode());
         if (ToolUtil.isNotEmpty(existedMenuName)) {
             throw new BussinessException(BizExceptionEnum.EXISTED_THE_MENU);
         }
 
-        //设置父级菜单编号
+        // 设置父级菜单编号
         menuSetPcode(menu);
-
         menu.setStatus(MenuStatus.ENABLE.getCode());
-        menuMapper.insert(menu);
+        dubboRbacMenuService.insertMenu(menu);
         return SUCCESS_TIP;
     }
 
@@ -158,15 +160,14 @@ public class MenuController extends BaseController {
     @RequestMapping(value = "/remove")
     @BussinessLog(value = "删除菜单", key = "menuId", dict = Dict.DeleteDict)
     @ResponseBody
-    public Tip remove(@RequestParam Integer menuId) {
+    public Tip remove(@RequestParam Long menuId) {
         if (ToolUtil.isEmpty(menuId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
 
-        //缓存菜单的名称
+        // 缓存菜单的名称
         LogObjectHolder.me().set(ConstantFactory.me().getMenuName(menuId));
-
-        menuService.delMenuContainSubMenus(menuId);
+        dubboRbacMenuService.delMenuContainSubMenus(menuId);
         return SUCCESS_TIP;
     }
 
@@ -175,11 +176,11 @@ public class MenuController extends BaseController {
      */
     @RequestMapping(value = "/view/{menuId}")
     @ResponseBody
-    public Tip view(@PathVariable Integer menuId) {
+    public Tip view(@PathVariable Long menuId) {
         if (ToolUtil.isEmpty(menuId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
-        menuMapper.selectByPrimaryKey(menuId);
+        dubboRbacMenuService.getMenu(menuId);
         return SUCCESS_TIP;
     }
 
@@ -189,7 +190,7 @@ public class MenuController extends BaseController {
     @RequestMapping(value = "/menuTreeList")
     @ResponseBody
     public List<ZTreeNode> menuTreeList() {
-        List<ZTreeNode> roleTreeList = menuMapper.menuTreeList();
+        List<ZTreeNode> roleTreeList = dubboRbacMenuService.menuTreeList();
         return roleTreeList;
     }
 
@@ -199,7 +200,7 @@ public class MenuController extends BaseController {
     @RequestMapping(value = "/selectMenuTreeList")
     @ResponseBody
     public List<ZTreeNode> selectMenuTreeList() {
-        List<ZTreeNode> roleTreeList = menuMapper.menuTreeList();
+        List<ZTreeNode> roleTreeList = dubboRbacRoleService.roleTreeList();
         roleTreeList.add(ZTreeNode.createParent());
         return roleTreeList;
     }
@@ -209,13 +210,13 @@ public class MenuController extends BaseController {
      */
     @RequestMapping(value = "/menuTreeListByRoleId/{roleId}")
     @ResponseBody
-    public List<ZTreeNode> menuTreeListByRoleId(@PathVariable Integer roleId) {
-        List<Integer> menuIds = menuMapper.getMenuIdsByRoleId(roleId);
+    public List<ZTreeNode> menuTreeListByRoleId(@PathVariable Long roleId) {
+        List<Long> menuIds = dubboRbacMenuService.getMenuIdsByRoleId(roleId);
         if (ToolUtil.isEmpty(menuIds)) {
-            List<ZTreeNode> roleTreeList = menuMapper.menuTreeList();
+            List<ZTreeNode> roleTreeList = dubboRbacMenuService.menuTreeList();
             return roleTreeList;
         } else {
-            List<ZTreeNode> roleTreeListByUserId = menuMapper.menuTreeListByMenuIds(menuIds);
+            List<ZTreeNode> roleTreeListByUserId = dubboRbacMenuService.menuTreeListByMenuIds(menuIds);
             return roleTreeListByUserId;
         }
     }
@@ -223,24 +224,24 @@ public class MenuController extends BaseController {
     /**
      * 根据请求的父级菜单编号设置pcode和层级
      */
-    private void menuSetPcode(@Valid Menu menu) {
+    private void menuSetPcode(@Valid MenuDto menu) {
         if (ToolUtil.isEmpty(menu.getPcode()) || menu.getPcode().equals("0")) {
             menu.setPcode("0");
             menu.setPcodes("[0],");
             menu.setLevels(1);
         } else {
-            int code = Integer.parseInt(menu.getPcode());
-            Menu pMenu = menuMapper.selectByPrimaryKey(code);
-            Integer pLevels = pMenu.getLevels();
-            menu.setPcode(pMenu.getCode());
+            Long code = Convert.toLong(menu.getPcode());
+            MenuDto menuDto = dubboRbacMenuService.getMenu(code);
+            Integer pLevels = menuDto.getLevels();
+            menu.setPcode(menuDto.getCode());
 
-            //如果编号和父编号一致会导致无限递归
+            // 如果编号和父编号一致会导致无限递归
             if (menu.getCode().equals(menu.getPcode())) {
                 throw new BussinessException(BizExceptionEnum.MENU_PCODE_COINCIDENCE);
             }
 
             menu.setLevels(pLevels + 1);
-            menu.setPcodes(pMenu.getPcodes() + "[" + pMenu.getCode() + "],");
+            menu.setPcodes(menuDto.getPcodes() + "[" + menuDto.getCode() + "],");
         }
     }
 

@@ -1,12 +1,12 @@
 package com.gzs.learn.web.common.constant.factory;
 
+import java.util.List;
+
 import org.springframework.cache.annotation.Cacheable;
 
+import com.gzs.learn.rbac.inf.DictDto;
 import com.gzs.learn.web.common.constant.cache.Cache;
 import com.gzs.learn.web.common.constant.cache.CacheKey;
-import com.gzs.learn.web.common.persistence.model.Dict;
-
-import java.util.List;
 
 /**
  * 常量生产工厂的接口
@@ -22,7 +22,7 @@ public interface IConstantFactory {
      * @author stylefeng
      * @Date 2017/5/9 23:41
      */
-    String getUserNameById(Integer userId);
+    String getUserNameById(Long userId);
 
     /**
      * 根据用户id获取用户账号
@@ -30,7 +30,7 @@ public interface IConstantFactory {
      * @author stylefeng
      * @date 2017年5月16日21:55:371
      */
-    String getUserAccountById(Integer userId);
+    String getUserAccountById(Long userId);
 
     /**
      * 通过角色ids获取角色名称
@@ -42,19 +42,19 @@ public interface IConstantFactory {
      * 通过角色id获取角色名称
      */
     @Cacheable(value = Cache.CONSTANT, key = "'" + CacheKey.SINGLE_ROLE_NAME + "'+#roleId")
-    String getSingleRoleName(Integer roleId);
+    String getSingleRoleName(Long roleId);
 
     /**
      * 通过角色id获取角色英文名称
      */
     @Cacheable(value = Cache.CONSTANT, key = "'" + CacheKey.SINGLE_ROLE_TIP + "'+#roleId")
-    String getSingleRoleTip(Integer roleId);
+    String getSingleRoleTip(Long roleId);
 
     /**
      * 获取部门名称
      */
     @Cacheable(value = Cache.CONSTANT, key = "'" + CacheKey.DEPT_NAME + "'+#deptId")
-    String getDeptName(Integer deptId);
+    String getDeptName(Long deptId);
 
     /**
      * 获取菜单的名称们(多个)
@@ -64,7 +64,7 @@ public interface IConstantFactory {
     /**
      * 获取菜单名称
      */
-    String getMenuName(Integer menuId);
+    String getMenuName(Long menuId);
 
     /**
      * 获取菜单名称通过编号
@@ -84,7 +84,7 @@ public interface IConstantFactory {
     /**
      * 根据字典名称和字典中的值获取对应的名称
      */
-    @Cacheable(value = Cache.CONSTANT, key = "'" + CacheKey.DICT_NAME + "'+#name+'_'+#val")
+    // @Cacheable(value = Cache.CONSTANT, key = "'" + CacheKey.DICT_NAME + "'+#name+'_'+#val")
     String getDictsByName(String name, Integer val);
 
     /**
@@ -105,7 +105,7 @@ public interface IConstantFactory {
     /**
      * 查询字典
      */
-    List<Dict> findSubDict(Integer id);
+    List<DictDto> findSubDict(Integer id);
 
     /**
      * 获取被缓存的对象(用户删除业务)
@@ -115,11 +115,11 @@ public interface IConstantFactory {
     /**
      * 获取子部门id
      */
-    List<Integer> getSubDeptId(Integer deptid);
+    List<Long> getSubDeptId(Long deptid);
 
     /**
      * 获取所有父部门id
      */
-    List<Integer> getParentDeptIds(Integer deptid);
+    List<Long> getParentDeptIds(Long deptid);
 
 }

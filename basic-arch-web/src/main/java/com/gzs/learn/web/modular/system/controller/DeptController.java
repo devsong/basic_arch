@@ -1,5 +1,8 @@
 package com.gzs.learn.web.modular.system.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -7,24 +10,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.gzs.learn.rbac.dubbo.DubboRbacDeptService;
+import com.gzs.learn.rbac.inf.DeptDto;
+import com.gzs.learn.rbac.inf.ZTreeNode;
 import com.gzs.learn.web.common.annotion.Permission;
 import com.gzs.learn.web.common.annotion.log.BussinessLog;
+import com.gzs.learn.web.common.constant.CommonResponse;
 import com.gzs.learn.web.common.constant.Dict;
 import com.gzs.learn.web.common.constant.factory.ConstantFactory;
+import com.gzs.learn.web.common.constant.tips.Tip;
 import com.gzs.learn.web.common.controller.BaseController;
 import com.gzs.learn.web.common.exception.BizExceptionEnum;
 import com.gzs.learn.web.common.exception.BussinessException;
-import com.gzs.learn.web.common.node.ZTreeNode;
-import com.gzs.learn.web.common.persistence.dao.DeptMapper;
-import com.gzs.learn.web.common.persistence.model.Dept;
 import com.gzs.learn.web.core.log.LogObjectHolder;
 import com.gzs.learn.web.core.util.ToolUtil;
-import com.gzs.learn.web.modular.system.convert.DeptWarpper;
-import com.gzs.learn.web.modular.system.service.IDeptService;
-
-import javax.annotation.Resource;
-import java.util.List;
-import java.util.Map;
+import com.gzs.learn.web.modular.system.wrapper.DeptWarpper;
 
 /**
  * 部门控制器
@@ -35,12 +35,9 @@ import java.util.Map;
 @Controller
 @RequestMapping("/dept")
 public class DeptController extends BaseController {
-
-    @Resource
-    DeptMapper deptMapper;
-    @Resource
-    IDeptService deptService;
     private String PREFIX = "/system/dept/";
+    @Autowired
+    private DubboRbacDeptService dubboRbacDeptService;
 
     /**
      * 跳转到部门管理首页
@@ -63,8 +60,8 @@ public class DeptController extends BaseController {
      */
     @Permission
     @RequestMapping("/dept_update/{deptId}")
-    public String deptUpdate(@PathVariable Integer deptId, Model model) {
-        Dept dept = deptMapper.selectByPrimaryKey(deptId);
+    public String deptUpdate(@PathVariable Long deptId, Model model) {
+        DeptDto dept = dubboRbacDeptService.getDept(deptId);
         model.addAttribute(dept);
         model.addAttribute("pName", ConstantFactory.me().getDeptName(dept.getPid()));
         LogObjectHolder.me().set(dept);
@@ -77,7 +74,7 @@ public class DeptController extends BaseController {
     @RequestMapping(value = "/tree")
     @ResponseBody
     public List<ZTreeNode> tree() {
-        List<ZTreeNode> tree = deptMapper.tree();
+        List<ZTreeNode> tree = dubboRbacDeptService.getDeptTree();
         tree.add(ZTreeNode.createParent());
         return tree;
     }
@@ -89,13 +86,13 @@ public class DeptController extends BaseController {
     @RequestMapping(value = "/add")
     @Permission
     @ResponseBody
-    public Object add(Dept dept) {
+    public Object add(DeptDto dept) {
         if (ToolUtil.isOneEmpty(dept, dept.getSimplename())) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
-        //完善pids,根据pid拿到pid的pids
+        // 完善pids,根据pid拿到pid的pids
         deptSetPids(dept);
-        return deptMapper.insert(dept);
+        return dubboRbacDeptService.insertDept(dept);
     }
 
     /**
@@ -105,7 +102,7 @@ public class DeptController extends BaseController {
     @Permission
     @ResponseBody
     public Object list(String condition) {
-        List<Map<String, Object>> list = deptMapper.list(condition);
+        List<DeptDto> list = dubboRbacDeptService.searchDepts(condition);
         return super.warpObject(new DeptWarpper(list));
     }
 
@@ -115,8 +112,9 @@ public class DeptController extends BaseController {
     @RequestMapping(value = "/detail/{deptId}")
     @Permission
     @ResponseBody
-    public Object detail(@PathVariable("deptId") Integer deptId) {
-        return deptMapper.selectByPrimaryKey(deptId);
+    public CommonResponse<DeptDto> detail(@PathVariable("deptId") Long deptId) {
+        DeptDto deptDto = dubboRbacDeptService.getDept(deptId);
+        return CommonResponse.buildSuccess(deptDto);
     }
 
     /**
@@ -126,12 +124,12 @@ public class DeptController extends BaseController {
     @RequestMapping(value = "/update")
     @Permission
     @ResponseBody
-    public Object update(Dept dept) {
+    public Object update(DeptDto dept) {
         if (ToolUtil.isEmpty(dept) || dept.getId() == null) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         deptSetPids(dept);
-        deptMapper.updateByPrimaryKeySelective(dept);
+        dubboRbacDeptService.updateDept(dept);
         return SUCCESS_TIP;
     }
 
@@ -142,23 +140,19 @@ public class DeptController extends BaseController {
     @RequestMapping(value = "/delete")
     @Permission
     @ResponseBody
-    public Object delete(@RequestParam Integer deptId) {
-
-        //缓存被删除的部门名称
+    public Tip delete(@RequestParam Long deptId) {
         LogObjectHolder.me().set(ConstantFactory.me().getDeptName(deptId));
-
-        deptService.deleteDept(deptId);
-
+        dubboRbacDeptService.deleteDept(deptId);
         return SUCCESS_TIP;
     }
 
-    private void deptSetPids(Dept dept) {
-        if (ToolUtil.isEmpty(dept.getPid()) || dept.getPid().equals(0)) {
-            dept.setPid(0);
+    private void deptSetPids(DeptDto dept) {
+        if (ToolUtil.isEmpty(dept.getPid()) || dept.getPid().equals(0L)) {
+            dept.setPid(0L);
             dept.setPids("[0],");
         } else {
-            int pid = dept.getPid();
-            Dept temp = deptMapper.selectByPrimaryKey(pid);
+            Long pid = dept.getPid();
+            DeptDto temp = dubboRbacDeptService.getDept(dept.getId());
             String pids = temp.getPids();
             dept.setPid(pid);
             dept.setPids(pids + "[" + pid + "],");

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzs.learn.rbac.dao.NoticeMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gzs.learn.rbac.po.NoticePo">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
+        <result column="creater" property="creater" jdbcType="VARCHAR" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createtime" />
+        <result column="timestamp" jdbcType="TIMESTAMP" property="timestamp"  />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,title,type,content,creater,create_time,timestamp
+    </sql>
+
+    <select id="list" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+            <include refid="Base_Column_List" />
+        from sys_notice
+        <if test="condition != null and condition != ''">
+            where title like CONCAT('%',#{condition},'%') or content like CONCAT('%',#{condition},'%')
+        </if>
+        order by
+            id DESC
+    </select>
+</mapper>

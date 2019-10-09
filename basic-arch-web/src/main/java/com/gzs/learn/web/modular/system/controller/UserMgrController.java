@@ -25,6 +25,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.collect.Maps;
+import com.gzs.learn.rbac.inf.DataScope;
+import com.gzs.learn.rbac.inf.UserDto;
+import com.gzs.learn.rbac.inf.UserSearchDto;
 import com.gzs.learn.web.common.annotion.Permission;
 import com.gzs.learn.web.common.annotion.log.BussinessLog;
 import com.gzs.learn.web.common.constant.CommonResponse;
@@ -36,18 +39,13 @@ import com.gzs.learn.web.common.constant.tips.Tip;
 import com.gzs.learn.web.common.controller.BaseController;
 import com.gzs.learn.web.common.exception.BizExceptionEnum;
 import com.gzs.learn.web.common.exception.BussinessException;
-import com.gzs.learn.web.common.persistence.model.User;
 import com.gzs.learn.web.config.properties.GunsProperties;
-import com.gzs.learn.web.core.datascope.DataScope;
 import com.gzs.learn.web.core.log.LogObjectHolder;
 import com.gzs.learn.web.core.shiro.ShiroKit;
 import com.gzs.learn.web.core.shiro.ShiroUser;
 import com.gzs.learn.web.core.util.ToolUtil;
-import com.gzs.learn.web.modular.system.convert.UserWarpper;
-import com.gzs.learn.web.modular.system.dto.UserDto;
-import com.gzs.learn.web.modular.system.dto.UserSearchDto;
-import com.gzs.learn.web.modular.system.factory.UserFactory;
 import com.gzs.learn.web.modular.system.service.IUserService;
+import com.gzs.learn.web.modular.system.wrapper.UserWarpper;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -62,7 +60,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UserMgrController extends BaseController {
     private static String PREFIX = "/system/user/";
-
     @Autowired
     private GunsProperties gunsProperties;
     @Autowired
@@ -93,7 +90,7 @@ public class UserMgrController extends BaseController {
         if (ToolUtil.isEmpty(userId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
-        User user = userService.selectByPrimaryKey(userId);
+        UserDto user = userService.selectByPrimaryKey(userId);
         model.addAttribute("userId", userId);
         model.addAttribute("userAccount", user.getAccount());
         return PREFIX + "user_roleassign.html";
@@ -109,7 +106,7 @@ public class UserMgrController extends BaseController {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         assertAuth(id);
-        User user = userService.selectByPrimaryKey(id);
+        UserDto user = userService.selectByPrimaryKey(id);
         model.addAttribute(user);
         model.addAttribute("roleName", ConstantFactory.me().getRoleName(user.getRoleid()));
         model.addAttribute("deptName", ConstantFactory.me().getDeptName(user.getDeptid()));
@@ -126,7 +123,7 @@ public class UserMgrController extends BaseController {
         if (ToolUtil.isEmpty(userId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
-        User user = userService.selectByPrimaryKey(userId);
+        UserDto user = userService.selectByPrimaryKey(userId);
         user.setAvatar(gunsProperties.getFilePrefix() + user.getAvatar());
         model.addAttribute(user);
         model.addAttribute("roleName", ConstantFactory.me().getRoleName(user.getRoleid()));
@@ -153,7 +150,7 @@ public class UserMgrController extends BaseController {
             throw new BussinessException(BizExceptionEnum.TWO_PWD_NOT_MATCH);
         }
         Long userId = ShiroKit.getUser().getId();
-        User user = userService.selectByPrimaryKey(userId);
+        UserDto user = userService.selectByPrimaryKey(userId);
         String oldMd5 = ShiroKit.md5(oldPassword, user.getSalt());
         if (user.getPassword().equals(oldMd5)) {
             String newMd5 = ShiroKit.md5(newPassword, user.getSalt());
@@ -176,12 +173,12 @@ public class UserMgrController extends BaseController {
             userSearchDto.setBeginTime(split[0]);
             userSearchDto.setEndTime(split[1]);
         }
-        List<User> users = null;
+        List<UserDto> users = null;
         if (ShiroKit.isAdmin()) {
             users = userService.selectUsers(null, userSearchDto);
         } else {
             Long userId = ShiroKit.getUser().getId();
-            User user = userService.selectByPrimaryKey(userId);
+            UserDto user = userService.selectByPrimaryKey(userId);
             DataScope dataScope = new DataScope(ShiroKit.getDeptDataScope(user));
             users = userService.selectUsers(dataScope, userSearchDto);
         }
@@ -202,11 +199,11 @@ public class UserMgrController extends BaseController {
         }
 
         // 判断账号是否重复
-        User theUser = userService.getByAccount(user.getAccount());
+        UserDto theUser = userService.getByAccount(user.getAccount());
         if (theUser != null) {
             throw new BussinessException(BizExceptionEnum.USER_ALREADY_REG);
         }
-        theUser = new User();
+        theUser = new UserDto();
         try {
             BeanUtils.copyProperties(theUser, user);
         } catch (IllegalAccessException | InvocationTargetException e) {
@@ -237,13 +234,13 @@ public class UserMgrController extends BaseController {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         if (ShiroKit.hasRole(Const.ADMIN_NAME)) {
-            userService.updateByPrimaryKeySelective(UserFactory.convertUserFromUserDto(user));
+            userService.updateByPrimaryKeySelective(user);
             return SUCCESS_TIP;
         }
         assertAuth(user.getId());
         ShiroUser shiroUser = ShiroKit.getUser();
         if (shiroUser.getId().equals(user.getId())) {
-            userService.updateByPrimaryKeySelective(UserFactory.convertUserFromUserDto(user));
+            userService.updateByPrimaryKeySelective(user);
             return SUCCESS_TIP;
         }
         throw new BussinessException(BizExceptionEnum.NO_PERMITION);
@@ -274,7 +271,7 @@ public class UserMgrController extends BaseController {
      */
     @RequestMapping("/view/{userId}")
     @ResponseBody
-    public User view(@PathVariable Long userId) {
+    public UserDto view(@PathVariable Long userId) {
         if (ToolUtil.isEmpty(userId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
@@ -294,7 +291,7 @@ public class UserMgrController extends BaseController {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         assertAuth(userId);
-        User user = userService.selectByPrimaryKey(userId);
+        UserDto user = userService.selectByPrimaryKey(userId);
         user.setSalt(ShiroKit.getRandomSalt(5));
         user.setPassword(ShiroKit.md5(Const.DEFAULT_PWD, user.getSalt()));
         userService.updateByPrimaryKey(user);
@@ -367,7 +364,7 @@ public class UserMgrController extends BaseController {
         try {
             String fileSavePath = gunsProperties.getFileUploadPath();
             picture.transferTo(new File(fileSavePath + pictureName));
-            User user = new User();
+            UserDto user = new UserDto();
             user.setAvatar(pictureName);
             user.setId(ShiroKit.getUser().getId());
             userService.updateByPrimaryKeySelective(user);
@@ -383,9 +380,9 @@ public class UserMgrController extends BaseController {
      * 判断当前登录的用户是否有操作这个用户的权限
      */
     private void assertAuth(Long userId) {
-        User user = userService.selectByPrimaryKey(userId);
-        List<Integer> deptDataScope = ShiroKit.getDeptDataScope(user);
-        Integer deptid = user.getDeptid();
+        UserDto user = userService.selectByPrimaryKey(userId);
+        List<Long> deptDataScope = ShiroKit.getDeptDataScope(user);
+        Long deptid = user.getDeptid();
         if (deptDataScope.contains(deptid)) {
             return;
         }
@@ -399,7 +396,7 @@ public class UserMgrController extends BaseController {
     @ResponseBody
     public CommonResponse<UserDto> currentUserInfo() {
         ShiroUser currentUser = ShiroKit.getUser();
-        User user = userService.selectByPrimaryKey(currentUser.getId());
+        UserDto user = userService.selectByPrimaryKey(currentUser.getId());
         UserDto userDto = new UserDto();
         try {
             BeanUtils.copyProperties(userDto, user);
@@ -418,7 +415,7 @@ public class UserMgrController extends BaseController {
     @RequestMapping("/getUserInfo")
     @ResponseBody
     public CommonResponse<UserDto> getUserInfo(Long id) {
-        User user = userService.selectByPrimaryKey(id);
+        UserDto user = userService.selectByPrimaryKey(id);
         UserDto userDto = new UserDto();
         try {
             BeanUtils.copyProperties(userDto, user);

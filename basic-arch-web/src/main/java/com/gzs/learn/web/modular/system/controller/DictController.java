@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.gzs.learn.rbac.dubbo.DubboRbacCommonService;
+import com.gzs.learn.rbac.inf.DictDto;
 import com.gzs.learn.web.common.annotion.Permission;
 import com.gzs.learn.web.common.annotion.log.BussinessLog;
 import com.gzs.learn.web.common.constant.CommonResponse;
@@ -22,9 +24,9 @@ import com.gzs.learn.web.common.persistence.dao.DictMapper;
 import com.gzs.learn.web.common.persistence.model.Dict;
 import com.gzs.learn.web.core.log.LogObjectHolder;
 import com.gzs.learn.web.core.util.ToolUtil;
-import com.gzs.learn.web.modular.system.convert.DictConvert;
-import com.gzs.learn.web.modular.system.dto.DictDto;
 import com.gzs.learn.web.modular.system.service.IDictService;
+import com.gzs.learn.web.modular.system.vo.DictVo;
+import com.gzs.learn.web.modular.system.wrapper.DictWrapper;
 
 /**
  * 字典控制器
@@ -35,6 +37,8 @@ import com.gzs.learn.web.modular.system.service.IDictService;
 @Controller
 @RequestMapping("/dict")
 public class DictController extends BaseController {
+    @Autowired
+    private DubboRbacCommonService dubboRbacCommonService;
     @Autowired
     private DictMapper dictMapper;
 
@@ -97,9 +101,9 @@ public class DictController extends BaseController {
     @RequestMapping(value = "/list")
     @Permission(Const.ADMIN_NAME)
     @ResponseBody
-    public CommonResponse<List<DictDto>> list(String condition) {
-        List<Dict> list = dictMapper.list(condition);
-        return CommonResponse.buildSuccess(DictConvert.convertDictDto(list));
+    public CommonResponse<List<DictVo>> list(String condition) {
+        List<DictDto> list = dubboRbacCommonService.searchDict(condition);
+        return CommonResponse.buildSuccess(DictWrapper.convertDictDto(list));
     }
 
     /**
@@ -108,9 +112,9 @@ public class DictController extends BaseController {
     @RequestMapping(value = "/detail/{dictId}")
     @Permission(Const.ADMIN_NAME)
     @ResponseBody
-    public CommonResponse<DictDto> detail(@PathVariable("dictId") Integer dictId) {
-        Dict dict = dictMapper.selectByPrimaryKey(dictId);
-        DictDto dictDto = DictConvert.convertDictDto(dict);
+    public CommonResponse<DictVo> detail(@PathVariable("dictId") Integer dictId) {
+        DictDto dict = dubboRbacCommonService.getDict(dictId);
+        DictVo dictDto = DictWrapper.convertDictDto(dict);
         return CommonResponse.buildSuccess(dictDto);
     }
 

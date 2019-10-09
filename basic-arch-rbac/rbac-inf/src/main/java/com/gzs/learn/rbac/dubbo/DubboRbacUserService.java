@@ -1,8 +1,10 @@
 package com.gzs.learn.rbac.dubbo;
 
-import com.gzs.learn.rbac.inf.DeptDto;
-import com.gzs.learn.rbac.inf.RoleDto;
+import java.util.List;
+
+import com.gzs.learn.rbac.inf.DataScope;
 import com.gzs.learn.rbac.inf.UserDto;
+import com.gzs.learn.rbac.inf.UserSearchDto;
 
 /**
  * 基础用户权限
@@ -25,16 +27,40 @@ public interface DubboRbacUserService {
     UserDto getUserById(Long userId);
 
     /**
-     * 查询角色信息
-     * @param roleId
+     * 用户搜索
+     * @param dataScope
+     * @param searchDto
      * @return
      */
-    RoleDto getRole(Integer roleId);
+    List<UserDto> search(DataScope dataScope, UserSearchDto searchDto);
 
     /**
-     * 获取部门信息
-     * @param deptId
+     * 写入用户信息
+     * @param user
      * @return
      */
-    DeptDto getDept(Integer deptId);
+    int insertUser(UserDto user);
+
+    /**
+     * 更新用户信息
+     * @param user
+     * @return
+     */
+    int updateUser(UserDto user);
+
+    /**
+     * 设置指定用户id状态字段
+     * @param userId
+     * @param status
+     * @return
+     */
+    boolean setStatus(Long userId, int status);
+
+    /**
+     * 赋予指定用户角色
+     * @param userId
+     * @param roleIds
+     * @return
+     */
+    boolean setRoles(Long userId, String roleIds);
 }

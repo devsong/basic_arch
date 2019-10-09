@@ -1,14 +1,13 @@
 package com.gzs.learn.web.common.persistence.dao;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
-import com.gzs.learn.web.common.node.ZTreeNode;
 import com.gzs.learn.web.common.persistence.model.Role;
 
 import tk.mybatis.mapper.common.Mapper;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -31,18 +30,4 @@ public interface RoleMapper extends Mapper<Role> {
      * @return
      */
     int deleteRolesById(@Param("roleId") Integer roleId);
-
-    /**
-     * 获取角色列表树
-     *
-     * @return
-     */
-    List<ZTreeNode> roleTreeList();
-
-    /**
-     * 获取角色列表树
-     *
-     * @return
-     */
-    List<ZTreeNode> roleTreeListByRoleId(String[] roleId);
 }

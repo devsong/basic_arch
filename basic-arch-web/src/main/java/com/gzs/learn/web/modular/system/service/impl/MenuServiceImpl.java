@@ -5,9 +5,8 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.gzs.learn.web.common.node.MenuNode;
-import com.gzs.learn.web.common.node.ZTreeNode;
+import com.gzs.learn.rbac.inf.MenuNodeDto;
+import com.gzs.learn.rbac.inf.ZTreeNode;
 import com.gzs.learn.web.common.persistence.dao.MenuMapper;
 import com.gzs.learn.web.common.persistence.model.Menu;
 import com.gzs.learn.web.modular.system.service.IMenuService;
@@ -23,7 +22,7 @@ public class MenuServiceImpl implements IMenuService {
     private MenuMapper menuMapper;
 
     @Override
-    public void delMenu(Integer menuId) {
+    public void delMenu(Long menuId) {
         // 删除菜单
         this.menuMapper.deleteByPrimaryKey(menuId);
         // 删除关联的relation
@@ -31,7 +30,7 @@ public class MenuServiceImpl implements IMenuService {
     }
 
     @Override
-    public void delMenuContainSubMenus(Integer menuId) {
+    public void delMenuContainSubMenus(Long menuId) {
         Menu menu = menuMapper.selectByPrimaryKey(menuId);
 
         // 删除当前菜单
@@ -42,7 +41,7 @@ public class MenuServiceImpl implements IMenuService {
         example.createCriteria().andLike("pcodes", "%[" + menu.getCode() + "]%");
         List<Menu> menus = menuMapper.selectByExample(example);
         for (Menu temp : menus) {
-            delMenu(temp.getId().intValue());
+            delMenu(temp.getId());
         }
     }
 
@@ -52,38 +51,32 @@ public class MenuServiceImpl implements IMenuService {
     }
 
     @Override
-    public List<Integer> getMenuIdsByRoleId(Integer roleId) {
-
+    public List<Long> getMenuIdsByRoleId(Long roleId) {
         return null;
     }
 
     @Override
     public List<ZTreeNode> menuTreeList() {
-
         return null;
     }
 
     @Override
-    public List<ZTreeNode> menuTreeListByMenuIds(List<Integer> menuIds) {
-
+    public List<ZTreeNode> menuTreeListByMenuIds(List<Long> menuIds) {
         return null;
     }
 
     @Override
-    public int deleteRelationByMenu(Integer menuId) {
-
+    public int deleteRelationByMenu(Long menuId) {
         return 0;
     }
 
     @Override
-    public List<String> getResUrlsByRoleId(Integer roleId) {
-
+    public List<String> getResUrlsByRoleId(Long roleId) {
         return null;
     }
 
     @Override
-    public List<MenuNode> getMenusByRoleIds(List<Integer> roleIds) {
-
+    public List<MenuNodeDto> getMenusByRoleIds(List<Long> roleIds) {
         return null;
     }
 }

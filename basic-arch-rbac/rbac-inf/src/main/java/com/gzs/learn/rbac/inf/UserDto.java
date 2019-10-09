@@ -51,9 +51,17 @@ public class UserDto extends Base {
      */
     private String roleid;
     /**
+     * 角色名
+     */
+    private String roleName;
+    /**
      * 部门id
      */
-    private Integer deptid;
+    private Long deptid;
+    /**
+     * 部门名
+     */
+    private String deptName;
     /**
      * 状态(1：启用  2：冻结  3：删除）
      */

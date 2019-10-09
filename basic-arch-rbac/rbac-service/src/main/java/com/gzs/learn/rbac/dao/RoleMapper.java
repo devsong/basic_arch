@@ -16,7 +16,7 @@ public interface RoleMapper extends Mapper<RolePo> {
      *
      * @return
      */
-    List<RolePo> selectRoles(@Param("condition") String condition);
+    List<RolePo> searchRoles(@Param("condition") String condition);
 
     /**
      * 删除某个角色的所有权限

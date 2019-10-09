@@ -10,5 +10,5 @@ import com.gzs.learn.rbac.po.DictPo;
 import tk.mybatis.mapper.common.Mapper;
 
 public interface DictMapper extends Mapper<DictPo> {
-    List<DeptPo> list(@Param("condition") String conditiion);
+    List<DeptPo> search(@Param("condition") String conditiion);
 }

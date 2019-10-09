@@ -2,27 +2,27 @@ package com.gzs.learn.web.modular.system.service;
 
 import java.util.List;
 
-import com.gzs.learn.web.common.node.MenuNode;
-import com.gzs.learn.web.common.persistence.model.User;
-import com.gzs.learn.web.core.datascope.DataScope;
-import com.gzs.learn.web.modular.system.dto.UserSearchDto;
+import com.gzs.learn.rbac.inf.DataScope;
+import com.gzs.learn.rbac.inf.MenuNodeDto;
+import com.gzs.learn.rbac.inf.UserDto;
+import com.gzs.learn.rbac.inf.UserSearchDto;
 
 public interface IUserService {
-    List<User> selectUsers(DataScope dataScope, UserSearchDto userSearchDto);
+    UserDto selectByPrimaryKey(Long userId);
 
-    User selectByPrimaryKey(Long userId);
+    boolean updateByPrimaryKey(UserDto user);
 
-    boolean updateByPrimaryKey(User user);
+    UserDto getByAccount(String account);
 
-    User getByAccount(String account);
+    boolean insert(UserDto createUser);
 
-    boolean insert(User createUser);
-
-    boolean updateByPrimaryKeySelective(User createUser);
+    boolean updateByPrimaryKeySelective(UserDto createUser);
 
     boolean setStatus(Long userId, int code);
 
     boolean setRoles(Long userId, String roleIds);
 
-    List<MenuNode> getMenusByRoleIds(List<Integer> roleList);
+    List<MenuNodeDto> getMenusByRoleIds(List<Long> roleList);
+
+    List<UserDto> selectUsers(DataScope dataScope, UserSearchDto userSearchDto);
 }

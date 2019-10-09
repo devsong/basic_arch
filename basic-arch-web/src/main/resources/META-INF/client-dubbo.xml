@@ -10,6 +10,7 @@
     <dubbo:registry id="clientZk" protocol="zookeeper" address="${client.zk}" />
     <dubbo:protocol port="-1" />
 
+    <!-- 权限系统接口 -->
     <dubbo:reference id="dubboRbacMenuService" timeout="10000" loadbalance="random" registry="clientZk"
         interface="com.gzs.learn.rbac.dubbo.DubboRbacMenuService" version="1.0.0" check="false" />
 
@@ -18,4 +19,13 @@
 
     <dubbo:reference id="dubboRbacUserService" timeout="10000" loadbalance="random" registry="clientZk"
         interface="com.gzs.learn.rbac.dubbo.DubboRbacUserService" version="1.0.0" check="false" />
+
+    <dubbo:reference id="dubboRbacRoleService" timeout="10000" loadbalance="random" registry="clientZk"
+        interface="com.gzs.learn.rbac.dubbo.DubboRbacRoleService" version="1.0.0" check="false" />
+
+    <dubbo:reference id="dubboRbacDeptService" timeout="10000" loadbalance="random" registry="clientZk"
+        interface="com.gzs.learn.rbac.dubbo.DubboRbacDeptService" version="1.0.0" check="false" />
+
+    <dubbo:reference id="dubboRbacCommonService" timeout="10000" loadbalance="random" registry="clientZk"
+        interface="com.gzs.learn.rbac.dubbo.DubboRbacCommonService" version="1.0.0" check="false" />
 </beans>

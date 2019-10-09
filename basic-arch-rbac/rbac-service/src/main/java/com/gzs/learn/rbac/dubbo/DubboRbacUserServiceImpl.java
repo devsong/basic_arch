@@ -1,11 +1,15 @@
 package com.gzs.learn.rbac.dubbo;
 
+import java.util.List;
+
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.gzs.learn.rbac.inf.DeptDto;
-import com.gzs.learn.rbac.inf.RoleDto;
+import com.gzs.learn.rbac.inf.DataScope;
 import com.gzs.learn.rbac.inf.UserDto;
+import com.gzs.learn.rbac.inf.UserSearchDto;
+import com.gzs.learn.rbac.po.UserPo;
 import com.gzs.learn.rbac.service.IUserService;
 
 @Component("dubboRbacUserService")
@@ -25,14 +29,31 @@ public class DubboRbacUserServiceImpl implements DubboRbacUserService {
     }
 
     @Override
-    public RoleDto getRole(Integer roleId) {
-        RoleDto roleDto = userService.getRole(roleId);
-        return roleDto;
+    public List<UserDto> search(DataScope dataScope, UserSearchDto searchDto) {
+        return userService.selectUsers(dataScope, searchDto);
     }
 
     @Override
-    public DeptDto getDept(Integer deptId) {
-        DeptDto deptDto = userService.getDept(deptId);
-        return deptDto;
+    public int insertUser(UserDto user) {
+        UserPo userPo = new UserPo();
+        BeanUtils.copyProperties(user, userPo);
+        return userService.insert(userPo);
+    }
+
+    @Override
+    public int updateUser(UserDto user) {
+        UserPo userPo = new UserPo();
+        BeanUtils.copyProperties(user, userPo);
+        return userService.update(userPo);
+    }
+
+    @Override
+    public boolean setStatus(Long userId, int status) {
+        return userService.setStatus(userId, status);
+    }
+
+    @Override
+    public boolean setRoles(Long userId, String roleIds) {
+        return userService.setRoles(userId, roleIds);
     }
 }

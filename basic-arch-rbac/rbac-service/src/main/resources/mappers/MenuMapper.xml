@@ -15,13 +15,15 @@
         <result column="tips" jdbcType="VARCHAR" property="tips" />
         <result column="status" jdbcType="INTEGER" property="status" />
         <result column="isopen" jdbcType="INTEGER" property="isopen" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createtime" />
+        <result column="timestamp" jdbcType="TIMESTAMP" property="timestamp"  />
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, code, pcode, pcodes, name, icon, url, num, levels, ismenu, tips, status, isopen
+        id, code, pcode, pcodes, name, icon, url, num, levels, ismenu, tips, status, isopen,create_time,timestamp
     </sql>
 
-    <select id="selectMenus" resultMap="BaseResultMap" parameterType="java.util.Map">
+    <select id="searchMenus" resultMap="BaseResultMap" parameterType="java.util.Map">
         select
         	<include refid="Base_Column_List"/>
         from 
@@ -110,8 +112,8 @@
         					sys_relation rela
         				WHERE
         				rela.roleid IN
-				        <foreach collection="list" index="index" item="i" open="(" separator="," close=")">
-				            #{i}
+				        <foreach collection="list" item="item" open="(" separator="," close=")">
+				            #{item}
 				        </foreach>
         			)
         	) m3 ON m1.id = m3.id

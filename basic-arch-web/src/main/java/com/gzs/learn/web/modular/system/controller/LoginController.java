@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.google.code.kaptcha.Constants;
+import com.gzs.learn.rbac.inf.MenuNodeDto;
+import com.gzs.learn.rbac.inf.UserDto;
 import com.gzs.learn.web.common.controller.BaseController;
 import com.gzs.learn.web.common.exception.InvalidKaptchaException;
-import com.gzs.learn.web.common.node.MenuNode;
-import com.gzs.learn.web.common.persistence.model.User;
 import com.gzs.learn.web.config.properties.GunsProperties;
 import com.gzs.learn.web.core.log.LogManager;
 import com.gzs.learn.web.core.log.factory.LogTaskFactory;
@@ -45,18 +45,18 @@ public class LoginController extends BaseController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String index(Model model) {
         // 获取菜单列表
-        List<Integer> roleList = ShiroKit.getUser().getRoleList();
+        List<Long> roleList = ShiroKit.getUser().getRoleList();
         if (roleList == null || roleList.size() == 0) {
             ShiroKit.getSubject().logout();
             model.addAttribute("tips", "该用户没有角色，无法登陆");
             return "/login.html";
         }
-        List<MenuNode> menus = userService.getMenusByRoleIds(roleList);
-        List<MenuNode> titles = MenuNode.buildTitle(menus);
+        List<MenuNodeDto> menus = userService.getMenusByRoleIds(roleList);
+        List<MenuNodeDto> titles = MenuNodeDto.buildTitle(menus);
         model.addAttribute("menus", titles);
         // 获取用户头像
         Long id = ShiroKit.getUser().getId();
-        User user = userService.selectByPrimaryKey(id);
+        UserDto user = userService.selectByPrimaryKey(id);
         String avatar = user.getAvatar();
         model.addAttribute("name", user.getName());
         model.addAttribute("avatar", gunsProperties.getFilePrefix() + avatar);

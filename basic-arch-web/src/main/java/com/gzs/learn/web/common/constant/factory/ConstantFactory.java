@@ -9,22 +9,21 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
+import com.gzs.learn.rbac.dubbo.DubboRbacCommonService;
+import com.gzs.learn.rbac.dubbo.DubboRbacDeptService;
 import com.gzs.learn.rbac.dubbo.DubboRbacMenuService;
+import com.gzs.learn.rbac.dubbo.DubboRbacRoleService;
 import com.gzs.learn.rbac.dubbo.DubboRbacUserService;
 import com.gzs.learn.rbac.inf.DeptDto;
+import com.gzs.learn.rbac.inf.DictDto;
 import com.gzs.learn.rbac.inf.MenuDto;
+import com.gzs.learn.rbac.inf.NoticeDto;
 import com.gzs.learn.rbac.inf.RoleDto;
 import com.gzs.learn.rbac.inf.UserDto;
 import com.gzs.learn.web.common.constant.enums.ManagerStatus;
 import com.gzs.learn.web.common.constant.enums.MenuStatus;
-import com.gzs.learn.web.common.persistence.dao.DeptMapper;
-import com.gzs.learn.web.common.persistence.dao.DictMapper;
-import com.gzs.learn.web.common.persistence.dao.MenuMapper;
-import com.gzs.learn.web.common.persistence.dao.NoticeMapper;
 import com.gzs.learn.web.common.persistence.model.Dept;
 import com.gzs.learn.web.common.persistence.model.Dict;
-import com.gzs.learn.web.common.persistence.model.Menu;
-import com.gzs.learn.web.common.persistence.model.Notice;
 import com.gzs.learn.web.core.log.LogObjectHolder;
 import com.gzs.learn.web.core.support.StrKit;
 import com.gzs.learn.web.core.util.Convert;
@@ -42,18 +41,22 @@ public class ConstantFactory implements IConstantFactory {
     @Autowired
     private DubboRbacMenuService dubboRbacMenuService;
 
-    private DeptMapper deptMapper = SpringContextHolder.getBean(DeptMapper.class);
-    private DictMapper dictMapper = SpringContextHolder.getBean(DictMapper.class);
-    private MenuMapper menuMapper = SpringContextHolder.getBean(MenuMapper.class);
-    private NoticeMapper noticeMapper = SpringContextHolder.getBean(NoticeMapper.class);
+    @Autowired
+    private DubboRbacDeptService dubboRbacDeptService;
+
+    @Autowired
+    private DubboRbacRoleService dubboRbacRoleService;
+
+    @Autowired
+    private DubboRbacCommonService dubboRbacCommonService;
 
     public static IConstantFactory me() {
         return SpringContextHolder.getBean("constantFactory");
     }
 
     @Override
-    public String getUserNameById(Integer userId) {
-        UserDto userDto = dubboRbacUserService.getUserById(userId.longValue());
+    public String getUserNameById(Long userId) {
+        UserDto userDto = dubboRbacUserService.getUserById(userId);
         if (userDto != null) {
             return userDto.getName();
         }
@@ -61,8 +64,8 @@ public class ConstantFactory implements IConstantFactory {
     }
 
     @Override
-    public String getUserAccountById(Integer userId) {
-        UserDto userDto = dubboRbacUserService.getUserById(userId.longValue());
+    public String getUserAccountById(Long userId) {
+        UserDto userDto = dubboRbacUserService.getUserById(userId);
         if (userDto != null) {
             return userDto.getAccount();
         }
@@ -71,10 +74,10 @@ public class ConstantFactory implements IConstantFactory {
 
     @Override
     public String getRoleName(String roleIds) {
-        Integer[] roles = Convert.toIntArray(roleIds);
+        Long[] roles = Convert.toLongArray(roleIds);
         StringBuilder sb = new StringBuilder();
-        for (int role : roles) {
-            RoleDto roleObj = dubboRbacUserService.getRole(role);
+        for (Long role : roles) {
+            RoleDto roleObj = dubboRbacRoleService.getRole(role);
             if (ToolUtil.isNotEmpty(roleObj) && ToolUtil.isNotEmpty(roleObj.getName())) {
                 sb.append(roleObj.getName()).append(",");
             }
@@ -83,11 +86,11 @@ public class ConstantFactory implements IConstantFactory {
     }
 
     @Override
-    public String getSingleRoleName(Integer roleId) {
+    public String getSingleRoleName(Long roleId) {
         if (0 == roleId) {
             return "--";
         }
-        RoleDto roleObj = dubboRbacUserService.getRole(roleId);
+        RoleDto roleObj = dubboRbacRoleService.getRole(roleId);
         if (ToolUtil.isNotEmpty(roleObj) && ToolUtil.isNotEmpty(roleObj.getName())) {
             return roleObj.getName();
         }
@@ -95,11 +98,11 @@ public class ConstantFactory implements IConstantFactory {
     }
 
     @Override
-    public String getSingleRoleTip(Integer roleId) {
+    public String getSingleRoleTip(Long roleId) {
         if (0 == roleId) {
             return "--";
         }
-        RoleDto roleObj = dubboRbacUserService.getRole(roleId);
+        RoleDto roleObj = dubboRbacRoleService.getRole(roleId);
         if (ToolUtil.isNotEmpty(roleObj) && ToolUtil.isNotEmpty(roleObj.getName())) {
             return roleObj.getTips();
         }
@@ -107,8 +110,8 @@ public class ConstantFactory implements IConstantFactory {
     }
 
     @Override
-    public String getDeptName(Integer deptId) {
-        DeptDto dept = dubboRbacUserService.getDept(deptId);
+    public String getDeptName(Long deptId) {
+        DeptDto dept = dubboRbacDeptService.getDept(deptId);
         if (ToolUtil.isNotEmpty(dept) && ToolUtil.isNotEmpty(dept.getFullname())) {
             return dept.getFullname();
         }
@@ -117,7 +120,7 @@ public class ConstantFactory implements IConstantFactory {
 
     @Override
     public String getMenuNames(String menuIds) {
-        Integer[] menus = Convert.toIntArray(menuIds);
+        Long[] menus = Convert.toLongArray(menuIds);
         List<MenuDto> menuDtos = dubboRbacMenuService.getMenu(Lists.newArrayList(menus));
         String menuName = menuDtos == null ? ""
                 : menuDtos.stream().filter(e -> ToolUtil.isNotEmpty(e) && ToolUtil.isNotEmpty(e.getName())).map(e -> e.getName())
@@ -126,7 +129,7 @@ public class ConstantFactory implements IConstantFactory {
     }
 
     @Override
-    public String getMenuName(Integer menuId) {
+    public String getMenuName(Long menuId) {
         if (ToolUtil.isEmpty(menuId)) {
             return "";
         }
@@ -142,9 +145,7 @@ public class ConstantFactory implements IConstantFactory {
         if (ToolUtil.isEmpty(code)) {
             return "";
         }
-        Menu param = new Menu();
-        param.setCode(code);
-        Menu menu = menuMapper.selectOne(param);
+        MenuDto menu = dubboRbacMenuService.getMenuByCode(code);
         if (menu == null) {
             return "";
         }
@@ -156,7 +157,7 @@ public class ConstantFactory implements IConstantFactory {
         if (ToolUtil.isEmpty(dictId)) {
             return "";
         }
-        Dict dict = dictMapper.selectByPrimaryKey(dictId);
+        DictDto dict = dubboRbacCommonService.getDict(dictId);
         if (dict == null) {
             return "";
         }
@@ -164,11 +165,11 @@ public class ConstantFactory implements IConstantFactory {
     }
 
     @Override
-    public String getNoticeTitle(Integer dictId) {
-        if (ToolUtil.isEmpty(dictId)) {
+    public String getNoticeTitle(Integer notictId) {
+        if (ToolUtil.isEmpty(notictId)) {
             return "";
         }
-        Notice notice = noticeMapper.selectByPrimaryKey(dictId);
+        NoticeDto notice = dubboRbacCommonService.getNotice(notictId);
         if (notice == null) {
             return "";
         }
@@ -177,16 +178,14 @@ public class ConstantFactory implements IConstantFactory {
 
     @Override
     public String getDictsByName(String name, Integer val) {
-        Dict temp = new Dict();
-        temp.setName(name);
-        Dict dict = dictMapper.selectOne(temp);
+        DictDto dict = dubboRbacCommonService.getDictByName(name);
         if (dict == null) {
             return "";
         }
         Example example = new Example(Dict.class);
         example.createCriteria().andEqualTo("pid", dict.getId());
-        List<Dict> dicts = dictMapper.selectByExample(example);
-        for (Dict item : dicts) {
+        List<DictDto> dicts = dubboRbacCommonService.getDictByPid(dict.getId());
+        for (DictDto item : dicts) {
             if (item.getNum() != null && item.getNum().equals(val)) {
                 return item.getName();
             }
@@ -210,13 +209,13 @@ public class ConstantFactory implements IConstantFactory {
     }
 
     @Override
-    public List<Dict> findSubDict(Integer id) {
+    public List<DictDto> findSubDict(Integer id) {
         if (ToolUtil.isEmpty(id)) {
             return null;
         }
         Example example = new Example(Dict.class);
         example.createCriteria().andEqualTo("pid", id);
-        return dictMapper.selectByExample(example);
+        return dubboRbacCommonService.getDictByPid(id.longValue());
     }
 
     @Override
@@ -225,16 +224,14 @@ public class ConstantFactory implements IConstantFactory {
     }
 
     @Override
-    public List<Integer> getSubDeptId(Integer deptid) {
+    public List<Long> getSubDeptId(Long deptid) {
         Example example = new Example(Dept.class);
         example.createCriteria().andLike("pids", "%[" + deptid + "]%");
-        List<Dept> depts = this.deptMapper.selectByExample(example);
-
-        ArrayList<Integer> deptids = new ArrayList<>();
-
+        List<DeptDto> depts = dubboRbacDeptService.getSubDeptDtos(deptid);
+        List<Long> deptids = new ArrayList<>();
         if (depts != null && depts.size() > 0) {
-            for (Dept dept : depts) {
-                deptids.add(dept.getId().intValue());
+            for (DeptDto dept : depts) {
+                deptids.add(dept.getId());
             }
         }
 
@@ -245,13 +242,13 @@ public class ConstantFactory implements IConstantFactory {
      * 获取所有父部门id
      */
     @Override
-    public List<Integer> getParentDeptIds(Integer deptid) {
-        Dept dept = deptMapper.selectByPrimaryKey(deptid);
+    public List<Long> getParentDeptIds(Long deptid) {
+        DeptDto dept = dubboRbacDeptService.getDept(deptid);
         String pids = dept.getPids();
         String[] split = pids.split(",");
-        ArrayList<Integer> parentDeptIds = new ArrayList<>();
+        List<Long> parentDeptIds = new ArrayList<>();
         for (String s : split) {
-            parentDeptIds.add(Integer.valueOf(StrKit.removeSuffix(StrKit.removePrefix(s, "["), "]")));
+            parentDeptIds.add(Long.valueOf(StrKit.removeSuffix(StrKit.removePrefix(s, "["), "]")));
         }
         return parentDeptIds;
     }

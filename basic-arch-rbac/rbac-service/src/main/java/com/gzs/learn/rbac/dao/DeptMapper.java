@@ -17,5 +17,5 @@ import tk.mybatis.mapper.common.Mapper;
 public interface DeptMapper extends Mapper<DeptPo> {
     List<ZTreeNode> tree();
 
-    List<DeptPo> list(@Param("condition") String condition);
+    List<DeptPo> search(@Param("condition") String condition);
 }

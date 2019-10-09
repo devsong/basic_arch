@@ -22,11 +22,11 @@ public class RelationPo extends Base {
     /**
      * 菜单id
      */
-    private Integer menuid;
+    private Long menuid;
     /**
      * 角色id
      */
-    private Integer roleid;
+    private Long roleid;
 
     @Column(name = "create_time")
     private Date createTime;

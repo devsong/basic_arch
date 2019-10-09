@@ -1,15 +1,14 @@
 package com.gzs.learn.web.common.persistence.dao;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
-import com.gzs.learn.web.common.node.MenuNode;
-import com.gzs.learn.web.common.node.ZTreeNode;
+import com.gzs.learn.rbac.inf.MenuNodeDto;
 import com.gzs.learn.web.common.persistence.model.Menu;
 
 import tk.mybatis.mapper.common.Mapper;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -31,23 +30,7 @@ public interface MenuMapper extends Mapper<Menu> {
      * @return
      * @date 2017年2月12日 下午9:14:34
      */
-    List<Integer> getMenuIdsByRoleId(@Param("roleId") Integer roleId);
-
-    /**
-     * 获取菜单列表树
-     *
-     * @return
-     * @date 2017年2月19日 下午1:33:51
-     */
-    List<ZTreeNode> menuTreeList();
-
-    /**
-     * 获取菜单列表树
-     *
-     * @return
-     * @date 2017年2月19日 下午1:33:51
-     */
-    List<ZTreeNode> menuTreeListByMenuIds(List<Integer> menuIds);
+    List<Integer> getMenuIdsByRoleId(@Param("roleId") Long roleId);
 
     /**
      * 删除menu关联的relation
@@ -56,7 +39,7 @@ public interface MenuMapper extends Mapper<Menu> {
      * @return
      * @date 2017年2月19日 下午4:10:59
      */
-    int deleteRelationByMenu(Integer menuId);
+    int deleteRelationByMenu(Long menuId);
 
     /**
      * 获取资源url通过角色id
@@ -65,7 +48,7 @@ public interface MenuMapper extends Mapper<Menu> {
      * @return
      * @date 2017年2月19日 下午7:12:38
      */
-    List<String> getResUrlsByRoleId(Integer roleId);
+    List<String> getResUrlsByRoleId(Long roleId);
 
     /**
      * 根据角色获取菜单
@@ -74,6 +57,6 @@ public interface MenuMapper extends Mapper<Menu> {
      * @return
      * @date 2017年2月19日 下午10:35:40
      */
-    List<MenuNode> getMenusByRoleIds(List<Integer> roleIds);
+    List<MenuNodeDto> getMenusByRoleIds(List<Long> roleIds);
 
 }

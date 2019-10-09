@@ -10,13 +10,15 @@
         <result column="deptid" jdbcType="INTEGER" property="deptid" />
         <result column="tips" jdbcType="VARCHAR" property="tips" />
         <result column="version" jdbcType="INTEGER" property="version" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createtime" />
+        <result column="timestamp" jdbcType="TIMESTAMP" property="timestamp"  />
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, num, pid, name, deptid, tips, version
+        id, num, pid, name, deptid, tips, version,create_time,timestamp
     </sql>
 
-    <select id="selectRoles" resultMap="BaseResultMap">
+    <select id="searchRoles" resultMap="BaseResultMap">
         select
             <include refid="Base_Column_List"/>
         from

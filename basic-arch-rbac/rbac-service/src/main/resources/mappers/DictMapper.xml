@@ -7,14 +7,16 @@
         <result column="pid" jdbcType="INTEGER" property="pid" />
         <result column="name" jdbcType="VARCHAR" property="name" />
         <result column="tips" jdbcType="VARCHAR" property="tips" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createtime" />
+        <result column="timestamp" jdbcType="TIMESTAMP" property="timestamp"  />
     </resultMap>
 
     <sql id="Base_Column_List">
         id, num, pid, name, tips
     </sql>
 
-    <select id="list" resultMap="BaseResultMap" parameterType="java.util.Map">
-        select 
+    <select id="search" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
            <include refid="Base_Column_List" />
         from 
             sys_dict

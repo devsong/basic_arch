@@ -15,6 +15,9 @@
  */
 package com.gzs.learn.web.core.shiro;
 
+import java.util.List;
+import java.util.Random;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.crypto.hash.SimpleHash;
@@ -22,12 +25,9 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
 
+import com.gzs.learn.rbac.inf.UserDto;
 import com.gzs.learn.web.common.constant.Const;
 import com.gzs.learn.web.common.constant.factory.ConstantFactory;
-import com.gzs.learn.web.common.persistence.model.User;
-
-import java.util.List;
-import java.util.Random;
 
 /**
  * shiro工具类
@@ -272,7 +272,7 @@ public class ShiroKit {
     /**
      * 获取当前用户的部门数据范围的集合
      */
-    public static List<Integer> getDeptDataScope() {
+    public static List<Long> getDeptDataScope() {
         /*
          * Integer deptId = getUser().getDeptId(); List<Integer> subDeptIds = ConstantFactory.me().getSubDeptId(deptId);
          * subDeptIds.add(deptId); return subDeptIds;
@@ -283,9 +283,9 @@ public class ShiroKit {
     /**
      * 获取当前用户的部门数据范围的集合
      */
-    public static List<Integer> getDeptDataScope(User user) {
-        Integer deptId = user == null ? getUser().getDeptId() : user.getDeptid();
-        List<Integer> subDeptIds = ConstantFactory.me().getSubDeptId(deptId);
+    public static List<Long> getDeptDataScope(UserDto user) {
+        Long deptId = user == null ? getUser().getDeptId() : user.getDeptid();
+        List<Long> subDeptIds = ConstantFactory.me().getSubDeptId(deptId);
         subDeptIds.add(deptId);
         return subDeptIds;
     }
@@ -294,8 +294,8 @@ public class ShiroKit {
      * 判断当前用户是否是超级管理员
      */
     public static boolean isAdmin() {
-        List<Integer> roleList = ShiroKit.getUser().getRoleList();
-        for (Integer integer : roleList) {
+        List<Long> roleList = ShiroKit.getUser().getRoleList();
+        for (Long integer : roleList) {
             String singleRoleTip = ConstantFactory.me().getSingleRoleTip(integer);
             if (singleRoleTip.equals(Const.ADMIN_NAME)) {
                 return true;

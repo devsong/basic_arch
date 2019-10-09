@@ -1,8 +1,11 @@
 package com.gzs.learn.rbac.service;
 
-import com.gzs.learn.rbac.inf.DeptDto;
-import com.gzs.learn.rbac.inf.RoleDto;
+import java.util.List;
+
+import com.gzs.learn.rbac.inf.DataScope;
 import com.gzs.learn.rbac.inf.UserDto;
+import com.gzs.learn.rbac.inf.UserSearchDto;
+import com.gzs.learn.rbac.po.UserPo;
 
 public interface IUserService {
 
@@ -10,8 +13,14 @@ public interface IUserService {
 
     UserDto getUser(Long id);
 
-    RoleDto getRole(Integer roleId);
+    List<UserDto> selectUsers(DataScope dataScope, UserSearchDto searchDto);
 
-    DeptDto getDept(Integer deptId);
+    int insert(UserPo userPo);
+
+    int update(UserPo userPo);
+
+    boolean setStatus(Long userId, int status);
+
+    boolean setRoles(Long userId, String roleIds);
 
 }

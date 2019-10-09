@@ -4,8 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.apache.commons.beanutils.BeanUtils;
 
+import com.gzs.learn.rbac.inf.UserDto;
 import com.gzs.learn.web.common.persistence.model.User;
-import com.gzs.learn.web.modular.system.dto.UserDto;
 
 import lombok.extern.slf4j.Slf4j;
 

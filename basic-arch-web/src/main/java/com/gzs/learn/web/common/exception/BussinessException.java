@@ -1,9 +1,10 @@
 package com.gzs.learn.web.common.exception;
 
-/**
- * @Description 业务异常的封装
- * @date 2016年11月12日 下午5:05:10
- */
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@Data
+@EqualsAndHashCode(callSuper = false)
 public class BussinessException extends RuntimeException {
     /**
      * 
@@ -24,29 +25,4 @@ public class BussinessException extends RuntimeException {
         this.msg = bizExceptionEnum.getMsg();
         this.urlPath = bizExceptionEnum.getUrlPath();
     }
-
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    public String getMessage() {
-        return msg;
-    }
-
-    public void setMessage(String message) {
-        this.msg = message;
-    }
-
-    public String getUrlPath() {
-        return urlPath;
-    }
-
-    public void setUrlPath(String urlPath) {
-        this.urlPath = urlPath;
-    }
-
 }

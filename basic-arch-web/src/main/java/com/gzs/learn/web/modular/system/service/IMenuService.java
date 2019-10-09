@@ -5,8 +5,8 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.gzs.learn.web.common.node.MenuNode;
-import com.gzs.learn.web.common.node.ZTreeNode;
+import com.gzs.learn.rbac.inf.MenuNodeDto;
+import com.gzs.learn.rbac.inf.ZTreeNode;
 
 /**
  * 菜单服务
@@ -19,13 +19,13 @@ public interface IMenuService {
      * 删除菜单
      *
      */
-    void delMenu(Integer menuId);
+    void delMenu(Long menuId);
 
     /**
      * 删除菜单包含所有子菜单
      *
      */
-    void delMenuContainSubMenus(Integer menuId);
+    void delMenuContainSubMenus(Long menuId);
 
     /**
      * 根据条件查询菜单
@@ -39,7 +39,7 @@ public interface IMenuService {
      *
      * @return
      */
-    List<Integer> getMenuIdsByRoleId(@Param("roleId") Integer roleId);
+    List<Long> getMenuIdsByRoleId(@Param("roleId") Long roleId);
 
     /**
      * 获取菜单列表树
@@ -53,7 +53,7 @@ public interface IMenuService {
      *
      * @return
      */
-    List<ZTreeNode> menuTreeListByMenuIds(List<Integer> menuIds);
+    List<ZTreeNode> menuTreeListByMenuIds(List<Long> menuIds);
 
     /**
      * 删除menu关联的relation
@@ -61,7 +61,7 @@ public interface IMenuService {
      * @param menuId
      * @return
      */
-    int deleteRelationByMenu(Integer menuId);
+    int deleteRelationByMenu(Long menuId);
 
     /**
      * 获取资源url通过角色id
@@ -69,7 +69,7 @@ public interface IMenuService {
      * @param roleId
      * @return
      */
-    List<String> getResUrlsByRoleId(Integer roleId);
+    List<String> getResUrlsByRoleId(Long roleId);
 
     /**
      * 根据角色获取菜单
@@ -77,5 +77,5 @@ public interface IMenuService {
      * @param roleIds
      * @return
      */
-    List<MenuNode> getMenusByRoleIds(List<Integer> roleIds);
+    List<MenuNodeDto> getMenusByRoleIds(List<Long> roleIds);
 }

@@ -14,7 +14,7 @@ public class RoleDto extends Base {
     /**
      * 父角色id
      */
-    private Integer pid;
+    private Long pid;
     /**
      * 角色名称
      */
@@ -22,7 +22,7 @@ public class RoleDto extends Base {
     /**
      * 部门名称
      */
-    private Integer deptid;
+    private Long deptid;
     /**
      * 提示
      */
