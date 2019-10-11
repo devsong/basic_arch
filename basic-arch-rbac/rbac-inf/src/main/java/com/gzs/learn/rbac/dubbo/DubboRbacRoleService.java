@@ -48,6 +48,18 @@ public interface DubboRbacRoleService {
      */
     boolean delRole(Long roleId);
 
+    /**
+     * 查询角色
+     * @param role
+     * @return
+     */
     RoleDto getRole(Long role);
 
+    /**
+     * 新增角色-菜单关系
+     * @param roleId
+     * @param menuIds
+     * @return
+     */
+    boolean setAuthority(Long roleId, String menuIds);
 }

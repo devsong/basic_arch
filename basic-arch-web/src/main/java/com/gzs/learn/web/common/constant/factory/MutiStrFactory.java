@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.gzs.learn.web.core.support.StrKit;
 import com.gzs.learn.web.core.util.ToolUtil;
 
@@ -46,8 +48,8 @@ public class MutiStrFactory {
         for (String item : items) {
             String[] attrs = item.split(ATTR_SPLIT);
             HashMap<String, String> itemMap = new HashMap<>();
-            itemMap.put(MUTI_STR_KEY, attrs[0]);
-            itemMap.put(MUTI_STR_VALUE, attrs[1]);
+            itemMap.put(MUTI_STR_KEY, StringUtils.trim(attrs[0]));
+            itemMap.put(MUTI_STR_VALUE, StringUtils.trim(attrs[1]));
             results.add(itemMap);
         }
         return results;
@@ -65,9 +67,9 @@ public class MutiStrFactory {
         for (String item : items) {
             String[] attrs = item.split(ATTR_SPLIT);
             HashMap<String, String> itemMap = new HashMap<>();
-            itemMap.put(MUTI_STR_ID, attrs[0]);
-            itemMap.put(MUTI_STR_KEY, attrs[1]);
-            itemMap.put(MUTI_STR_VALUE, attrs[2]);
+            itemMap.put(MUTI_STR_ID, StringUtils.trim(attrs[0]));
+            itemMap.put(MUTI_STR_KEY, StringUtils.trim(attrs[1]));
+            itemMap.put(MUTI_STR_VALUE, StringUtils.trim(attrs[2]));
             results.add(itemMap);
         }
         return results;

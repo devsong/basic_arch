@@ -1,5 +1,9 @@
 package com.gzs.learn.web.modular.system.controller;
 
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -7,23 +11,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.gzs.learn.rbac.dubbo.DubboRbacCommonService;
+import com.gzs.learn.rbac.inf.NoticeDto;
 import com.gzs.learn.web.common.annotion.log.BussinessLog;
 import com.gzs.learn.web.common.constant.Dict;
 import com.gzs.learn.web.common.constant.factory.ConstantFactory;
 import com.gzs.learn.web.common.controller.BaseController;
 import com.gzs.learn.web.common.exception.BizExceptionEnum;
 import com.gzs.learn.web.common.exception.BussinessException;
-import com.gzs.learn.web.common.persistence.dao.NoticeMapper;
-import com.gzs.learn.web.common.persistence.model.Notice;
 import com.gzs.learn.web.core.log.LogObjectHolder;
 import com.gzs.learn.web.core.shiro.ShiroKit;
 import com.gzs.learn.web.core.util.ToolUtil;
 import com.gzs.learn.web.modular.system.wrapper.NoticeWrapper;
-
-import javax.annotation.Resource;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 通知控制器
@@ -34,11 +33,10 @@ import java.util.Map;
 @Controller
 @RequestMapping("/notice")
 public class NoticeController extends BaseController {
-
     private String PREFIX = "/system/notice/";
 
-    @Resource
-    private NoticeMapper noticeMapper;
+    @Autowired
+    private DubboRbacCommonService dubboRbacCommonService;
 
     /**
      * 跳转到通知列表首页
@@ -61,7 +59,7 @@ public class NoticeController extends BaseController {
      */
     @RequestMapping("/notice_update/{noticeId}")
     public String noticeUpdate(@PathVariable Integer noticeId, Model model) {
-        Notice notice = noticeMapper.selectByPrimaryKey(noticeId);
+        NoticeDto notice = dubboRbacCommonService.getNotice(noticeId);
         model.addAttribute("notice", notice);
         LogObjectHolder.me().set(notice);
         return PREFIX + "notice_edit.html";
@@ -72,7 +70,7 @@ public class NoticeController extends BaseController {
      */
     @RequestMapping("/hello")
     public String hello() {
-        List<Map<String, Object>> notices = noticeMapper.list(null);
+        List<NoticeDto> notices = dubboRbacCommonService.searchNotice(null);
         super.setAttr("noticeList", notices);
         return "/blackboard.html";
     }
@@ -83,8 +81,8 @@ public class NoticeController extends BaseController {
     @RequestMapping(value = "/list")
     @ResponseBody
     public Object list(String condition) {
-        List<Map<String, Object>> list = noticeMapper.list(condition);
-        return super.warpObject(new NoticeWrapper(list));
+        List<NoticeDto> notices = dubboRbacCommonService.searchNotice(null);
+        return super.warpObject(new NoticeWrapper(notices));
     }
 
     /**
@@ -93,13 +91,13 @@ public class NoticeController extends BaseController {
     @RequestMapping(value = "/add")
     @ResponseBody
     @BussinessLog(value = "新增通知", key = "title", dict = Dict.NoticeMap)
-    public Object add(Notice notice) {
+    public Object add(NoticeDto notice) {
         if (ToolUtil.isOneEmpty(notice, notice.getTitle(), notice.getContent())) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
-        notice.setCreater(ShiroKit.getUser().getId());
+        notice.setCreater(ShiroKit.getUser().getId() + "");
         notice.setCreatetime(new Date());
-        noticeMapper.insert(notice);
+        dubboRbacCommonService.insertNotice(notice);
         return SUCCESS_TIP;
     }
 
@@ -112,7 +110,7 @@ public class NoticeController extends BaseController {
     public Object delete(@RequestParam Integer noticeId) {
         // 缓存通知名称
         LogObjectHolder.me().set(ConstantFactory.me().getNoticeTitle(noticeId));
-        noticeMapper.deleteByPrimaryKey(noticeId);
+        dubboRbacCommonService.deleteNotice(noticeId);
         return SUCCESS_TIP;
     }
 
@@ -122,15 +120,14 @@ public class NoticeController extends BaseController {
     @RequestMapping(value = "/update")
     @ResponseBody
     @BussinessLog(value = "修改通知", key = "title", dict = Dict.NoticeMap)
-    public Object update(Notice notice) {
+    public Object update(NoticeDto notice) {
         if (ToolUtil.isOneEmpty(notice, notice.getId(), notice.getTitle(), notice.getContent())) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
-        Notice old = noticeMapper.selectByPrimaryKey(notice.getId());
+        NoticeDto old = dubboRbacCommonService.getNotice(notice.getId().intValue());
         old.setTitle(notice.getTitle());
         old.setContent(notice.getContent());
-        noticeMapper.updateByPrimaryKey(old);
+        dubboRbacCommonService.updateNotice(old);
         return SUCCESS_TIP;
     }
-
 }

@@ -4,12 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gzs.learn.rbac.dubbo.DubboRbacRoleService;
 import com.gzs.learn.web.common.annotion.DataSource;
 import com.gzs.learn.web.common.constant.DSEnum;
-import com.gzs.learn.web.common.persistence.dao.RelationMapper;
-import com.gzs.learn.web.common.persistence.dao.RoleMapper;
-import com.gzs.learn.web.common.persistence.model.Relation;
-import com.gzs.learn.web.core.util.Convert;
 import com.gzs.learn.web.modular.system.service.IRoleService;
 
 @Service
@@ -17,29 +14,16 @@ import com.gzs.learn.web.modular.system.service.IRoleService;
 @Transactional()
 public class RoleServiceImpl implements IRoleService {
     @Autowired
-    RoleMapper roleMapper;
-
-    @Autowired
-    RelationMapper relationMapper;
+    private DubboRbacRoleService dubboRbacRoleService;
 
     @Override
-    public void setAuthority(Integer roleId, String ids) {
+    public void setAuthority(Long roleId, String menuIds) {
         // 删除该角色所有的权限
-        this.roleMapper.deleteRolesById(roleId);
-        // 添加新的权限
-        for (Integer id : Convert.toIntArray(ids)) {
-            Relation relation = new Relation();
-            relation.setRoleid(roleId);
-            relation.setMenuid(id);
-            this.relationMapper.insert(relation);
-        }
+        dubboRbacRoleService.setAuthority(roleId, menuIds);
     }
 
     @Override
-    public void delRoleById(Integer roleId) {
-        // 删除角色
-        this.roleMapper.deleteByPrimaryKey(roleId);
-        // 删除该角色所有的权限
-        this.roleMapper.deleteRolesById(roleId);
+    public void delRoleById(Long roleId) {
+        this.dubboRbacRoleService.delRole(roleId);
     }
 }

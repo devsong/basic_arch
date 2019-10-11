@@ -16,9 +16,7 @@ import lombok.EqualsAndHashCode;
 @Table(name = "sys_relation")
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Relation extends Base {
-    private static final long serialVersionUID = 1L;
-
+public class Relation {
     /**
      * 菜单id
      */

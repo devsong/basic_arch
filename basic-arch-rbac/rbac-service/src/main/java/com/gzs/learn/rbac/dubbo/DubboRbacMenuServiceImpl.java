@@ -61,22 +61,22 @@ public class DubboRbacMenuServiceImpl implements DubboRbacMenuService {
 
     @Override
     public boolean delMenuContainSubMenus(Long menuId) {
-        return false;
+        return menuService.delMenuContainSunMenus(menuId);
     }
 
     @Override
     public List<Long> getMenuIdsByRoleId(Long roleId) {
-        return null;
+        return menuService.getMenuIdsByRoleId(roleId);
     }
 
     @Override
     public List<ZTreeNode> menuTreeListByMenuIds(List<Long> menuIds) {
-        return null;
+        return menuService.menuTreeListByMenuIds(menuIds);
     }
 
     @Override
     public List<MenuNodeDto> getMenuIdsByRoleIds(List<Long> roleList) {
-        return null;
+        return menuService.getMenuIdsByRoleIds(roleList);
     }
 
 }

@@ -3,6 +3,7 @@ package com.gzs.learn.rbac.service;
 import java.util.List;
 
 import com.gzs.learn.rbac.inf.MenuDto;
+import com.gzs.learn.rbac.inf.MenuNodeDto;
 import com.gzs.learn.rbac.inf.ZTreeNode;
 
 public interface IMenuService {
@@ -22,4 +23,12 @@ public interface IMenuService {
     boolean insertMenu(MenuDto menu);
 
     List<ZTreeNode> menuTreeList();
+
+    boolean delMenuContainSunMenus(Long menuId);
+
+    List<Long> getMenuIdsByRoleId(Long roleId);
+
+    List<ZTreeNode> menuTreeListByMenuIds(List<Long> menuIds);
+
+    List<MenuNodeDto> getMenuIdsByRoleIds(List<Long> roleList);
 }

@@ -16,12 +16,6 @@ import com.gzs.learn.rbac.inf.ZTreeNode;
  */
 public interface IMenuService {
     /**
-     * 删除菜单
-     *
-     */
-    void delMenu(Long menuId);
-
-    /**
      * 删除菜单包含所有子菜单
      *
      */
@@ -54,14 +48,6 @@ public interface IMenuService {
      * @return
      */
     List<ZTreeNode> menuTreeListByMenuIds(List<Long> menuIds);
-
-    /**
-     * 删除menu关联的relation
-     *
-     * @param menuId
-     * @return
-     */
-    int deleteRelationByMenu(Long menuId);
 
     /**
      * 获取资源url通过角色id

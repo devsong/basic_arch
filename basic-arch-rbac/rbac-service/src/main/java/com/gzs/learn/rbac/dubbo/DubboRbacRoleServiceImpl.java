@@ -49,4 +49,9 @@ public class DubboRbacRoleServiceImpl implements DubboRbacRoleService {
     public RoleDto getRole(Long role) {
         return roleService.getRole(role);
     }
+
+    @Override
+    public boolean setAuthority(Long roleId, String menuIds) {
+        return roleService.setAuthority(roleId, menuIds);
+    }
 }

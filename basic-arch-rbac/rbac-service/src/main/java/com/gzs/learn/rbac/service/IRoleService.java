@@ -19,4 +19,6 @@ public interface IRoleService {
     boolean updateRole(RoleDto role);
 
     boolean delRole(Long roleId);
+
+    boolean setAuthority(Long roleId, String menuIds);
 }

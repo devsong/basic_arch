@@ -15,7 +15,7 @@ public interface IRoleService {
      * @param ids    权限的id
      * @date 2017年2月13日 下午8:26:53
      */
-    void setAuthority(Integer roleId, String ids);
+    void setAuthority(Long roleId, String ids);
 
     /**
      * 删除角色
@@ -23,5 +23,5 @@ public interface IRoleService {
      * @author stylefeng
      * @Date 2017/5/5 22:24
      */
-    void delRoleById(Integer roleId);
+    void delRoleById(Long roleId);
 }

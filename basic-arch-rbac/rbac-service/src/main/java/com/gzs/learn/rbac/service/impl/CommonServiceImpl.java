@@ -7,11 +7,9 @@ import org.springframework.stereotype.Component;
 
 import com.gzs.learn.common.util.BeanUtil;
 import com.gzs.learn.rbac.dao.DictMapper;
-import com.gzs.learn.rbac.dao.NoticeMapper;
 import com.gzs.learn.rbac.inf.DictDto;
-import com.gzs.learn.rbac.inf.NoticeDto;
+import com.gzs.learn.rbac.po.DeptPo;
 import com.gzs.learn.rbac.po.DictPo;
-import com.gzs.learn.rbac.po.NoticePo;
 import com.gzs.learn.rbac.service.ICommonService;
 
 import tk.mybatis.mapper.entity.Example;
@@ -20,9 +18,6 @@ import tk.mybatis.mapper.entity.Example;
 public class CommonServiceImpl implements ICommonService {
     @Autowired
     private DictMapper dictMapper;
-
-    @Autowired
-    private NoticeMapper noticeMapper;
 
     @Override
     public DictDto getDict(Integer dictId) {
@@ -61,17 +56,9 @@ public class CommonServiceImpl implements ICommonService {
     }
 
     @Override
-    public NoticeDto getNotice(Integer notictId) {
-        NoticePo noticePo = noticeMapper.selectByPrimaryKey(notictId.longValue());
-        NoticeDto noticeDto = new NoticeDto();
-        BeanUtil.copyProperties(noticePo, noticeDto);
-        return noticeDto;
-    }
-
-    @Override
     public List<DictDto> searchDict(String condition) {
-        dictMapper.search(condition);
-        return null;
+        List<DeptPo> deptPos = dictMapper.search(condition);
+        List<DictDto> deptDtos = BeanUtil.copyList(deptPos, DictDto.class);
+        return deptDtos;
     }
-
 }

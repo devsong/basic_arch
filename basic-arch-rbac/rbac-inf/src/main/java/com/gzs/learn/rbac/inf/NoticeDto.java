@@ -1,7 +1,5 @@
 package com.gzs.learn.rbac.inf;
 
-import java.util.Date;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -23,11 +21,7 @@ public class NoticeDto extends Base {
      */
     private String content;
     /**
-     * 创建时间
-     */
-    private Date createtime;
-    /**
      * 创建人
      */
-    private Integer creater;
+    private String creater;
 }

@@ -1,5 +1,6 @@
 package com.gzs.learn.rbac.inf;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -10,7 +11,8 @@ import com.gzs.learn.rbac.enums.IsMenu;
 import lombok.Data;
 
 @Data
-public class MenuNodeDto implements Comparable<MenuNodeDto> {
+public class MenuNodeDto implements Comparable<MenuNodeDto>, Serializable {
+    private static final long serialVersionUID = 1L;
 
     /**
      * 节点id

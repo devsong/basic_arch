@@ -33,7 +33,7 @@ public interface MenuMapper extends Mapper<MenuPo> {
      * @date 2017年2月12日 下午9:14:34
      */
     @Select("select menuid from sys_relation where roleid = #{roleId}")
-    List<Integer> getMenuIdsByRoleId(@Param("roleId") Long roleId);
+    List<Long> getMenuIdsByRoleId(@Param("roleId") Long roleId);
 
     /**
      * 获取菜单列表树
@@ -49,7 +49,7 @@ public interface MenuMapper extends Mapper<MenuPo> {
      * @return
      * @date 2017年2月19日 下午1:33:51
      */
-    List<ZTreeNode> menuTreeListByMenuIds(List<Integer> menuIds);
+    List<ZTreeNode> menuTreeListByMenuIds(List<Long> menuIds);
 
     /**
      * 删除menu关联的relation

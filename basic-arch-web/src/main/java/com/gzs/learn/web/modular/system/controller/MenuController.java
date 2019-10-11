@@ -28,7 +28,6 @@ import com.gzs.learn.web.common.constant.tips.Tip;
 import com.gzs.learn.web.common.controller.BaseController;
 import com.gzs.learn.web.common.exception.BizExceptionEnum;
 import com.gzs.learn.web.common.exception.BussinessException;
-import com.gzs.learn.web.common.persistence.model.Menu;
 import com.gzs.learn.web.core.log.LogObjectHolder;
 import com.gzs.learn.web.core.support.BeanKit;
 import com.gzs.learn.web.core.util.Convert;
@@ -81,8 +80,6 @@ public class MenuController extends BaseController {
         MenuDto menu = dubboRbacMenuService.getMenu(menuId);
 
         // 获取父级菜单的id
-        Menu temp = new Menu();
-        temp.setCode(menu.getPcode());
         MenuDto pMenu = dubboRbacMenuService.getMenuByCode(menu.getPcode());
 
         // 如果父级是顶级菜单
@@ -94,7 +91,7 @@ public class MenuController extends BaseController {
         }
 
         Map<String, Object> menuMap = BeanKit.beanToMap(menu);
-        menuMap.put("pcodeName", ConstantFactory.me().getMenuNameByCode(temp.getCode()));
+        menuMap.put("pcodeName", ConstantFactory.me().getMenuNameByCode(menu.getCode()));
         model.addAttribute("menu", menuMap);
         LogObjectHolder.me().set(menu);
         return PREFIX + "menu_edit.html";

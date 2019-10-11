@@ -22,15 +22,11 @@ import com.gzs.learn.rbac.inf.RoleDto;
 import com.gzs.learn.rbac.inf.UserDto;
 import com.gzs.learn.web.common.constant.enums.ManagerStatus;
 import com.gzs.learn.web.common.constant.enums.MenuStatus;
-import com.gzs.learn.web.common.persistence.model.Dept;
-import com.gzs.learn.web.common.persistence.model.Dict;
 import com.gzs.learn.web.core.log.LogObjectHolder;
 import com.gzs.learn.web.core.support.StrKit;
 import com.gzs.learn.web.core.util.Convert;
 import com.gzs.learn.web.core.util.SpringContextHolder;
 import com.gzs.learn.web.core.util.ToolUtil;
-
-import tk.mybatis.mapper.entity.Example;
 
 @Component
 @DependsOn("springContextHolder")
@@ -182,8 +178,6 @@ public class ConstantFactory implements IConstantFactory {
         if (dict == null) {
             return "";
         }
-        Example example = new Example(Dict.class);
-        example.createCriteria().andEqualTo("pid", dict.getId());
         List<DictDto> dicts = dubboRbacCommonService.getDictByPid(dict.getId());
         for (DictDto item : dicts) {
             if (item.getNum() != null && item.getNum().equals(val)) {
@@ -213,8 +207,6 @@ public class ConstantFactory implements IConstantFactory {
         if (ToolUtil.isEmpty(id)) {
             return null;
         }
-        Example example = new Example(Dict.class);
-        example.createCriteria().andEqualTo("pid", id);
         return dubboRbacCommonService.getDictByPid(id.longValue());
     }
 
@@ -225,8 +217,6 @@ public class ConstantFactory implements IConstantFactory {
 
     @Override
     public List<Long> getSubDeptId(Long deptid) {
-        Example example = new Example(Dept.class);
-        example.createCriteria().andLike("pids", "%[" + deptid + "]%");
         List<DeptDto> depts = dubboRbacDeptService.getSubDeptDtos(deptid);
         List<Long> deptids = new ArrayList<>();
         if (depts != null && depts.size() > 0) {

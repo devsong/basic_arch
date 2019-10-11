@@ -1,6 +1,7 @@
 package com.gzs.learn.rbac.service.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -41,7 +42,15 @@ public class DeptServiceImpl implements IDeptService {
 
     @Override
     public boolean deleteDept(Long deptId) {
-        return deptMapper.deleteByPrimaryKey(deptId) == 1;
+        deptMapper.deleteByPrimaryKey(deptId);
+        Example example = new Example(DeptPo.class);
+        example.createCriteria().andLike("pid", "%[" + deptId + "]%");
+        List<DeptPo> subDeptPos = deptMapper.selectByExample(example);
+        List<Long> deptIds = subDeptPos.stream().map(s -> s.getId()).collect(Collectors.toList());
+        Example deleteExample = new Example(DeptPo.class);
+        deleteExample.createCriteria().andIn("id", deptIds);
+        deptMapper.deleteByExample(deleteExample);
+        return true;
     }
 
     @Override

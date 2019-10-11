@@ -22,4 +22,16 @@ public interface DubboRbacCommonService {
     List<DictDto> searchDict(String condition);
 
     NoticeDto getNotice(Integer notictId);
+
+    List<NoticeDto> searchNotice(String condition);
+
+    boolean insertNotice(NoticeDto notice);
+
+    boolean deleteNotice(Integer noticeId);
+
+    boolean updateNotice(NoticeDto updateDto);
+
+    DictDto insertDict(DictDto itemDict);
+
+    boolean deleteDict(Integer dictId);
 }

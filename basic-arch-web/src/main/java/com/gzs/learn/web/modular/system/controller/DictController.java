@@ -20,8 +20,6 @@ import com.gzs.learn.web.common.constant.factory.ConstantFactory;
 import com.gzs.learn.web.common.controller.BaseController;
 import com.gzs.learn.web.common.exception.BizExceptionEnum;
 import com.gzs.learn.web.common.exception.BussinessException;
-import com.gzs.learn.web.common.persistence.dao.DictMapper;
-import com.gzs.learn.web.common.persistence.model.Dict;
 import com.gzs.learn.web.core.log.LogObjectHolder;
 import com.gzs.learn.web.core.util.ToolUtil;
 import com.gzs.learn.web.modular.system.service.IDictService;
@@ -39,8 +37,6 @@ import com.gzs.learn.web.modular.system.wrapper.DictWrapper;
 public class DictController extends BaseController {
     @Autowired
     private DubboRbacCommonService dubboRbacCommonService;
-    @Autowired
-    private DictMapper dictMapper;
 
     @Autowired
     IDictService dictService;
@@ -68,11 +64,9 @@ public class DictController extends BaseController {
     @Permission(Const.ADMIN_NAME)
     @RequestMapping("/dict_edit/{dictId}")
     public String deptUpdate(@PathVariable Integer dictId, Model model) {
-        Dict dict = dictMapper.selectByPrimaryKey(dictId);
+        DictDto dict = dubboRbacCommonService.getDict(dictId);
         model.addAttribute("dict", dict);
-        Dict queryModel = new Dict();
-        dict.setPid(dictId);
-        List<Dict> subDicts = dictMapper.select(queryModel);
+        List<DictDto> subDicts = dubboRbacCommonService.getDictByPid(dictId.longValue());
         model.addAttribute("subDicts", subDicts);
         LogObjectHolder.me().set(dict);
         return PREFIX + "dict_edit.html";
