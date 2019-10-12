@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzs.learn.rbac.dao.RoleMapper">
+
+    <resultMap id="BaseResultMap" type="com.gzs.learn.rbac.po.RolePo">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="num" jdbcType="INTEGER" property="num" />
+        <result column="pid" jdbcType="INTEGER" property="pid" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="deptid" jdbcType="INTEGER" property="deptid" />
+        <result column="tips" jdbcType="VARCHAR" property="tips" />
+        <result column="version" jdbcType="INTEGER" property="version" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createtime" />
+        <result column="timestamp" jdbcType="TIMESTAMP" property="timestamp"  />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, num, pid, name, deptid, tips, version,create_time,timestamp
+    </sql>
+
+    <select id="searchRoles" resultMap="BaseResultMap">
+        select
+            <include refid="Base_Column_List"/>
+        from
+            sys_role
+        <where>
+            <if test="condition != null">
+                name like CONCAT('%',#{condition},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="roleTreeList" resultType="com.gzs.learn.rbac.inf.ZTreeNode">
+        select 
+            id ,pId,name,
+            (case when (pId=0 or pId is null) then 'true' else 'false' end) open 
+        from 
+            sys_role
+    </select>
+
+    <select id="roleTreeListByRoleId" resultType="com.gzs.learn.rbac.inf.ZTreeNode">
+        SELECT
+            r.id as id,pId ,name,
+            (CASE WHEN (pId = 0 OR pId IS NULL) THEN 'true' ELSE 'false' END) as open,
+            (CASE WHEN (r1.ID = 0 OR r1.ID IS NULL) THEN 'false' ELSE 'true' END) as  checked
+        FROM
+            sys_role r LEFT JOIN 
+            (
+                SELECT  id FROM sys_role WHERE ID IN
+                <foreach collection="array" index="index" item="i" open="(" separator="," close=")">
+                    #{i}
+                </foreach>
+            ) r1 ON r.ID = r1.ID
+        ORDER BY
+            pId,num ASC
+    </select>
+
+</mapper>
