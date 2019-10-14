@@ -12,8 +12,8 @@
     <packaging>pom</packaging>
 
     <modules>
-         <module>log-inf</module>
-         <module>log-service</module>
+         <module>basic-arch-log-inf</module>
+         <module>basic-arch-log-service</module>
      </modules>
 
     <dependencies>

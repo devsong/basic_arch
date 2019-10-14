@@ -3,23 +3,34 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
 		<groupId>com.gzs.learn</groupId>
-		<artifactId>basic-arch</artifactId>
+		<artifactId>basic-arch-config</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>basic-arch-rbac</artifactId>
-	<packaging>pom</packaging>
+	<artifactId>basic-arch-config-inf</artifactId>
+	<packaging>jar</packaging>
 
-	<modules>
-		<module>basic-arch-rbac-inf</module>
-		<module>basic-arch-rbac-service</module>
-	</modules>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot</artifactId>
 		</dependency>
 	</dependencies>
 </project>

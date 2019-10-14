@@ -1,4 +1,4 @@
-package com.gzs.learn.serial;
+package com.gzs.learn.rbac;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +12,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 
 @Configuration
 @EnableTransactionManagement(order = 2, proxyTargetClass = true)
-@MapperScan(basePackages = { "com.gzs.learn.serial.repository" })
+@MapperScan(basePackages = { "com.gzs.learn.rbac.dao" })
 public class MybatisConfig {
 
     @Autowired
