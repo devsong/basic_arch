@@ -12,14 +12,7 @@
     <packaging>pom</packaging>
 
     <modules>
-         <module>basic-arch-log-inf</module>
-         <module>basic-arch-log-service</module>
-     </modules>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-    </dependencies>
+        <module>basic-arch-log-inf</module>
+        <module>basic-arch-log-service</module>
+    </modules>
 </project>

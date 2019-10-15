@@ -7,13 +7,13 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>rbac-service</artifactId>
+    <artifactId>basic-arch-rbac-service</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>com.gzs.learn</groupId>
-            <artifactId>rbac-inf</artifactId>
+            <artifactId>basic-arch-rbac-inf</artifactId>
             <version>${project.version}</version>
         </dependency>
 
