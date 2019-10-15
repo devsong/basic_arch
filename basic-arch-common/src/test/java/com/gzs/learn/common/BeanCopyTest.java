@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.gzs.learn.common.util.BeanUtil;
+import com.gzs.learn.common.util.JsonUtil;
 
 import lombok.Data;
 
@@ -25,8 +25,8 @@ public class BeanCopyTest {
     public void testCopyList() {
         List<Foo> listSrc = Lists.newArrayList(new Foo());
         List<Bar> listDesc = Lists.newArrayListWithCapacity(listSrc.size());
-        listDesc = BeanUtil.copyList(listSrc,Bar.class);
-        System.out.println(JSON.toJSONString(listDesc));
+        listDesc = BeanUtil.copyList(listSrc, Bar.class);
+        System.out.println(JsonUtil.toJSONString(listDesc));
     }
 
 }

@@ -1,5 +1,5 @@
 package com.gzs.learn.log.service;
 
-public interface ISyslogService {
+public interface IPerflogService {
 
 }

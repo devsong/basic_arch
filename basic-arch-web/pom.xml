@@ -15,7 +15,13 @@
     <dependencies>
         <dependency>
             <groupId>com.gzs.learn</groupId>
-            <artifactId>rbac-inf</artifactId>
+            <artifactId>basic-arch-rbac-inf</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.gzs.learn</groupId>
+            <artifactId>basic-arch-log-inf</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -48,11 +54,6 @@
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
         </dependency>
 
         <dependency>
@@ -182,12 +183,6 @@
             <groupId>org.apache.zookeeper</groupId>
             <artifactId>zookeeper</artifactId>
         </dependency>
-
-       <!--  <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional>
-        </dependency> -->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

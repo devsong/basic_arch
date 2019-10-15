@@ -8,9 +8,15 @@ import java.util.List;
 
 import com.gzs.learn.rbac.enums.IsMenu;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class MenuNodeDto implements Comparable<MenuNodeDto>, Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -62,11 +68,8 @@ public class MenuNodeDto implements Comparable<MenuNodeDto>, Serializable {
     /**
      * 查询子节点时候的临时集合
      */
+    @Builder.Default
     private List<MenuNodeDto> linkedList = new ArrayList<MenuNodeDto>();
-
-    public MenuNodeDto() {
-        super();
-    }
 
     public MenuNodeDto(Long id, Long parentId) {
         super();

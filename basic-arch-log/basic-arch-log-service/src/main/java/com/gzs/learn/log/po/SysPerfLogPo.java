@@ -27,7 +27,8 @@ public class SysPerfLogPo implements Serializable {
     /**
      * 组名
      */
-    private String group;
+    @Column(name = "group_name")
+    private String groupName;
     /**
      * 应用名
      */

@@ -2,11 +2,10 @@ package com.gzs.learn.log.dubbo;
 
 import com.gzs.learn.log.inf.SysPerfLogDto;
 
-public class DubboSyslogServiceImpl implements DubboSyslogService {
+public class DubboSyslogServiceImpl implements DubboPerflogService {
 
     @Override
-    public boolean inserSyslog(SysPerfLogDto sysLogDto) {
-        // TODO Auto-generated method stub
+    public boolean insertPerflog(SysPerfLogDto sysLogDto) {
         return false;
     }
 

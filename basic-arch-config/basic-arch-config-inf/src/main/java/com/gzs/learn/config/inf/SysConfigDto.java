@@ -3,16 +3,23 @@ package com.gzs.learn.config.inf;
 import java.io.Serializable;
 import java.util.Date;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 
 @Data
-public class ConfigDto implements Serializable {
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class SysConfigDto implements Serializable {
     /**
-    * 
-    */
+     * 
+     */
     private static final long serialVersionUID = 1L;
     /**
-     * 配置id
+     * id
      */
     private Long id;
     /**
@@ -20,21 +27,29 @@ public class ConfigDto implements Serializable {
      */
     private String product;
     /**
-     * 分组
+     * 组名
      */
-    private String group;
+    private String groupName;
     /**
      * 应用名
      */
     private String app;
     /**
-     * 配置名称
+     * 配置描述
      */
     private String configName;
+    /**
+     * 配置键值
+     */
+    private String configKey;
     /**
      * 配置值
      */
     private String configValue;
+    /**
+     * 配置状态
+     */
+    private Integer status;
     /**
      * 版本号
      */
@@ -44,15 +59,19 @@ public class ConfigDto implements Serializable {
      */
     private String creator;
     /**
-     * 最后一次更新人
+     * 创建时间
+     */
+    private Date createTime;
+    /**
+     * 最近一次更新人
      */
     private String lastUpdator;
     /**
-     * 最后一次更新时间
+     * 最近一次更新时间
      */
     private Date lastUpdateTime;
     /**
-     * 更新ip
+     * 最近一次更新IP
      */
     private String lastUpdateIp;
 }

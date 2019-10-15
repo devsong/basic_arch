@@ -7,6 +7,6 @@ import com.gzs.learn.log.inf.SysPerfLogDto;
  * @author guanzhisong
  *
  */
-public interface DubboSyslogService {
-    boolean inserSyslog(SysPerfLogDto sysLogDto);
+public interface DubboPerflogService {
+    boolean insertPerflog(SysPerfLogDto sysLogDto);
 }

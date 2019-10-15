@@ -4,10 +4,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import com.gzs.learn.serial.domain.GroupListenerNode;
 
-/**
- * @author miaowenlong
- *
- */
 public interface SerialManagerService {
 
     void rechargeSerialGroup(String name, int version, long tsup);

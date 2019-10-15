@@ -22,8 +22,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
@@ -75,7 +74,7 @@ public class HttpUtil {
      * @param headers http请求头信息
      * @return
      */
-    public static <T> Response<T> doGet(String url, TypeReference<List<T>> reference, Header... headers) {
+    public static <T> Response<T> doGet(String url, TypeReference<T> reference, Header... headers) {
         return doGet(url, reference, null, headers);
     }
 
@@ -88,7 +87,7 @@ public class HttpUtil {
      * @param headers http请求头信息
      * @return
      */
-    public static <T> Response<T> doGet(String url, TypeReference<List<T>> reference, RequestConfig requestConfig, Header... headers) {
+    public static <T> Response<T> doGet(String url, TypeReference<T> reference, RequestConfig requestConfig, Header... headers) {
         requestConfig = requestConfig == null ? HttpClientFactory.getDefaultRequestConfig() : requestConfig;
         HttpUriRequest request = RequestBuilder.get().setUri(url).setConfig(requestConfig).build();
         return execute(request, reference, headers);
@@ -140,8 +139,7 @@ public class HttpUtil {
      * @param headers 请求头信息
      * @return
      */
-    public static <T> Response<T> doPost(String url, List<? extends NameValuePair> pairs, TypeReference<List<T>> reference,
-            Header... headers) {
+    public static <T> Response<T> doPost(String url, List<? extends NameValuePair> pairs, TypeReference<T> reference, Header... headers) {
         return doPost(url, pairs, reference, null, headers);
     }
 
@@ -155,7 +153,7 @@ public class HttpUtil {
      * @param headers 请求头信息
      * @return
      */
-    public static <T> Response<T> doPost(String url, List<? extends NameValuePair> pairs, TypeReference<List<T>> reference,
+    public static <T> Response<T> doPost(String url, List<? extends NameValuePair> pairs, TypeReference<T> reference,
             RequestConfig requestConfig, Header... headers) {
         HttpUriRequest request;
         requestConfig = requestConfig == null ? HttpClientFactory.getDefaultRequestConfig() : requestConfig;
@@ -213,7 +211,7 @@ public class HttpUtil {
      * @param headers
      * @return
      */
-    public static <T> Response<T> doPost(String url, String requestBody, TypeReference<List<T>> reference, Header... headers) {
+    public static <T> Response<T> doPost(String url, String requestBody, TypeReference<T> reference, Header... headers) {
         return doPost(url, requestBody, reference, null, headers);
     }
 
@@ -226,7 +224,7 @@ public class HttpUtil {
      * @param headers
      * @return
      */
-    public static <T> Response<T> doPost(String url, String requestBody, TypeReference<List<T>> reference, RequestConfig requestConfig,
+    public static <T> Response<T> doPost(String url, String requestBody, TypeReference<T> reference, RequestConfig requestConfig,
             Header... headers) {
         HttpUriRequest request = null;
         requestConfig = requestConfig == null ? HttpClientFactory.getDefaultRequestConfig() : requestConfig;
@@ -285,8 +283,7 @@ public class HttpUtil {
      * @param headers
      * @return
      */
-    public static <T> Response<T> doPut(String url, List<? extends NameValuePair> pairs, TypeReference<List<T>> reference,
-            Header... headers) {
+    public static <T> Response<T> doPut(String url, List<? extends NameValuePair> pairs, TypeReference<T> reference, Header... headers) {
         return doPut(url, pairs, reference, null, headers);
     }
 
@@ -299,7 +296,7 @@ public class HttpUtil {
      * @param headers
      * @return
      */
-    public static <T> Response<T> doPut(String url, List<? extends NameValuePair> pairs, TypeReference<List<T>> reference,
+    public static <T> Response<T> doPut(String url, List<? extends NameValuePair> pairs, TypeReference<T> reference,
             RequestConfig requestConfig, Header... headers) {
         HttpUriRequest request;
         requestConfig = requestConfig == null ? HttpClientFactory.getDefaultRequestConfig() : requestConfig;
@@ -349,11 +346,11 @@ public class HttpUtil {
      * @param headers
      * @return
      */
-    public static <T> Response<T> doPut(String url, String requestBody, TypeReference<List<T>> reference, Header... headers) {
+    public static <T> Response<T> doPut(String url, String requestBody, TypeReference<T> reference, Header... headers) {
         return doPut(url, requestBody, reference, null, headers);
     }
 
-    public static <T> Response<T> doPut(String url, String requestBody, TypeReference<List<T>> reference, RequestConfig requestConfig,
+    public static <T> Response<T> doPut(String url, String requestBody, TypeReference<T> reference, RequestConfig requestConfig,
             Header... headers) {
         HttpUriRequest request;
         requestConfig = requestConfig == null ? HttpClientFactory.getDefaultRequestConfig() : requestConfig;
@@ -469,7 +466,7 @@ public class HttpUtil {
                 if (cls.getName().equals("java.lang.String")) {
                     obj = (T) resp;
                 } else {
-                    obj = JSON.parseObject(resp, cls);
+                    obj = JsonUtil.parseObject(resp, cls);
                 }
             } else {
                 errMsg = resp;
@@ -486,13 +483,13 @@ public class HttpUtil {
      * @param reference
      * @return
      */
-    private static <T> Response<T> execute(HttpUriRequest request, TypeReference<List<T>> reference, Header... headers) {
+    private static <T> Response<T> execute(HttpUriRequest request, TypeReference<T> reference, Header... headers) {
         if (headers != null && headers.length > 0) {
             request.setHeaders(headers);
         }
         int code = 0;
         boolean success = false;
-        List<T> list = null;
+        T list = null;
         String errMsg = null;
         try (CloseableHttpResponse response = client.execute(request)) {
             code = response.getStatusLine().getStatusCode();
@@ -500,7 +497,7 @@ public class HttpUtil {
             String resp = entity == null ? "" : EntityUtils.toString(entity, StandardCharsets.UTF_8);
             if (code / 100 == 2) {
                 success = true;
-                list = JSON.parseObject(resp, reference);
+                list = JsonUtil.parseObject(resp, reference);
             } else {
                 errMsg = resp;
             }

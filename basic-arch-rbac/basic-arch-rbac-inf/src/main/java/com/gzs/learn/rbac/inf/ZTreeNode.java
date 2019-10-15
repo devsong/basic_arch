@@ -2,7 +2,10 @@ package com.gzs.learn.rbac.inf;
 
 import java.io.Serializable;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 
@@ -10,6 +13,9 @@ import lombok.Data;
  * 
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ZTreeNode implements Serializable {
     /**
      * 

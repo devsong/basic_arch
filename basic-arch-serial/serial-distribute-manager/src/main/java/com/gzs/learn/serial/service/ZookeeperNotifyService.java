@@ -2,10 +2,6 @@ package com.gzs.learn.serial.service;
 
 import com.gzs.learn.serial.inf.pk.SerialGroupPK;
 
-/**
- * @author miaowenlong
- *
- */
 public interface ZookeeperNotifyService {
 
     /**

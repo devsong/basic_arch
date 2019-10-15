@@ -1,11 +1,18 @@
 package com.gzs.learn.config.dubbo;
 
-import com.gzs.learn.config.inf.ConfigDto;
+import java.util.List;
+
+import com.gzs.learn.config.inf.SysConfigDto;
+import com.gzs.learn.config.inf.SysConfigKeyDto;
 
 public interface DubboConfigService {
-    boolean addConfig(ConfigDto configDto);
+    boolean addConfig(SysConfigDto configDto);
 
-    boolean delConfig(Long id);
+    boolean delConfig(SysConfigKeyDto key);
 
-    boolean updateConfig(ConfigDto configDto);
+    boolean updateConfig(SysConfigDto configDto);
+
+    String getConfig(SysConfigKeyDto key);
+
+    List<SysConfigDto> getConfigs(SysConfigKeyDto key);
 }
