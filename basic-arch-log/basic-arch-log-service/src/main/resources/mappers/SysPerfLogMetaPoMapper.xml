@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzs.learn.log.dao.SysPerfLogMetaPoMapper">
+    <resultMap id="BaseResultMap" type="com.gzs.learn.log.po.SysPerfLogMetaPo">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="product" jdbcType="VARCHAR" property="product" />
+        <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+        <result column="app" jdbcType="VARCHAR" property="app" />
+        <result column="clazz" jdbcType="VARCHAR" property="clazz" />
+        <result column="method" jdbcType="VARCHAR" property="method" />
+        <result column="operator_ip" jdbcType="VARCHAR" property="operatorIp" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="timestamp" jdbcType="TIMESTAMP" property="timestamp" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, product, group_name, app, clazz, method, operator_ip, create_time, timestamp
+    </sql>
+
+</mapper>

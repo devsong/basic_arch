@@ -2,6 +2,7 @@ package com.gzs.learn.web.modular.biz.service;
 
 import java.util.List;
 
+import com.gzs.learn.log.inf.SysPerfLogDto;
 import com.gzs.learn.web.common.persistence.model.logs.LoginLog;
 import com.gzs.learn.web.common.persistence.model.logs.OperationLog;
 import com.gzs.learn.web.modular.biz.bo.QueryLogBo;
@@ -58,4 +59,6 @@ public interface ISystemLogService {
      * 清空登陆日志
      */
     void truncateLoginLog();
+
+    void savePerfLog(SysPerfLogDto sysPerfLogDto);
 }

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzs.learn.log.dao.SysPerfLogMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gzs.learn.log.po.SysPerfLogPo">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="product" jdbcType="VARCHAR" property="product" />
+        <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+        <result column="app" jdbcType="VARCHAR" property="app" />
+        <result column="operator_ip" jdbcType="VARCHAR" property="operatorIp" />
+        <result column="clazz" jdbcType="VARCHAR" property="clazz" />
+        <result column="method" jdbcType="VARCHAR" property="method" />
+        <result column="execute_timespan" jdbcType="INTEGER" property="executeTimespan" />
+        <result column="params_in" jdbcType="LONGVARCHAR" property="paramsIn" />
+        <result column="params_out" jdbcType="LONGVARCHAR" property="paramsOut" />
+        <result column="code" jdbcType="INTEGER" property="code" />
+        <result column="errmsg" jdbcType="LONGVARCHAR" property="errmsg" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="timestamp" jdbcType="TIMESTAMP" property="timestamp" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, product, group_name, app, operator_ip, clazz, method, execute_timespan, params_in, params_out,code, errmsg,
+        create_time,timestamp
+    </sql>
+
+    <select id="searchPerfLogs" resultMap="BaseResultMap" parameterType="com.gzs.learn.log.inf.search.SysPerfLogSearchDto">
+        select
+        <include refid="Base_Column_List" />
+        FROM
+        sys_login_log
+        <where>
+            <if test="createTimeStart != null  and createTimeEnd != null">
+                create_time between #{createTimeStart} and #{createTimeEnd}
+            </if>
+            <if test="product != null and product!=''">
+                and product=#{product}
+            </if>
+            <if test="groupName != null and groupName''">
+                and group_name=#{groupName}
+            </if>
+            <if test="app != null and app!=''">
+                and app=#{app}
+            </if>
+            <if test="clazz != null and clazz!=''">
+                and clazz=#{clazz}
+            </if>
+            <if test="method != null and method!=''">
+                and method=#{method}
+            </if>
+            <if test="operatorIps != null">
+                and operator_ip in(
+                <foreach collection="operatorIps" item="item" separator=",">
+                    #{item}
+                </foreach>
+                )
+            </if>
+        </where>
+        order by
+        id desc
+    </select>
+
+    <update id="truncate">
+        truncate table sys_login_log
+    </update>
+</mapper>

@@ -3,14 +3,12 @@ package com.gzs.learn.common.util;
 import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
 
 import java.util.List;
-import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.MapType;
 
 public class JsonUtil {
     private static final ObjectMapper jsonConvertInstance = new ObjectMapper();
@@ -82,24 +80,6 @@ public class JsonUtil {
         JavaType javaType = jsonConvertInstance.getTypeFactory().constructParametricType(List.class, clazz);
         try {
             List<T> readValue = jsonConvertInstance.readValue(json, javaType);
-            return readValue;
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * 序列化map
-     * @param <V>
-     * @param json
-     * @param val
-     * @return
-     */
-    public static <V> Map<String, V> parseMap(String json, Class<V> val) {
-        MapType mapType = jsonConvertInstance.getTypeFactory().constructMapType(Map.class, String.class, val);
-        try {
-            Map<String, V> readValue = jsonConvertInstance.readValue(json, mapType);
             return readValue;
         } catch (JsonProcessingException e) {
             e.printStackTrace();

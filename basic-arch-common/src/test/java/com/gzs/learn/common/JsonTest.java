@@ -1,14 +1,12 @@
 package com.gzs.learn.common;
 
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.gzs.learn.common.util.JsonUtil;
 
 import lombok.AllArgsConstructor;
@@ -36,7 +34,7 @@ public class JsonTest {
         list = JsonUtil.parseList(JsonUtil.toJSONString(list), FooJson.class);
         Assert.assertTrue(list.size() == 2);
     }
-    
+
     @Test
     public void testParseList2() {
         List<FooJson> list = Lists.newArrayList(new FooJson(1, "test"), new FooJson(2, "test2"));
@@ -45,15 +43,6 @@ public class JsonTest {
         Assert.assertTrue(list.size() == 2);
     }
 
-    @Test
-    public void testParseMap() {
-        Map<String, BarJson> map = Maps.newHashMap();
-        BarJson bar = new BarJson(2, "bar");
-        map.put("test", bar);
-        String json = JsonUtil.toJSONString(map);
-        map = JsonUtil.parseMap(json, BarJson.class);
-        Assert.assertTrue(map.size() == 1);
-    }
 }
 
 @Data

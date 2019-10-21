@@ -7,7 +7,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
-import com.gzs.learn.web.common.annotion.DataSource;
+import com.gzs.learn.log.dubbo.DubboPerfLogService;
+import com.gzs.learn.log.inf.SysPerfLogDto;
+import com.gzs.learn.web.common.constant.Const;
 import com.gzs.learn.web.common.constant.DSEnum;
 import com.gzs.learn.web.common.page.PageReq;
 import com.gzs.learn.web.common.persistence.dao.logs.LoginLogMapper;
@@ -19,9 +21,10 @@ import com.gzs.learn.web.modular.biz.bo.QueryLogBo;
 import com.gzs.learn.web.modular.biz.service.ISystemLogService;
 
 @Component
-@DataSource(DSEnum.DATA_SOURCE_LOGS)
 @Transactional
 public class SystemLogServiceImpl implements ISystemLogService {
+    @Autowired
+    private DubboPerfLogService dubboPerflogService;
 
     @Autowired
     private LoginLogMapper loginLogMapper;
@@ -74,5 +77,12 @@ public class SystemLogServiceImpl implements ISystemLogService {
     @Override
     public void truncateBizLog() {
         operationLogMapper.truncate();
+    }
+
+    @Override
+    public void savePerfLog(SysPerfLogDto sysPerfLogDto) {
+        Const.SYSTEM_POOL.execute(() -> {
+            dubboPerflogService.insertPerflog(sysPerfLogDto);
+        });
     }
 }

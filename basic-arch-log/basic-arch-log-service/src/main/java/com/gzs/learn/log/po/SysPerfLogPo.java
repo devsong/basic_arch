@@ -4,9 +4,13 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 
@@ -14,12 +18,17 @@ import lombok.Data;
  *
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "sys_perf_log")
 public class SysPerfLogPo implements Serializable {
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
+    @Id
+    private Long id;
     /**
      * 产品线
      */
@@ -73,5 +82,4 @@ public class SysPerfLogPo implements Serializable {
     * 更新时间
     */
     private Date timestamp;
-
 }

@@ -15,21 +15,13 @@
     <dubbo:registry id="serialZk" protocol="zookeeper" address="${dubbo.zk.publish}" />
     <dubbo:protocol port="-1" threads="200" />
 
-    <dubbo:service interface="com.gzs.learn.rbac.dubbo.DubboRbacAuthService" ref="dubboRbacAuthService" registry="serialZk"
+    <dubbo:service interface="com.gzs.learn.log.dubbo.DubboPerflogService" ref="dubboPerflogService" registry="serialZk"
         timeout="3000" retries="0" version="${dubbo.zk.version}" />
 
-    <dubbo:service interface="com.gzs.learn.rbac.dubbo.DubboRbacMenuService" ref="dubboRbacMenuService" registry="serialZk"
-        timeout="3000" retries="0" version="${dubbo.zk.version}" />
+    <dubbo:service interface="com.gzs.learn.log.dubbo.DubboUserLoginLogService" ref="dubboUserLoginLogService"
+        registry="serialZk" timeout="3000" retries="0" version="${dubbo.zk.version}" />
 
-    <dubbo:service interface="com.gzs.learn.rbac.dubbo.DubboRbacUserService" ref="dubboRbacUserService" registry="serialZk"
-        timeout="3000" retries="0" version="${dubbo.zk.version}" />
+    <dubbo:service interface="com.gzs.learn.log.dubbo.DubboUserOperationLogService" ref="dubboUserOperationLogService"
+        registry="serialZk" timeout="3000" retries="0" version="${dubbo.zk.version}" />
 
-    <dubbo:service interface="com.gzs.learn.rbac.dubbo.DubboRbacRoleService" ref="dubboRbacRoleService" registry="serialZk"
-        timeout="3000" retries="0" version="${dubbo.zk.version}" />
-
-    <dubbo:service interface="com.gzs.learn.rbac.dubbo.DubboRbacDeptService" ref="dubboRbacDeptService" registry="serialZk"
-        timeout="3000" retries="0" version="${dubbo.zk.version}" />
-
-    <dubbo:service interface="com.gzs.learn.rbac.dubbo.DubboRbacCommonService" ref="dubboRbacCommonService" registry="serialZk"
-        timeout="3000" retries="0" version="${dubbo.zk.version}" />
 </beans>

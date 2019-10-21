@@ -16,53 +16,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "user_login_log")
-public class UserLoginLogPo implements Serializable {
+@Table(name = "user_operation_log")
+public class UserOperationLogPo implements Serializable {
     /**
-    * 
-    */
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * 主键id
+     * 
      */
+    private static final long serialVersionUID = 1L;
     @Id
     private Long id;
-
-    /**
-     * 日志名
-     */
+    private String logtype;
     private String logname;
-
-    /**
-     * 用户id
-     */
-    private Long userid;
-
-    /**
-     * 成功标识
-     */
-    private String succeed;
-
-    /**
-     * 消息
-     */
-    private String message;
-
-    /**
-     * 操作ip
-     */
     @Column(name = "operator_ip")
     private String operatorIp;
-
-    /**
-     * 创建时间
-     */
+    private Long userid;
+    private String classname;
+    private String method;
+    private String succeed;
+    private String message;
     @Column(name = "create_time")
     private Date createTime;
-
-    /**
-     * 更新时间
-     */
     private Date timestamp;
 }

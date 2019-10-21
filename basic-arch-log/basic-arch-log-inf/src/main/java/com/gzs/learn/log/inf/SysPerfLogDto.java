@@ -2,7 +2,10 @@ package com.gzs.learn.log.inf;
 
 import java.io.Serializable;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 
@@ -10,6 +13,9 @@ import lombok.Data;
  *
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class SysPerfLogDto implements Serializable {
 
     /**
@@ -17,13 +23,17 @@ public class SysPerfLogDto implements Serializable {
      */
     private static final long serialVersionUID = 1L;
     /**
+     * id
+     */
+    private Long id;
+    /**
      * 产品线
      */
     private String product;
     /**
      * 组名
      */
-    private String group;
+    private String groupName;
     /**
      * 应用名
      */

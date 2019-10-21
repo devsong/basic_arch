@@ -1,11 +1,7 @@
-package com.gzs.learn.log.po;
+package com.gzs.learn.log.inf;
 
 import java.io.Serializable;
 import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,8 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "user_login_log")
-public class UserLoginLogPo implements Serializable {
+public class UserLoginLogDto implements Serializable {
     /**
     * 
     */
@@ -26,7 +21,6 @@ public class UserLoginLogPo implements Serializable {
     /**
      * 主键id
      */
-    @Id
     private Long id;
 
     /**
@@ -52,13 +46,11 @@ public class UserLoginLogPo implements Serializable {
     /**
      * 操作ip
      */
-    @Column(name = "operator_ip")
     private String operatorIp;
 
     /**
      * 创建时间
      */
-    @Column(name = "create_time")
     private Date createTime;
 
     /**
