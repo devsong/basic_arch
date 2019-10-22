@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gzs.learn.log.dao.SysPerfLogMetaPoMapper">
+<mapper namespace="com.gzs.learn.log.dao.SysPerfLogMetaMapper">
     <resultMap id="BaseResultMap" type="com.gzs.learn.log.po.SysPerfLogMetaPo">
         <id column="id" jdbcType="BIGINT" property="id" />
         <result column="product" jdbcType="VARCHAR" property="product" />

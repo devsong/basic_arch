@@ -30,26 +30,10 @@ public class SysPerfLogPo implements Serializable {
     @Id
     private Long id;
     /**
-     * 产品线
+     * 元数据id
      */
-    private String product;
-    /**
-     * 组名
-     */
-    @Column(name = "group_name")
-    private String groupName;
-    /**
-     * 应用名
-     */
-    private String app;
-    /**
-     * 类名
-     */
-    private String clazz;
-    /**
-     * 方法名
-     */
-    private String method;
+    @Column(name = "meta_id")
+    private Long metaId;
     /**
      * 执行时间
      */

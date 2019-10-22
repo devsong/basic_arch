@@ -1,10 +1,4 @@
-package com.gzs.learn.log.po;
-
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
+package com.gzs.learn.log.inf.search;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,16 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "sys_perf_log_meta")
-public class SysPerfLogMetaPo implements java.io.Serializable {
+public class SysPerfLogMetaSearchDto implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
-
-    /**
-     * 
-     */
-    @Id
-    private Long id;
-
     /**
      * 产品线
      */
@@ -33,7 +19,6 @@ public class SysPerfLogMetaPo implements java.io.Serializable {
     /**
      * 组名
      */
-    @Column(name = "group_name")
     private String groupName;
 
     /**
@@ -54,17 +39,5 @@ public class SysPerfLogMetaPo implements java.io.Serializable {
     /**
      * 客户端机器ip
      */
-    @Column(name = "operator_ip")
     private String operatorIp;
-
-    /**
-     * 创建时间
-     */
-    @Column(name = "create_time")
-    private Date createTime;
-
-    /**
-     * 更新时间
-     */
-    private Date timestamp;
 }

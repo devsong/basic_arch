@@ -11,6 +11,13 @@ import com.gzs.learn.log.inf.search.SysPerfLogSearchDto;
  */
 public interface DubboPerfLogService {
     /**
+     * 写入元数据信息
+     * @param sysLogDto
+     * @return
+     */
+    boolean insertPerfLogMeta(SysPerfLogDto sysLogDto);
+
+    /**
      * 写入性能日志数据
      * @param sysLogDto
      * @return
@@ -23,4 +30,5 @@ public interface DubboPerfLogService {
      * @return
      */
     LogPageResponseDto<SysPerfLogDto> searchPerfLogs(SysPerfLogSearchDto searchDto);
+
 }

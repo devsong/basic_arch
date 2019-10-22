@@ -1,4 +1,4 @@
-package com.gzs.learn.log;
+package com.gzs.learn.log.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

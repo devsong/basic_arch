@@ -1,6 +1,9 @@
 package com.gzs.learn.log.inf;
 
 import java.io.Serializable;
+import java.util.Date;
+
+import com.gzs.learn.log.enums.SysPerfLogDurationEnum;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +20,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class SysPerfLogDto implements Serializable {
-
     /**
      * 
      */
@@ -47,6 +49,10 @@ public class SysPerfLogDto implements Serializable {
      */
     private String method;
     /**
+     * 操作IP
+     */
+    private String operatorIp;
+    /**
      * 执行时间
      */
     private Integer executeTimespan;
@@ -70,4 +76,12 @@ public class SysPerfLogDto implements Serializable {
      * 系统异常堆栈信息
      */
     private String errMsg;
+    /**
+     * 统计日志记录维度
+     */
+    private SysPerfLogDurationEnum durationEnum;
+    /**
+     * 创建时间
+     */
+    private Date createTime;
 }

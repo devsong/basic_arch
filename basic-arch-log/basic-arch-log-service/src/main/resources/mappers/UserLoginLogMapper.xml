@@ -43,8 +43,4 @@
         order by
         id desc
     </select>
-
-    <update id="truncate">
-        truncate table sys_login_log
-    </update>
 </mapper>
