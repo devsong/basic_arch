@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -23,6 +24,7 @@ public class UserOperationLogPo implements Serializable {
      */
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(generator = "JDBC")
     private Long id;
     private String logtype;
     private String logname;

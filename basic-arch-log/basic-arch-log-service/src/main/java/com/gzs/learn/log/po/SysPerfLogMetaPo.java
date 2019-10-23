@@ -3,6 +3,7 @@ package com.gzs.learn.log.po;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -23,6 +24,7 @@ public class SysPerfLogMetaPo implements java.io.Serializable {
      * 
      */
     @Id
+    @GeneratedValue(generator = "JDBC")
     private Long id;
 
     /**

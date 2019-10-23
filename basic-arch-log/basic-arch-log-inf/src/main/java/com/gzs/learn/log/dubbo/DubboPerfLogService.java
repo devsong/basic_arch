@@ -2,6 +2,8 @@ package com.gzs.learn.log.dubbo;
 
 import com.gzs.learn.log.LogPageResponseDto;
 import com.gzs.learn.log.inf.SysPerfLogDto;
+import com.gzs.learn.log.inf.SysPerfLogMetaDto;
+import com.gzs.learn.log.inf.search.SysPerfLogMetaSearchDto;
 import com.gzs.learn.log.inf.search.SysPerfLogSearchDto;
 
 /**
@@ -31,4 +33,10 @@ public interface DubboPerfLogService {
      */
     LogPageResponseDto<SysPerfLogDto> searchPerfLogs(SysPerfLogSearchDto searchDto);
 
+    /**
+     * 元数据搜索
+     * @param searchDto
+     * @return
+     */
+    LogPageResponseDto<SysPerfLogMetaDto> searchMetas(SysPerfLogMetaSearchDto searchDto);
 }

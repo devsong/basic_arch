@@ -31,6 +31,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.gzs.learn</groupId>
+            <artifactId>basic-arch-log-inf</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>

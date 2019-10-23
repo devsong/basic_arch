@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -28,6 +29,7 @@ public class SysPerfLogPo implements Serializable {
      */
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(generator = "JDBC")
     private Long id;
     /**
      * 元数据id
@@ -61,7 +63,8 @@ public class SysPerfLogPo implements Serializable {
     /**
      * 调用时间
      */
-    private Date createtime;
+    @Column(name = "create_time")
+    private Date createTime;
     /**
     * 更新时间
     */

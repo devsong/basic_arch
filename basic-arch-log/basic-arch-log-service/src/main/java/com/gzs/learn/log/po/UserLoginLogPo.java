@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -27,6 +28,7 @@ public class UserLoginLogPo implements Serializable {
      * 主键id
      */
     @Id
+    @GeneratedValue(generator = "JDBC")
     private Long id;
 
     /**

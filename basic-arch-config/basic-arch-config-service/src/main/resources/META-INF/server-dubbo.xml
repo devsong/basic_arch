@@ -12,9 +12,9 @@
         <dubbo:parameter key="qos.port" value="33333" />
     </dubbo:application>
 
-    <dubbo:registry id="serialZk" protocol="zookeeper" address="${dubbo.zk.publish}" />
+    <dubbo:registry id="clientZk" protocol="zookeeper" address="${dubbo.zk.publish}" />
     <dubbo:protocol port="-1" />
 
-    <dubbo:service interface="com.gzs.learn.config.dubbo.DubboConfigService" ref="dubboConfigService" registry="serialZk"
+    <dubbo:service interface="com.gzs.learn.config.dubbo.DubboConfigService" ref="dubboConfigService" registry="clientZk"
         timeout="3000" retries="0" version="${dubbo.zk.version}" />
 </beans>

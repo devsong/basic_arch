@@ -1,9 +1,10 @@
 package com.gzs.learn.log.service.impl;
 
-import static com.gzs.learn.log.ILogConstant.EXECUTE_CODE_SUCCESS;
 import static com.gzs.learn.log.LogSystemConstant.CODE_SUCCESS;
 import static com.gzs.learn.log.enums.SysPerfLogDurationEnum.BY_DATE;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -18,7 +19,6 @@ import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.gzs.learn.common.util.BeanUtil;
 import com.gzs.learn.log.LogPageResponseDto;
-import com.gzs.learn.log.LogSystemConstant;
 import com.gzs.learn.log.LogPageResponseDto.LogPageResponseDtoBuilder;
 import com.gzs.learn.log.LogPageResponseDto.PageResponse;
 import com.gzs.learn.log.dao.SysPerfLogCountMapper;
@@ -60,12 +60,12 @@ public class PerfLogServiceImpl implements IPerfLogService {
         BeanUtil.copyProperties(sysLogDto, metaPo);
         long metaId = 0;
         // 检查元数据信息是否写入
-        List<SysPerfLogMetaPo> exists = sysPerfLogMetaMapper.select(metaPo);
-        if (CollectionUtils.isEmpty(exists)) {
+        SysPerfLogMetaPo exist = getExistMetaPo(sysLogDto);
+        if (exist == null) {
             insertPerLogMeta(metaPo);
             metaId = metaPo.getId();
         } else {
-            metaId = exists.get(0).getId();
+            metaId = exist.getId();
         }
         // 写入性能日志
         SysPerfLogPo po = new SysPerfLogPo();
@@ -91,28 +91,24 @@ public class PerfLogServiceImpl implements IPerfLogService {
                 minTime = 0;
         double avgTime = 0;
         if (CollectionUtils.isEmpty(exists)) {
+            // 执行时间
+            int executeTime = sysLogDto.getExecuteTimespan();
             totalExecute += 1;
+            totalTime += executeTime;
+            maxTime = executeTime;
+            minTime = executeTime;
+            avgTime = executeTime;
             if (sysLogDto.getCode() != CODE_SUCCESS) {
                 exceptionExecute += 1;
                 sysExceptionExecute += sysLogDto.getCode() < CODE_SUCCESS ? 1L : 0;
                 bizExceptionExecute += sysLogDto.getCode() > CODE_SUCCESS ? 1L : 0;
             }
-            // 执行时间
-            int executeTime = sysLogDto.getExecuteTimespan();
-            totalTime += executeTime;
-            maxTime = executeTime;
-            minTime = executeTime;
-            avgTime = executeTime;
         } else {
             // 执行次数
             SysPerfLogCountPo existPo = exists.get(0);
             long executeCount = existPo.getExecuteTotal();
             totalExecute = executeCount + 1;
-            if (sysLogDto.getCode() != CODE_SUCCESS) {
-                exceptionExecute = existPo.getExecuteException() + 1;
-                sysExceptionExecute = existPo.getExecuteSysException() + (sysLogDto.getCode() < CODE_SUCCESS ? 1L : 0);
-                bizExceptionExecute = existPo.getExecuteBizException() + (sysLogDto.getCode() > CODE_SUCCESS ? 1L : 0);
-            }
+
             // 执行时间
             int executeTime = sysLogDto.getExecuteTimespan();
 
@@ -124,7 +120,12 @@ public class PerfLogServiceImpl implements IPerfLogService {
             totalTime += total;
             maxTime = max;
             minTime = min;
-            avgTime = ((double) totalTime) / totalExecute;
+            avgTime = new BigDecimal(totalTime).divide(new BigDecimal(totalExecute), 2, RoundingMode.HALF_UP).doubleValue();
+            if (sysLogDto.getCode() != CODE_SUCCESS) {
+                exceptionExecute = existPo.getExecuteException() + 1;
+                sysExceptionExecute = existPo.getExecuteSysException() + (sysLogDto.getCode() < CODE_SUCCESS ? 1L : 0);
+                bizExceptionExecute = existPo.getExecuteBizException() + (sysLogDto.getCode() > CODE_SUCCESS ? 1L : 0);
+            }
         }
 
         countPo.setExecuteTotal(totalExecute);
@@ -170,4 +171,14 @@ public class PerfLogServiceImpl implements IPerfLogService {
         return result;
     }
 
+    private SysPerfLogMetaPo getExistMetaPo(SysPerfLogDto sysLogDto) {
+        SysPerfLogMetaPo query = SysPerfLogMetaPo.builder().product(sysLogDto.getProduct()).groupName(sysLogDto.getGroupName())
+                .app(sysLogDto.getApp()).clazz(sysLogDto.getClazz()).method(sysLogDto.getMethod()).operatorIp(sysLogDto.getOperatorIp())
+                .build();
+        List<SysPerfLogMetaPo> exists = sysPerfLogMetaMapper.select(query);
+        if (!CollectionUtils.isEmpty(exists)) {
+            return exists.get(0);
+        }
+        return null;
+    }
 }

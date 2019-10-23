@@ -9,13 +9,13 @@
         <result column="params_in" jdbcType="LONGVARCHAR" property="paramsIn" />
         <result column="params_out" jdbcType="LONGVARCHAR" property="paramsOut" />
         <result column="code" jdbcType="INTEGER" property="code" />
-        <result column="errmsg" jdbcType="LONGVARCHAR" property="errmsg" />
+        <result column="errmsg" jdbcType="LONGVARCHAR" property="errMsg" />
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
         <result column="timestamp" jdbcType="TIMESTAMP" property="timestamp" />
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, meta_id, execute_timespan, params_in, params_out,code, errmsg,create_time,timestamp
+        pl.id, pl.meta_id, pl.execute_timespan, pl.params_in, pl.params_out,pl.code, pl.errmsg,pl.create_time,pl.timestamp
     </sql>
 
     <select id="searchPerfLogs" resultMap="BaseResultMap" parameterType="com.gzs.learn.log.inf.search.SysPerfLogSearchDto">
@@ -30,7 +30,7 @@
             <if test="product != null and product!=''">
                 and m.product=#{product}
             </if>
-            <if test="groupName != null and groupName''">
+            <if test="groupName != null and groupName!=''">
                 and m.group_name=#{groupName}
             </if>
             <if test="app != null and app!=''">
