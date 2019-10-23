@@ -1,4 +1,4 @@
-package com.gzs.learn.config.aop;
+package com.gzs.learn.rbac.aop;
 
 import java.lang.reflect.Method;
 import java.util.Date;
@@ -10,32 +10,34 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Stopwatch;
 import com.gzs.learn.common.util.IpUtil;
 import com.gzs.learn.common.util.JsonUtil;
-import com.gzs.learn.config.IConfigConstant;
-import com.gzs.learn.config.conf.ConfProperties;
 import com.gzs.learn.log.dubbo.DubboPerfLogService;
 import com.gzs.learn.log.enums.SysPerfLogDurationEnum;
 import com.gzs.learn.log.inf.SysPerfLogDto;
+import com.gzs.learn.rbac.IRbacConstant;
+import com.gzs.learn.rbac.conf.RbacProperties;
 
 import lombok.extern.slf4j.Slf4j;
 
+@Order(1)
 @Aspect
 @Component
 @Slf4j
 public class PerformanceAop {
 
     @Autowired
-    private ConfProperties confProperties;
+    private RbacProperties confProperties;
 
     @Autowired
     private DubboPerfLogService dubboPerfLogService;
 
-    @Pointcut("execution(* com.gzs.learn.config.dubbo.*Impl.*(..))")
+    @Pointcut("execution(* com.gzs.learn.rbac.dubbo.*Impl.*(..))")
     public void log4Perf() {
 
     }
@@ -90,7 +92,7 @@ public class PerformanceAop {
                 .operatorIp(IpUtil.getLocalIp()).durationEnum(SysPerfLogDurationEnum.BY_MINUTE).executeTimespan((int) elapsed)
                 .createTime(new Date()).build();
 
-        IConfigConstant.EXECUTOR.execute(() -> {
+        IRbacConstant.EXECUTOR.execute(() -> {
             dubboPerfLogService.insertPerfLogMeta(sysPerfLogDto);
         });
     }

@@ -25,6 +25,12 @@
 
         <dependency>
             <groupId>com.gzs.learn</groupId>
+            <artifactId>basic-arch-log-inf</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.gzs.learn</groupId>
             <artifactId>basic-arch-common</artifactId>
             <version>${project.version}</version>
         </dependency>

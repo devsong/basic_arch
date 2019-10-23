@@ -1,4 +1,4 @@
-package com.gzs.learn.rbac;
+package com.gzs.learn.rbac.conf;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
