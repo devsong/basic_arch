@@ -34,7 +34,7 @@ public class PerformanceAop {
     @Autowired
     private RbacProperties confProperties;
 
-    @Autowired
+    //@Autowired
     private DubboPerfLogService dubboPerfLogService;
 
     @Pointcut("execution(* com.gzs.learn.rbac.dubbo.*Impl.*(..))")

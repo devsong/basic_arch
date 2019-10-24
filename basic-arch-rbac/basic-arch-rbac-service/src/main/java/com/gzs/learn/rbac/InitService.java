@@ -23,14 +23,14 @@ public class InitService {
     @Autowired
     private RbacProperties rbacProperties;
 
-    @Autowired
+    //@Autowired
     private DubboPerfLogService dubboPerfLogService;
 
     @PostConstruct
     public void init() {
         log.info("init execute...");
 
-        registerPerfMetaData();
+        // registerPerfMetaData();
     }
 
     private void registerPerfMetaData() {

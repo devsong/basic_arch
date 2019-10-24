@@ -14,6 +14,7 @@
 
     <dubbo:registry id="register" protocol="zookeeper" address="${dubbo.zk.publish}" />
     <dubbo:protocol port="-1" threads="200" />
+    <dubbo:provider timeout="5000"/>
 
     <dubbo:service interface="com.gzs.learn.rbac.dubbo.DubboRbacAuthService" ref="dubboRbacAuthService" registry="register"
         timeout="3000" retries="0" version="${dubbo.zk.version}" />
@@ -32,4 +33,5 @@
 
     <dubbo:service interface="com.gzs.learn.rbac.dubbo.DubboRbacCommonService" ref="dubboRbacCommonService"
         registry="register" timeout="3000" retries="0" version="${dubbo.zk.version}" />
+
 </beans>
