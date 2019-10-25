@@ -10,9 +10,6 @@
     <dubbo:registry id="clientZk" protocol="zookeeper" address="${dubbo.zk.publish}" />
     <dubbo:consumer timeout="5000" />
 
-
-    <dubbo:reference id="dubboPerfLogService" interface="com.gzs.learn.log.dubbo.DubboPerfLogService" timeout="10000"
-        loadbalance="random" registry="clientZk" version="1.0.0">
-    </dubbo:reference>
-
+    <!-- <dubbo:reference id="dubboPerfLogService" interface="com.gzs.learn.log.dubbo.DubboPerfLogService" timeout="10000" loadbalance="random" 
+        registry="clientZk" version="1.0.0"> </dubbo:reference> -->
 </beans>
