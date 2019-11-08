@@ -1,5 +1,6 @@
 package com.gzs.learn.rbac.po;
 
+import javax.persistence.Column;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -31,6 +32,7 @@ public class RolePo extends Base {
     /**
      * 部门名称
      */
+    @Column(name = "dept_id")
     private Long deptid;
     /**
      * 提示

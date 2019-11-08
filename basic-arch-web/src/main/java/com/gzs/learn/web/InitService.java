@@ -1,4 +1,4 @@
-package com.gzs.learn.config;
+package com.gzs.learn.web;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component;
 
 import com.gzs.learn.common.util.ClassUtil;
 import com.gzs.learn.common.util.IpUtil;
-import com.gzs.learn.config.conf.ConfProperties;
 import com.gzs.learn.log.dubbo.DubboPerfLogService;
 import com.gzs.learn.log.inf.SysPerfLogDto;
+import com.gzs.learn.web.config.properties.GunsProperties;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 public class InitService {
 
     @Autowired
-    private ConfProperties confProperties;
+    private GunsProperties gunsProperties;
 
     @Autowired
     private DubboPerfLogService dubboPerfLogService;
@@ -35,7 +35,8 @@ public class InitService {
 
     private void registerPerfMetaData() {
         String operatorIp = IpUtil.getLocalIp();
-        List<Class<?>> classes = ClassUtil.getClass("com.gzs.learn.config.dubbo", true);
+       
+        List<Class<?>> classes = ClassUtil.getClass("com.gzs.learn.web.modular.system.controller", true);
         for (Class<?> clazz : classes) {
             if (clazz.isInterface()) {
                 continue;
@@ -43,8 +44,8 @@ public class InitService {
             String className = clazz.getName();
             for (Method m : clazz.getDeclaredMethods()) {
                 String methodName = m.getName();
-                SysPerfLogDto metaDto = SysPerfLogDto.builder().product(confProperties.getProduct())
-                        .groupName(confProperties.getGroupName()).app(confProperties.getApp()).clazz(className).method(methodName)
+                SysPerfLogDto metaDto = SysPerfLogDto.builder().product(gunsProperties.getProduct())
+                        .groupName(gunsProperties.getGroupName()).app(gunsProperties.getApp()).clazz(className).method(methodName)
                         .operatorIp(operatorIp).build();
                 dubboPerfLogService.insertPerfLogMeta(metaDto);
             }

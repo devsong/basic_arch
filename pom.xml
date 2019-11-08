@@ -13,7 +13,6 @@
 	
 	<modules>
 		<module>basic-arch-common</module>
-		<module>basic-arch-config</module>
 		<module>basic-arch-rbac</module>
 		<module>basic-arch-log</module>
 		<module>basic-arch-serial</module>

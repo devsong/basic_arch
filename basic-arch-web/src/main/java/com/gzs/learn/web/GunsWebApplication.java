@@ -10,8 +10,10 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.ctrip.framework.apollo.spring.annotation.EnableApolloConfig;
 import com.gzs.learn.web.config.properties.GunsProperties;
 
+@EnableApolloConfig
 @SpringBootApplication
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @ImportResource(value = { "classpath:/META-INF/applicationContext.xml" })

@@ -2,6 +2,7 @@ package com.gzs.learn.rbac.po;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -57,10 +58,12 @@ public class UserPo extends Base {
     /**
      * 角色id
      */
+    @Column(name = "role_id")
     private String roleid;
     /**
      * 部门id
      */
+    @Column(name = "dept_id")
     private Long deptid;
     /**
      * 状态(1：启用  2：冻结  3：删除）

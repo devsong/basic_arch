@@ -19,12 +19,6 @@
 
         <dependency>
             <groupId>com.gzs.learn</groupId>
-            <artifactId>basic-arch-config-inf</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.gzs.learn</groupId>
             <artifactId>basic-arch-log-inf</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -97,6 +91,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ctrip.framework.apollo</groupId>
+            <artifactId>apollo-client</artifactId>
         </dependency>
 
         <dependency>

@@ -6,25 +6,25 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd 
         http://dubbo.apache.org/schema/dubbo 
         http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
-    <dubbo:application name="rbac-service" owner="guanzhisong">
+    <dubbo:application name="log-service" owner="guanzhisong">
         <dubbo:parameter key="qos.enable" value="false" />
         <dubbo:parameter key="qos.accept.foreign.ip" value="false" />
         <dubbo:parameter key="qos.port" value="33333" />
     </dubbo:application>
 
     <dubbo:config-center address="${dubbo.zk.config-center}" />
-    <!-- <dubbo:metadata-report address="${dubbo.zk.meta-center}" /> -->
-    <dubbo:registry id="serialZk" address="${dubbo.zk.registry-center}" simplified="true" />
-    <dubbo:protocol port="-1" threads="200" />
-
-
-    <dubbo:service interface="com.gzs.learn.log.dubbo.DubboPerfLogService" ref="dubboPerflogService" registry="serialZk"
+    <dubbo:metadata-report address="${dubbo.zk.meta-center}" />
+    <dubbo:registry id="logZk" address="${dubbo.zk.registry-center}" simplified="true" />
+    <dubbo:protocol port="-1" threads="${dubbo.threads}" />
+    <dubbo:provider timeout="${dubbo.timeout}" />
+    
+    <dubbo:service interface="com.gzs.learn.log.dubbo.DubboPerfLogService" ref="dubboPerflogService" registry="logZk"
         timeout="3000" retries="0" version="${dubbo.zk.version}" />
 
     <dubbo:service interface="com.gzs.learn.log.dubbo.DubboUserLoginLogService" ref="dubboUserLoginLogService"
-        registry="serialZk" timeout="3000" retries="0" version="${dubbo.zk.version}" />
+        registry="logZk" timeout="3000" retries="0" version="${dubbo.zk.version}" />
 
     <dubbo:service interface="com.gzs.learn.log.dubbo.DubboUserOperationLogService" ref="dubboUserOperationLogService"
-        registry="serialZk" timeout="3000" retries="0" version="${dubbo.zk.version}" />
+        registry="logZk" timeout="3000" retries="0" version="${dubbo.zk.version}" />
 
 </beans>

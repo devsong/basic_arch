@@ -1,7 +1,5 @@
 package com.gzs.learn.rbac.po;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Table;
 
@@ -18,19 +16,14 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class RelationPo extends Base {
     private static final long serialVersionUID = 1L;
-
     /**
      * 菜单id
      */
+    @Column(name = "menu_id")
     private Long menuid;
     /**
      * 角色id
      */
+    @Column(name = "role_id")
     private Long roleid;
-
-    @Column(name = "create_time")
-    private Date createTime;
-    
-    @Column(name = "_timestamp")
-    private Date timestamp;
 }

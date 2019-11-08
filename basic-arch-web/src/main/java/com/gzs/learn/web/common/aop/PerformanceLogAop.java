@@ -1,6 +1,7 @@
 package com.gzs.learn.web.common.aop;
 
 import java.lang.reflect.Method;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -103,8 +104,9 @@ public class PerformanceLogAop {
 
         SysPerfLogDto sysPerfLogDto = SysPerfLogDto.builder().product(gunsProperties.getProduct()).groupName(gunsProperties.getGroupName())
                 .app(gunsProperties.getApp()).clazz(className).method(methodName).executeTimespan((int) cost).code(success ? 0 : 1)
-                .errMsg(exception == null ? "" : JsonUtil.toJSONString(exception)).paramsIn(JsonUtil.toJSONString(params))
-                .paramsOut(JsonUtil.toJSONString(ret)).build();
+                .errMsg(exception == null ? "" : JsonUtil.toJSONString(exception))
+                .paramsIn(params == null ? "" : JsonUtil.toJSONString(params)).paramsOut(ret == null ? "" : JsonUtil.toJSONString(ret))
+                .createTime(new Date()).build();
         systemLogService.savePerfLog(sysPerfLogDto);
     }
 }

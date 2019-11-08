@@ -3,6 +3,10 @@
 ##########################################################
 
 ###################  guns配置  ###################
+app:
+   id: 1000005
+apollo:
+   meta: http://dev.meta.apollo.com
 guns:
   swagger-open: false #是否开启swagger (true/false)
   kaptcha-open: false #是否开启登录时验证码 (true/false)
