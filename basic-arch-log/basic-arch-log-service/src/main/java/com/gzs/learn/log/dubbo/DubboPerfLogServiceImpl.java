@@ -23,7 +23,7 @@ public class DubboPerfLogServiceImpl implements DubboPerfLogService {
     public boolean insertPerfLogMeta(SysPerfLogDto sysLogDto) {
         SysPerfLogMetaPo metaPo = new SysPerfLogMetaPo();
         BeanUtil.copyProperties(sysLogDto, metaPo);
-        return perfLogService.insertPerLogMeta(metaPo);
+        return perfLogService.insertPerfLogMeta(metaPo);
     }
 
     @Override

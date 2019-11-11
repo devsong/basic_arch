@@ -7,7 +7,7 @@ import com.gzs.learn.log.po.SysPerfLogMetaPo;
 
 public interface IPerfLogService {
 
-    boolean insertPerLogMeta(SysPerfLogMetaPo po);
+    boolean insertPerfLogMeta(SysPerfLogMetaPo po);
 
     boolean insertPerfLog(SysPerfLogDto sysLogDto);
 

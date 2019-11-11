@@ -45,7 +45,7 @@ public class PerfLogServiceImpl implements IPerfLogService {
     private SysPerfLogMapper sysPerfLogMapper;
 
     @Override
-    public boolean insertPerLogMeta(SysPerfLogMetaPo po) {
+    public boolean insertPerfLogMeta(SysPerfLogMetaPo po) {
         try {
             sysPerfLogMetaMapper.insertSelective(po);
         } catch (DuplicateKeyException e) {
@@ -62,7 +62,7 @@ public class PerfLogServiceImpl implements IPerfLogService {
         // 检查元数据信息是否写入
         SysPerfLogMetaPo exist = getExistMetaPo(sysLogDto);
         if (exist == null) {
-            insertPerLogMeta(metaPo);
+            insertPerfLogMeta(metaPo);
             metaId = metaPo.getId();
         } else {
             metaId = exist.getId();

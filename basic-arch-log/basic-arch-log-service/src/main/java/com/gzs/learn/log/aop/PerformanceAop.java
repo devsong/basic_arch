@@ -1,4 +1,4 @@
-package com.gzs.learn.rbac.aop;
+package com.gzs.learn.log.aop;
 
 import java.lang.reflect.Method;
 import java.util.Date;
@@ -17,11 +17,11 @@ import com.alibaba.fastjson.JSON;
 import com.google.common.base.Stopwatch;
 import com.gzs.learn.common.util.IpUtil;
 import com.gzs.learn.common.util.JsonUtil;
-import com.gzs.learn.log.dubbo.DubboPerfLogService;
+import com.gzs.learn.log.ILogConstant;
+import com.gzs.learn.log.config.LogProperties;
 import com.gzs.learn.log.enums.SysPerfLogDurationEnum;
 import com.gzs.learn.log.inf.SysPerfLogDto;
-import com.gzs.learn.rbac.IRbacConstant;
-import com.gzs.learn.rbac.conf.RbacProperties;
+import com.gzs.learn.log.service.IPerfLogService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,12 +32,12 @@ import lombok.extern.slf4j.Slf4j;
 public class PerformanceAop {
 
     @Autowired
-    private RbacProperties confProperties;
+    private LogProperties logProperties;
 
     @Autowired
-    private DubboPerfLogService dubboPerfLogService;
+    private IPerfLogService perfLogService;
 
-    @Pointcut("execution(* com.gzs.learn.rbac.dubbo.*Impl.*(..))")
+    @Pointcut("execution(* com.gzs.learn.log.dubbo.*Impl.*(..))")
     public void log4Perf() {
 
     }
@@ -86,14 +86,14 @@ public class PerformanceAop {
             }
         }
 
-        SysPerfLogDto sysPerfLogDto = SysPerfLogDto.builder().product(confProperties.getProduct()).groupName(confProperties.getGroupName())
-                .app(confProperties.getApp()).clazz(clazz).method(methodName).paramsIn(JsonUtil.toJSONString(args))
+        SysPerfLogDto sysPerfLogDto = SysPerfLogDto.builder().product(logProperties.getProduct()).groupName(logProperties.getGroupName())
+                .app(logProperties.getApp()).clazz(clazz).method(methodName).paramsIn(JsonUtil.toJSONString(args))
                 .paramsOut(returnValue == null ? "" : JsonUtil.toJSONString(returnValue)).code(code).errMsg(errorMsg)
                 .operatorIp(IpUtil.getLocalIp()).durationEnum(SysPerfLogDurationEnum.BY_MINUTE).executeTimespan((int) elapsed)
                 .createTime(new Date()).build();
 
-        IRbacConstant.EXECUTOR.execute(() -> {
-            dubboPerfLogService.insertPerflog(sysPerfLogDto);
+        ILogConstant.EXECUTOR.execute(() -> {
+            perfLogService.insertPerfLog(sysPerfLogDto);
         });
     }
 }
