@@ -86,11 +86,12 @@ public class PerformanceAop {
             }
         }
 
+        String argsJson = (args == null || args.length == 0) ? "" : JsonUtil.toJSONString(args);
+        String retJson = (returnValue == null ? "" : JsonUtil.toJSONString(returnValue));
         SysPerfLogDto sysPerfLogDto = SysPerfLogDto.builder().product(logProperties.getProduct()).groupName(logProperties.getGroupName())
-                .app(logProperties.getApp()).clazz(clazz).method(methodName).paramsIn(JsonUtil.toJSONString(args))
-                .paramsOut(returnValue == null ? "" : JsonUtil.toJSONString(returnValue)).code(code).errMsg(errorMsg)
-                .operatorIp(IpUtil.getLocalIp()).durationEnum(SysPerfLogDurationEnum.BY_MINUTE).executeTimespan((int) elapsed)
-                .createTime(new Date()).build();
+                .app(logProperties.getApp()).clazz(clazz).method(methodName).paramsIn(argsJson).paramsOut(retJson).code(code)
+                .errMsg(errorMsg).operatorIp(IpUtil.getLocalIp()).durationEnum(SysPerfLogDurationEnum.BY_MINUTE)
+                .executeTimespan((int) elapsed).createTime(new Date()).build();
 
         ILogConstant.EXECUTOR.execute(() -> {
             perfLogService.insertPerfLog(sysPerfLogDto);

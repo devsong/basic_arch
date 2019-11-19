@@ -7,7 +7,7 @@
         <result column="num" jdbcType="INTEGER" property="num" />
         <result column="pid" jdbcType="INTEGER" property="pid" />
         <result column="name" jdbcType="VARCHAR" property="name" />
-        <result column="deptid" jdbcType="INTEGER" property="deptid" />
+        <result column="dept_id" jdbcType="INTEGER" property="deptid" />
         <result column="tips" jdbcType="VARCHAR" property="tips" />
         <result column="version" jdbcType="INTEGER" property="version" />
         <result column="create_time" jdbcType="TIMESTAMP" property="createtime" />
@@ -15,7 +15,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, num, pid, name, deptid, tips, version,create_time,timestamp
+        id, num, pid, name, dept_id, tips, version,create_time,timestamp
     </sql>
 
     <select id="searchRoles" resultMap="BaseResultMap">

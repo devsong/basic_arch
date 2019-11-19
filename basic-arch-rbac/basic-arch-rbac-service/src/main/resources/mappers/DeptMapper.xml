@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gzs.learn.rbac.dao.DeptMapper">
     <resultMap id="BaseResultMap" type="com.gzs.learn.rbac.po.DeptPo">
-        <id column="id" jdbcType="INTEGER" property="id" />
+        <id column="id" jdbcType="BIGINT" property="id" />
         <result column="num" jdbcType="INTEGER" property="num" />
-        <result column="pid" jdbcType="INTEGER" property="pid" />
+        <result column="pid" jdbcType="BIGINT" property="pid" />
         <result column="pids" jdbcType="VARCHAR" property="pids" />
         <result column="simplename" jdbcType="VARCHAR" property="simplename" />
         <result column="fullname" jdbcType="VARCHAR" property="fullname" />

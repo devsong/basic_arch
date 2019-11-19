@@ -12,8 +12,8 @@
         <result column="sex" jdbcType="INTEGER" property="sex" />
         <result column="email" jdbcType="VARCHAR" property="email" />
         <result column="phone" jdbcType="VARCHAR" property="phone" />
-        <result column="roleid" jdbcType="VARCHAR" property="roleid" />
-        <result column="deptid" jdbcType="INTEGER" property="deptid" />
+        <result column="role_id" jdbcType="VARCHAR" property="roleid" />
+        <result column="dept_id" jdbcType="INTEGER" property="deptid" />
         <result column="status" jdbcType="INTEGER" property="status" />
         <result column="version" jdbcType="INTEGER" property="version" />
         <result column="create_time" jdbcType="TIMESTAMP" property="createtime" />
@@ -21,7 +21,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,avatar,account,password,salt,name,birthday,sex,email,phone,roleid,deptid,status,version,create_time,timestamp
+        id,avatar,account,password,salt,name,birthday,sex,email,phone,role_id,dept_id,status,version,create_time,timestamp
     </sql>
 
     <select id="selectUsers" resultMap="BaseResultMap" parameterType="java.util.Map">
@@ -37,8 +37,8 @@
             or name like CONCAT('%',#{userSearchDto.name},'%'))
         </if>
         <if test="userSearchDto.deptId != null and userSearchDto.deptId != 0">
-            and (deptid = #{userSearchDto.deptId}
-            or deptid in ( select id from sys_dept where pids like CONCAT('%[', #{userSearchDto.deptId}, ']%') ))
+            and (dept_id = #{userSearchDto.deptId}
+            or dept_id in ( select id from sys_dept where pids like CONCAT('%[', #{userSearchDto.deptId}, ']%') ))
         </if>
         <if test="userSearchDto.beginTime != null and userSearchDto.beginTime != '' and userSearchDto.endTime != null and userSearchDto.endTime != ''">
             and (createTime between CONCAT(#{userSearchDto.beginTime},' 00:00:00') and CONCAT(#{userSearchDto.endTime},' 23:59:59'))

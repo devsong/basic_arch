@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.base.Stopwatch;
 import com.gzs.learn.common.util.JsonUtil;
+import com.gzs.learn.log.enums.SysPerfLogDurationEnum;
 import com.gzs.learn.log.inf.SysPerfLogDto;
 import com.gzs.learn.web.config.properties.GunsProperties;
 import com.gzs.learn.web.modular.biz.service.ISystemLogService;
@@ -33,7 +34,7 @@ public class PerformanceLogAop {
     /**
      * 对所有controller切片 (方法说明描述)
      */
-    @Pointcut("within(@org.springframework.stereotype.Controller *)")
+    @Pointcut("@annotation(org.springframework.web.bind.annotation.ResponseBody)")
     public void log4Controller() {
     }
 
@@ -101,12 +102,13 @@ public class PerformanceLogAop {
         // 获取拦截方法的参数
         String className = point.getTarget().getClass().getName();
         Object[] params = point.getArgs();
+        String argsJson = (params == null || params.length == 0) ? "" : JsonUtil.toJSONString(params);
+        String retJson = (ret == null ? "" : JsonUtil.toJSONString(ret));
 
         SysPerfLogDto sysPerfLogDto = SysPerfLogDto.builder().product(gunsProperties.getProduct()).groupName(gunsProperties.getGroupName())
                 .app(gunsProperties.getApp()).clazz(className).method(methodName).executeTimespan((int) cost).code(success ? 0 : 1)
-                .errMsg(exception == null ? "" : JsonUtil.toJSONString(exception))
-                .paramsIn(params == null ? "" : JsonUtil.toJSONString(params)).paramsOut(ret == null ? "" : JsonUtil.toJSONString(ret))
-                .createTime(new Date()).build();
+                .errMsg(exception == null ? "" : JsonUtil.toJSONString(exception)).paramsIn(argsJson).paramsOut(retJson)
+                .createTime(new Date()).durationEnum(SysPerfLogDurationEnum.BY_MINUTE).build();
         systemLogService.savePerfLog(sysPerfLogDto);
     }
 }

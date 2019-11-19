@@ -80,9 +80,9 @@
         	url 
         from
         	sys_relation rel
-         	join sys_menu m on rel.menuid = m.id
+         	join sys_menu m on rel.menu_id = m.id
         where 
-        	rel.roleid = #{roleId}
+        	rel.role_id = #{roleId}
     </select>
 
     <select id="getMenusByRoleIds" resultType="com.gzs.learn.rbac.inf.MenuNodeDto" parameterType="java.util.Map">
@@ -107,11 +107,11 @@
         		WHERE
         			ID IN (
         				SELECT
-        					menuid
+        					menu_id
         				FROM
         					sys_relation rela
         				WHERE
-        				rela.roleid IN
+        				rela.role_id IN
 				        <foreach collection="list" item="item" open="(" separator="," close=")">
 				            #{item}
 				        </foreach>
