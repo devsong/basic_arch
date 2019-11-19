@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="false">
-	<property name="APP_NAME" value="serial-distribute-service"/>
+	<property name="APP_NAME" value="basic-arch-rbac-service"/>
 	<property name="LOG_HOME" value="./${log.dir:-logs}/"/>
 	<property name="MAX_HISTORY" value="60"/>
 	<property name="ENCODER_PATTERN" value="%d{yyyy-MM-dd  HH:mm:ss.SSS} %-5level [%10.10thread] %logger{20} - %msg%n"/>
