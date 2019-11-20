@@ -3,9 +3,10 @@ package com.gzs.learn.web.modular.biz.service;
 import java.util.List;
 
 import com.gzs.learn.log.inf.SysPerfLogDto;
-import com.gzs.learn.web.common.persistence.model.logs.LoginLog;
-import com.gzs.learn.web.common.persistence.model.logs.OperationLog;
-import com.gzs.learn.web.modular.biz.bo.QueryLogBo;
+import com.gzs.learn.log.inf.UserLoginLogDto;
+import com.gzs.learn.log.inf.UserOperationLogDto;
+import com.gzs.learn.log.inf.search.UserLoginLogSearchDto;
+import com.gzs.learn.log.inf.search.UserOperationLogSearchDto;
 
 public interface ISystemLogService {
     /**
@@ -13,52 +14,42 @@ public interface ISystemLogService {
      * @param queryLogBo
      * @return
      */
-    List<LoginLog> getLoginLogs(QueryLogBo queryLogBo);
+    List<UserLoginLogDto> getLoginLogs(UserLoginLogSearchDto loginLogSearchDto);
 
     /**
      * 获取登陆日志详情
      * @param id
      * @return
      */
-    LoginLog getLoginLogDetail(Long id);
+    UserLoginLogDto getLoginLogDetail(Long id);
 
     /**
      * 保存登陆日志
      * @param loginLog
      * @return
      */
-    boolean saveLoginLog(LoginLog loginLog);
+    boolean saveLoginLog(UserLoginLogDto loginLog);
 
     /**
      * 获取操作日志
      * @param queryLogBo
      * @return
      */
-    List<OperationLog> getOperationLogs(QueryLogBo queryLogBo);
+    List<UserOperationLogDto> getOperationLogs(UserOperationLogSearchDto operationLogSearchDto);
 
     /**
      * 查询详情
      * @param id
      * @return
      */
-    OperationLog getOperationLogDetail(Long id);
+    UserOperationLogDto getOperationLogDetail(Long id);
 
     /**
      * 保存操作日志
      * @param operationLog
      * @return
      */
-    boolean saveOperationLog(OperationLog operationLog);
-
-    /**
-     * 清空业务日志
-     */
-    void truncateBizLog();
-
-    /**
-     * 清空登陆日志
-     */
-    void truncateLoginLog();
+    boolean saveOperationLog(UserOperationLogDto operationLog);
 
     void savePerfLog(SysPerfLogDto sysPerfLogDto);
 }

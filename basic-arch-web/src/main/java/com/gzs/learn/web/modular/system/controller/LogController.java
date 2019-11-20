@@ -9,14 +9,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.gzs.learn.log.inf.UserOperationLogDto;
+import com.gzs.learn.log.inf.search.UserOperationLogSearchDto;
 import com.gzs.learn.web.common.annotion.Permission;
 import com.gzs.learn.web.common.annotion.log.BussinessLog;
 import com.gzs.learn.web.common.constant.Const;
 import com.gzs.learn.web.common.controller.BaseController;
-import com.gzs.learn.web.common.page.PageReq;
-import com.gzs.learn.web.common.persistence.model.logs.OperationLog;
 import com.gzs.learn.web.core.support.BeanKit;
-import com.gzs.learn.web.modular.biz.bo.QueryLogBo;
 import com.gzs.learn.web.modular.biz.service.ISystemLogService;
 import com.gzs.learn.web.modular.system.wrapper.LogWarpper;
 
@@ -45,10 +44,8 @@ public class LogController extends BaseController {
     @RequestMapping("/list")
     @Permission(Const.ADMIN_NAME)
     @ResponseBody
-    public Object list(QueryLogBo queryLogBo) {
-        PageReq params = defaultPage();
-        queryLogBo.setPageReq(params);
-        List<OperationLog> result = systemLogService.getOperationLogs(queryLogBo);
+    public Object list(UserOperationLogSearchDto operationLogSearchDto) {
+        List<UserOperationLogDto> result = systemLogService.getOperationLogs(operationLogSearchDto);
         return packForBT(result);
     }
 
@@ -59,7 +56,7 @@ public class LogController extends BaseController {
     @Permission(Const.ADMIN_NAME)
     @ResponseBody
     public Object detail(@PathVariable Long id) {
-        OperationLog operationLog = systemLogService.getOperationLogDetail(id);
+        UserOperationLogDto operationLog = systemLogService.getOperationLogDetail(id);
         Map<String, Object> stringObjectMap = BeanKit.beanToMap(operationLog);
         return super.warpObject(new LogWarpper(stringObjectMap));
     }
@@ -72,7 +69,7 @@ public class LogController extends BaseController {
     @Permission(Const.ADMIN_NAME)
     @ResponseBody
     public Object delLog() {
-        systemLogService.truncateBizLog();
+        // systemLogService.truncateBizLog();
         return SUCCESS_TIP;
     }
 }

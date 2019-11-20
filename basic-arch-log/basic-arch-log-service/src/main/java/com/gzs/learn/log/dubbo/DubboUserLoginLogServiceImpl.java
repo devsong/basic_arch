@@ -27,4 +27,9 @@ public class DubboUserLoginLogServiceImpl implements DubboUserLoginLogService {
         return userLoginLogService.searchUserLoginLogs(userLoginLogSearchDto);
     }
 
+    @Override
+    public UserLoginLogDto getLoginDetail(Long id) {
+        return userLoginLogService.getDetail(id);
+    }
+
 }

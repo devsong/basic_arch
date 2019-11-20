@@ -6,13 +6,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.gzs.learn.log.inf.UserLoginLogDto;
+import com.gzs.learn.log.inf.search.UserLoginLogSearchDto;
 import com.gzs.learn.web.common.annotion.Permission;
-import com.gzs.learn.web.common.annotion.log.BussinessLog;
 import com.gzs.learn.web.common.constant.Const;
 import com.gzs.learn.web.common.controller.BaseController;
-import com.gzs.learn.web.common.page.PageReq;
-import com.gzs.learn.web.common.persistence.model.logs.LoginLog;
-import com.gzs.learn.web.modular.biz.bo.QueryLogBo;
 import com.gzs.learn.web.modular.biz.service.ISystemLogService;
 
 /**
@@ -42,22 +40,10 @@ public class LoginLogController extends BaseController {
     @RequestMapping("/list")
     @Permission(Const.ADMIN_NAME)
     @ResponseBody
-    public Object list(QueryLogBo queryLogBo) {
-        PageReq params = defaultPage();
-        queryLogBo.setPageReq(params);
-        List<LoginLog> result = systemLogService.getLoginLogs(queryLogBo);
+    public Object list(UserLoginLogSearchDto loginLogSearchDto) {
+        loginLogSearchDto.setPage(1);
+        loginLogSearchDto.setPageSize(10);
+        List<UserLoginLogDto> result = systemLogService.getLoginLogs(loginLogSearchDto);
         return packForBT(result);
-    }
-
-    /**
-     * 清空日志
-     */
-    @BussinessLog("清空登录日志")
-    @RequestMapping("/delLoginLog")
-    @Permission(Const.ADMIN_NAME)
-    @ResponseBody
-    public Object delLog() {
-        systemLogService.truncateLoginLog();
-        return SUCCESS_TIP;
     }
 }

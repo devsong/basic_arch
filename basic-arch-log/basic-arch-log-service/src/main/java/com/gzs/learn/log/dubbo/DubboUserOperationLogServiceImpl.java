@@ -27,4 +27,9 @@ public class DubboUserOperationLogServiceImpl implements DubboUserOperationLogSe
         return userOperationLogService.searchOperationLogs(userOperationLogSearchDto);
     }
 
+    @Override
+    public UserOperationLogDto getOperationLogDetail(Long id) {
+        return userOperationLogService.getDetail(id);
+    }
+
 }

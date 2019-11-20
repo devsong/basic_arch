@@ -1,12 +1,14 @@
 package com.gzs.learn.web.core.log.factory;
 
+import static com.gzs.learn.web.common.constant.enums.LogSucceed.FAIL;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.gzs.learn.log.inf.UserLoginLogDto;
+import com.gzs.learn.log.inf.UserOperationLogDto;
 import com.gzs.learn.web.common.constant.enums.LogSucceed;
 import com.gzs.learn.web.common.constant.enums.LogType;
-import com.gzs.learn.web.common.persistence.model.logs.LoginLog;
-import com.gzs.learn.web.common.persistence.model.logs.OperationLog;
 import com.gzs.learn.web.core.log.LogManager;
 import com.gzs.learn.web.core.util.SpringContextHolder;
 import com.gzs.learn.web.core.util.ToolUtil;
@@ -24,7 +26,7 @@ public class LogTaskFactory {
             @Override
             public void run() {
                 try {
-                    LoginLog loginLog = LogFactory.createLoginLog(LogType.LOGIN, userId, null, ip);
+                    UserLoginLogDto loginLog = LogFactory.createLoginLog(LogType.LOGIN, userId, null, ip);
                     systemLogService.saveLoginLog(loginLog);
                 } catch (Exception e) {
                     logger.error("创建登录日志异常!", e);
@@ -37,7 +39,7 @@ public class LogTaskFactory {
         return new Runnable() {
             @Override
             public void run() {
-                LoginLog loginLog = LogFactory.createLoginLog(LogType.LOGIN_FAIL, null, "账号:" + username + "," + msg, ip);
+                UserLoginLogDto loginLog = LogFactory.createLoginLog(LogType.LOGIN_FAIL, null, "账号:" + username + "," + msg, ip);
                 try {
                     systemLogService.saveLoginLog(loginLog);
                 } catch (Exception e) {
@@ -51,7 +53,7 @@ public class LogTaskFactory {
         return new Runnable() {
             @Override
             public void run() {
-                LoginLog loginLog = LogFactory.createLoginLog(LogType.EXIT, userId, null, ip);
+                UserLoginLogDto loginLog = LogFactory.createLoginLog(LogType.EXIT, userId, null, ip);
                 try {
                     systemLogService.saveLoginLog(loginLog);
                 } catch (Exception e) {
@@ -66,8 +68,8 @@ public class LogTaskFactory {
         return new Runnable() {
             @Override
             public void run() {
-                OperationLog operationLog = LogFactory.createOperationLog(LogType.BUSSINESS, userId, bussinessName, clazzName, methodName,
-                        msg, LogSucceed.SUCCESS);
+                UserOperationLogDto operationLog = LogFactory.createOperationLog(LogType.BUSSINESS, userId, bussinessName, clazzName,
+                        methodName, msg, LogSucceed.SUCCESS);
                 try {
                     systemLogService.saveOperationLog(operationLog);
                 } catch (Exception e) {
@@ -82,7 +84,7 @@ public class LogTaskFactory {
             @Override
             public void run() {
                 String msg = ToolUtil.getExceptionMsg(exception);
-                OperationLog operationLog = LogFactory.createOperationLog(LogType.EXCEPTION, userId, "", null, null, msg, LogSucceed.FAIL);
+                UserOperationLogDto operationLog = LogFactory.createOperationLog(LogType.EXCEPTION, userId, "", null, null, msg, FAIL);
                 try {
                     systemLogService.saveOperationLog(operationLog);
                 } catch (Exception e) {

@@ -11,4 +11,6 @@ public interface IUserLoginLogService {
 
     List<UserLoginLogDto> searchUserLoginLogs(UserLoginLogSearchDto userLoginLogSearchDto);
 
+    UserLoginLogDto getDetail(Long id);
+
 }

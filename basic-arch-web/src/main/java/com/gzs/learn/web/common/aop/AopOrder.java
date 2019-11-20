@@ -14,8 +14,6 @@ public interface AopOrder {
     
     int PERMISSION_ORDER = 3;
     
-    int DS_ORDER = 4;
-    
     int TRANSACTION_ORDER = 5;
     
     int LOG_ORDER = 6;

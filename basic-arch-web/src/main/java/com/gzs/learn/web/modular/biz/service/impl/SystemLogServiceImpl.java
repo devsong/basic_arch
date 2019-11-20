@@ -6,18 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.pagehelper.PageHelper;
 import com.gzs.learn.log.dubbo.DubboPerfLogService;
+import com.gzs.learn.log.dubbo.DubboUserLoginLogService;
+import com.gzs.learn.log.dubbo.DubboUserOperationLogService;
 import com.gzs.learn.log.inf.SysPerfLogDto;
+import com.gzs.learn.log.inf.UserLoginLogDto;
+import com.gzs.learn.log.inf.UserOperationLogDto;
+import com.gzs.learn.log.inf.search.UserLoginLogSearchDto;
+import com.gzs.learn.log.inf.search.UserOperationLogSearchDto;
 import com.gzs.learn.web.common.constant.Const;
-import com.gzs.learn.web.common.constant.DSEnum;
-import com.gzs.learn.web.common.page.PageReq;
-import com.gzs.learn.web.common.persistence.dao.logs.LoginLogMapper;
-import com.gzs.learn.web.common.persistence.dao.logs.OperationLogMapper;
-import com.gzs.learn.web.common.persistence.model.logs.LoginLog;
-import com.gzs.learn.web.common.persistence.model.logs.OperationLog;
-import com.gzs.learn.web.core.mutidatesource.DataSourceContextHolder;
-import com.gzs.learn.web.modular.biz.bo.QueryLogBo;
 import com.gzs.learn.web.modular.biz.service.ISystemLogService;
 
 @Component
@@ -27,56 +24,41 @@ public class SystemLogServiceImpl implements ISystemLogService {
     private DubboPerfLogService dubboPerflogService;
 
     @Autowired
-    private LoginLogMapper loginLogMapper;
+    private DubboUserLoginLogService dubboUserLoginLogService;
 
     @Autowired
-    private OperationLogMapper operationLogMapper;
+    private DubboUserOperationLogService dubboUserOperationLogService;
 
     @Override
-    public List<LoginLog> getLoginLogs(QueryLogBo queryLogBo) {
-        PageReq pageReq = queryLogBo.getPageReq();
-        PageHelper.offsetPage(pageReq.getOffset(), pageReq.getLimit());
-        List<LoginLog> loginLogs = loginLogMapper.getLoginLogs(queryLogBo);
-        return loginLogs;
+    public List<UserLoginLogDto> getLoginLogs(UserLoginLogSearchDto loginLogSearchDto) {
+        List<UserLoginLogDto> searchUserLoginLogs = dubboUserLoginLogService.searchUserLoginLogs(loginLogSearchDto);
+        return searchUserLoginLogs;
     }
 
     @Override
-    public LoginLog getLoginLogDetail(Long id) {
-        return loginLogMapper.selectByPrimaryKey(id);
+    public UserLoginLogDto getLoginLogDetail(Long id) {
+        return dubboUserLoginLogService.getLoginDetail(id);
     }
 
     @Override
-    public boolean saveLoginLog(LoginLog loginLog) {
-        DataSourceContextHolder.setDataSourceType(DSEnum.DATA_SOURCE_LOGS);
-        return loginLogMapper.insertSelective(loginLog) == 1;
+    public boolean saveLoginLog(UserLoginLogDto loginLog) {
+        return dubboUserLoginLogService.insertUserLoginLog(loginLog);
     }
 
     @Override
-    public void truncateLoginLog() {
-        loginLogMapper.truncate();
-    }
-
-    @Override
-    public List<OperationLog> getOperationLogs(QueryLogBo queryLogBo) {
-        PageReq pageReq = queryLogBo.getPageReq();
-        PageHelper.offsetPage(pageReq.getOffset(), pageReq.getLimit());
-        List<OperationLog> operationLogs = operationLogMapper.getOperationLogs(queryLogBo);
+    public List<UserOperationLogDto> getOperationLogs(UserOperationLogSearchDto operationLogSearchDto) {
+        List<UserOperationLogDto> operationLogs = dubboUserOperationLogService.searchOperationLogs(operationLogSearchDto);
         return operationLogs;
     }
 
     @Override
-    public OperationLog getOperationLogDetail(Long id) {
-        return operationLogMapper.selectByPrimaryKey(id);
+    public UserOperationLogDto getOperationLogDetail(Long id) {
+        return dubboUserOperationLogService.getOperationLogDetail(id);
     }
 
     @Override
-    public boolean saveOperationLog(OperationLog operationLog) {
-        return operationLogMapper.insertSelective(operationLog) == 1;
-    }
-
-    @Override
-    public void truncateBizLog() {
-        operationLogMapper.truncate();
+    public boolean saveOperationLog(UserOperationLogDto operationLog) {
+        return dubboUserOperationLogService.insertOperationLog(operationLog);
     }
 
     @Override

@@ -19,4 +19,11 @@ public interface DubboUserLoginLogService {
      * @return
      */
     List<UserLoginLogDto> searchUserLoginLogs(UserLoginLogSearchDto userLoginLogSearchDto);
+
+    /**
+     * 取登录日志详情
+     * @param id
+     * @return
+     */
+    UserLoginLogDto getLoginDetail(Long id);
 }

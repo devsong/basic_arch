@@ -19,4 +19,11 @@ public interface DubboUserOperationLogService {
      * @return
      */
     List<UserOperationLogDto> searchOperationLogs(UserOperationLogSearchDto userOperationLogSearchDto);
+
+    /**
+     * 取日志详情
+     * @param id
+     * @return
+     */
+    UserOperationLogDto getOperationLogDetail(Long id);
 }
