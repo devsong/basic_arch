@@ -7,7 +7,8 @@ package com.gzs.learn.web.core.template.config;
  * @date 2017-05-07 22:12
  */
 public class PageConfig {
-
+    private static final String VIEW_BASE_DIR = "\\src\\main\\webapp\\WEB-INF\\view\\";
+    private static final String STATIC_BASE_DIR = "\\src\\main\\webapp\\static\\modular\\";
     private ContextConfig contextConfig;
 
     private String pagePathTemplate;
@@ -17,11 +18,11 @@ public class PageConfig {
     private String pageInfoJsPathTemplate;
 
     public void init() {
-        pagePathTemplate = "\\src\\main\\webapp\\WEB-INF\\view\\" + contextConfig.getModuleName() + "\\{}\\{}.html";
-        pageAddPathTemplate = "\\src\\main\\webapp\\WEB-INF\\view\\" + contextConfig.getModuleName() + "\\{}\\{}_add.html";
-        pageEditPathTemplate = "\\src\\main\\webapp\\WEB-INF\\view\\" + contextConfig.getModuleName() + "\\{}\\{}_edit.html";
-        pageJsPathTemplate = "\\src\\main\\webapp\\static\\modular\\" + contextConfig.getModuleName() + "\\{}\\{}.js";
-        pageInfoJsPathTemplate = "\\src\\main\\webapp\\static\\modular\\" + contextConfig.getModuleName() + "\\{}\\{}_info.js";
+        pagePathTemplate = VIEW_BASE_DIR + contextConfig.getModuleName() + "\\{}\\{}.html";
+        pageAddPathTemplate = VIEW_BASE_DIR + contextConfig.getModuleName() + "\\{}\\{}_add.html";
+        pageEditPathTemplate = VIEW_BASE_DIR + contextConfig.getModuleName() + "\\{}\\{}_edit.html";
+        pageJsPathTemplate = STATIC_BASE_DIR + contextConfig.getModuleName() + "\\{}\\{}.js";
+        pageInfoJsPathTemplate = STATIC_BASE_DIR + contextConfig.getModuleName() + "\\{}\\{}_info.js";
     }
 
     public String getPagePathTemplate() {

@@ -1,8 +1,5 @@
 package com.gzs.learn.web.config;
 
-import java.sql.SQLException;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -10,12 +7,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.google.common.collect.Maps;
 import com.gzs.learn.web.common.aop.AopOrder;
-import com.gzs.learn.web.common.constant.DSEnum;
 import com.gzs.learn.web.config.properties.GunsDataSourceProperties;
 import com.gzs.learn.web.config.properties.LogDataSourceProperties;
-import com.gzs.learn.web.core.mutidatesource.DynamicDataSource;
 
 import tk.mybatis.spring.annotation.MapperScan;
 
@@ -34,15 +28,6 @@ public class MybatisPlusConfig {
     LogDataSourceProperties logDataSourceProperties;
 
     /**
-     * 另一个数据源
-     */
-    private DruidDataSource dataSourceLogs() {
-        DruidDataSource dataSource = new DruidDataSource();
-        logDataSourceProperties.config(dataSource);
-        return dataSource;
-    }
-
-    /**
      * guns的数据源
      */
     private DruidDataSource dataSourceGuns() {
@@ -58,30 +43,5 @@ public class MybatisPlusConfig {
     @ConditionalOnProperty(prefix = "guns", name = "muti-datasource-open", havingValue = "false")
     public DruidDataSource singleDatasource() {
         return dataSourceGuns();
-    }
-
-    /**
-     * 多数据源连接池配置
-     */
-    @Bean
-    @ConditionalOnProperty(prefix = "guns", name = "muti-datasource-open", havingValue = "true")
-    public DynamicDataSource mutiDataSource() {
-        DruidDataSource dataSourceGuns = dataSourceGuns();
-        DruidDataSource dataSourceLogs = dataSourceLogs();
-
-        try {
-            dataSourceGuns.init();
-            dataSourceLogs.init();
-        } catch (SQLException sql) {
-            sql.printStackTrace();
-        }
-
-        DynamicDataSource dynamicDataSource = new DynamicDataSource();
-        Map<Object, Object> map = Maps.newHashMap();
-        map.put(DSEnum.DATA_SOURCE_GUNS, dataSourceGuns);
-        map.put(DSEnum.DATA_SOURCE_LOGS, dataSourceLogs);
-        dynamicDataSource.setTargetDataSources(map);
-        dynamicDataSource.setDefaultTargetDataSource(dataSourceGuns);
-        return dynamicDataSource;
     }
 }

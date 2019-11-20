@@ -1,4 +1,4 @@
-package com.gzs.learn.config.inf;
+package com.gzs.learn.common.config;
 
 import java.sql.SQLException;
 

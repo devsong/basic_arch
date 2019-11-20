@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.gzs.learn.config.inf.DataSourceProperties;
+import com.gzs.learn.common.config.DataSourceProperties;
 
 import tk.mybatis.spring.annotation.MapperScan;
 
