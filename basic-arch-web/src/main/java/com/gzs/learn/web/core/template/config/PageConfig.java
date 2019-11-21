@@ -2,9 +2,6 @@ package com.gzs.learn.web.core.template.config;
 
 /**
  * 页面 模板生成的配置
- *
- * @author fengshuonan
- * @date 2017-05-07 22:12
  */
 public class PageConfig {
     private static final String VIEW_BASE_DIR = "\\src\\main\\webapp\\WEB-INF\\view\\";

@@ -14,5 +14,10 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.gzs.learn</groupId>
+            <artifactId>basic-arch-entity</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

@@ -1,10 +1,10 @@
 package com.gzs.learn.web.core.template.config;
 
+import static com.gzs.learn.web.core.template.TemplateConstant.BASE_PACKAGE;
+import static com.gzs.learn.web.core.template.TemplateConstant.BASE_PACKAGE_DIR;
+
 /**
  * Dao模板生成的配置
- *
- * @author fengshuonan
- * @date 2017-05-07 22:12
  */
 public class DaoConfig {
 
@@ -16,9 +16,9 @@ public class DaoConfig {
     private String packageName;
 
     public void init() {
-        this.daoPathTemplate = "\\src\\main\\java\\com\\stylefeng\\guns\\modular\\" + contextConfig.getModuleName() + "\\dao\\{}Dao.java";
-        this.xmlPathTemplate = "\\src\\main\\java\\com\\stylefeng\\guns\\modular\\" + contextConfig.getModuleName() + "\\dao\\mapping\\{}Dao.xml";
-        this.packageName = "com.gzs.learn.web.modular." + contextConfig.getModuleName() + ".dao";
+        this.daoPathTemplate = BASE_PACKAGE_DIR + "\\modular\\" + contextConfig.getModuleName() + "\\dao\\{}Dao.java";
+        this.xmlPathTemplate = BASE_PACKAGE_DIR + "\\modular\\" + contextConfig.getModuleName() + "\\dao\\mapping\\{}Dao.xml";
+        this.packageName = BASE_PACKAGE + ".web.modular." + contextConfig.getModuleName() + ".dao";
     }
 
     public String getPackageName() {

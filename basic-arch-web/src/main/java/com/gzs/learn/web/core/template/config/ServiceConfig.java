@@ -3,16 +3,14 @@ package com.gzs.learn.web.core.template.config;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+import com.gzs.learn.web.core.template.TemplateConstant;
 
 /**
  * Service模板生成的配置
- *
- * @author fengshuonan
- * @date 2017-05-07 22:12
  */
 public class ServiceConfig {
-    private static final String BASE_PACKAGE = "com.gzs.learn.web.modular.";
-    private static final String BASE_PACKAGE_DIR = "\\src\\main\\java\\com\\gzs\\learn\\web\\modular\\";
+    private static final String BASE_PACKAGE = TemplateConstant.BASE_PACKAGE + ".web.modular.";
+    private static final String BASE_PACKAGE_DIR = TemplateConstant.BASE_PACKAGE_DIR + "\\web\\modular\\";
     private ContextConfig contextConfig;
 
     private String servicePathTemplate;

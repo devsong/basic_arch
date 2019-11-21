@@ -4,17 +4,13 @@ import com.gzs.learn.web.core.template.config.*;
 
 /**
  * 模板生成父类
- *
- * @author fengshuonan
- * @date 2017-05-08 20:17
  */
 public class AbstractTemplateEngine {
-
-    protected ContextConfig contextConfig;                //全局配置
-    protected ControllerConfig controllerConfig;          //控制器的配置
-    protected PageConfig pageConfig;                      //页面的控制器
-    protected DaoConfig daoConfig;                        //Dao配置
-    protected ServiceConfig serviceConfig;                //Service配置
+    protected ContextConfig contextConfig; // 全局配置
+    protected ControllerConfig controllerConfig; // 控制器的配置
+    protected PageConfig pageConfig; // 页面的控制器
+    protected DaoConfig daoConfig; // Dao配置
+    protected ServiceConfig serviceConfig; // Service配置
 
     public void initConfig() {
         if (this.contextConfig == null) {
@@ -86,4 +82,3 @@ public class AbstractTemplateEngine {
         this.serviceConfig = serviceConfig;
     }
 }
-
