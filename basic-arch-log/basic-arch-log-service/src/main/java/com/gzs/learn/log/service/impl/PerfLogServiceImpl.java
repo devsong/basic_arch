@@ -18,9 +18,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.gzs.learn.common.util.BeanUtil;
-import com.gzs.learn.log.LogPageResponseDto;
-import com.gzs.learn.log.LogPageResponseDto.LogPageResponseDtoBuilder;
-import com.gzs.learn.log.LogPageResponseDto.PageResponse;
+import com.gzs.learn.inf.PageResponseDto;
+import com.gzs.learn.inf.PageResponseDto.PageResponse;
+import com.gzs.learn.inf.PageResponseDto.PageResponseDtoBuilder;
 import com.gzs.learn.log.dao.SysPerfLogCountMapper;
 import com.gzs.learn.log.dao.SysPerfLogMapper;
 import com.gzs.learn.log.dao.SysPerfLogMetaMapper;
@@ -142,10 +142,10 @@ public class PerfLogServiceImpl implements IPerfLogService {
     }
 
     @Override
-    public LogPageResponseDto<SysPerfLogDto> searchPerfLogs(SysPerfLogSearchDto searchDto) {
+    public PageResponseDto<SysPerfLogDto> searchPerfLogs(SysPerfLogSearchDto searchDto) {
         PageInfo<SysPerfLogPo> pageInfo = PageHelper.startPage(searchDto.getPage(), searchDto.getPageSize(), true)
                 .doSelectPageInfo(() -> sysPerfLogMapper.searchPerfLogs(searchDto));
-        LogPageResponseDtoBuilder<SysPerfLogDto> builder = LogPageResponseDto.builder();
+        PageResponseDtoBuilder<SysPerfLogDto> builder = PageResponseDto.builder();
 
         PageResponse page = PageResponse.builder().page(searchDto.getPage()).pageSize(searchDto.getPageSize())
                 .total((int) pageInfo.getTotal()).build();
@@ -166,7 +166,7 @@ public class PerfLogServiceImpl implements IPerfLogService {
             dto.setMethod(metaPo.getMethod());
             dto.setOperatorIp(metaPo.getOperatorIp());
         }
-        LogPageResponseDto<SysPerfLogDto> result = builder.code(0).msg("success").page(page).data(targetDtos).build();
+        PageResponseDto<SysPerfLogDto> result = builder.code(0).msg("success").page(page).data(targetDtos).build();
         result.setData(targetDtos);
         return result;
     }

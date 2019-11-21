@@ -1,7 +1,6 @@
 package com.gzs.learn.log.dubbo;
 
-import java.util.List;
-
+import com.gzs.learn.inf.PageResponseDto;
 import com.gzs.learn.log.inf.UserLoginLogDto;
 import com.gzs.learn.log.inf.search.UserLoginLogSearchDto;
 
@@ -18,7 +17,7 @@ public interface DubboUserLoginLogService {
      * @param userOperationLogSearchDto
      * @return
      */
-    List<UserLoginLogDto> searchUserLoginLogs(UserLoginLogSearchDto userLoginLogSearchDto);
+    PageResponseDto<UserLoginLogDto> searchUserLoginLogs(UserLoginLogSearchDto userLoginLogSearchDto);
 
     /**
      * 取登录日志详情

@@ -15,9 +15,10 @@
  */
 package com.gzs.learn.web.core.shiro.check;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.gzs.learn.web.core.listener.ConfigListener;
 import com.gzs.learn.web.core.shiro.ShiroKit;
@@ -26,14 +27,11 @@ import com.gzs.learn.web.core.support.CollectionKit;
 import com.gzs.learn.web.core.support.HttpKit;
 import com.gzs.learn.web.core.util.SpringContextHolder;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * 权限自定义检查
  */
 @Service
 @DependsOn("springContextHolder")
-@Transactional(readOnly = true)
 public class PermissionCheckFactory implements ICheck {
 
     public static ICheck me() {

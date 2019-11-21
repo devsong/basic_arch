@@ -3,22 +3,16 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.gzs.learn</groupId>
-        <artifactId>basic-arch-log</artifactId>
+        <artifactId>basic-arch</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-    <artifactId>basic-arch-log-inf</artifactId>
+    <artifactId>basic-arch-entity</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.gzs.learn</groupId>
-            <artifactId>basic-arch-entity</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

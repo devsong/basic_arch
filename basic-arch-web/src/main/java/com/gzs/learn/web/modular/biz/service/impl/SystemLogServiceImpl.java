@@ -1,11 +1,9 @@
 package com.gzs.learn.web.modular.biz.service.impl;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
+import com.gzs.learn.inf.PageResponseDto;
 import com.gzs.learn.log.dubbo.DubboPerfLogService;
 import com.gzs.learn.log.dubbo.DubboUserLoginLogService;
 import com.gzs.learn.log.dubbo.DubboUserOperationLogService;
@@ -18,7 +16,6 @@ import com.gzs.learn.web.common.constant.Const;
 import com.gzs.learn.web.modular.biz.service.ISystemLogService;
 
 @Component
-@Transactional
 public class SystemLogServiceImpl implements ISystemLogService {
     @Autowired
     private DubboPerfLogService dubboPerflogService;
@@ -30,8 +27,8 @@ public class SystemLogServiceImpl implements ISystemLogService {
     private DubboUserOperationLogService dubboUserOperationLogService;
 
     @Override
-    public List<UserLoginLogDto> getLoginLogs(UserLoginLogSearchDto loginLogSearchDto) {
-        List<UserLoginLogDto> searchUserLoginLogs = dubboUserLoginLogService.searchUserLoginLogs(loginLogSearchDto);
+    public PageResponseDto<UserLoginLogDto> getLoginLogs(UserLoginLogSearchDto loginLogSearchDto) {
+        PageResponseDto<UserLoginLogDto> searchUserLoginLogs = dubboUserLoginLogService.searchUserLoginLogs(loginLogSearchDto);
         return searchUserLoginLogs;
     }
 
@@ -46,8 +43,8 @@ public class SystemLogServiceImpl implements ISystemLogService {
     }
 
     @Override
-    public List<UserOperationLogDto> getOperationLogs(UserOperationLogSearchDto operationLogSearchDto) {
-        List<UserOperationLogDto> operationLogs = dubboUserOperationLogService.searchOperationLogs(operationLogSearchDto);
+    public PageResponseDto<UserOperationLogDto> getOperationLogs(UserOperationLogSearchDto operationLogSearchDto) {
+        PageResponseDto<UserOperationLogDto> operationLogs = dubboUserOperationLogService.searchOperationLogs(operationLogSearchDto);
         return operationLogs;
     }
 

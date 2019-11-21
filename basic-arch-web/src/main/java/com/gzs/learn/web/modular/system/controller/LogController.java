@@ -1,6 +1,5 @@
 package com.gzs.learn.web.modular.system.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.gzs.learn.inf.PageResponseDto;
 import com.gzs.learn.log.inf.UserOperationLogDto;
 import com.gzs.learn.log.inf.search.UserOperationLogSearchDto;
 import com.gzs.learn.web.common.annotion.Permission;
@@ -44,9 +44,9 @@ public class LogController extends BaseController {
     @RequestMapping("/list")
     @Permission(Const.ADMIN_NAME)
     @ResponseBody
-    public Object list(UserOperationLogSearchDto operationLogSearchDto) {
-        List<UserOperationLogDto> result = systemLogService.getOperationLogs(operationLogSearchDto);
-        return packForBT(result);
+    public PageResponseDto<UserOperationLogDto> list(UserOperationLogSearchDto operationLogSearchDto) {
+        PageResponseDto<UserOperationLogDto> result = systemLogService.getOperationLogs(operationLogSearchDto);
+        return result;
     }
 
     /**

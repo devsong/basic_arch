@@ -1,11 +1,10 @@
 package com.gzs.learn.web.modular.system.controller;
 
-import java.util.List;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.gzs.learn.inf.PageResponseDto;
 import com.gzs.learn.log.inf.UserLoginLogDto;
 import com.gzs.learn.log.inf.search.UserLoginLogSearchDto;
 import com.gzs.learn.web.common.annotion.Permission;
@@ -40,10 +39,10 @@ public class LoginLogController extends BaseController {
     @RequestMapping("/list")
     @Permission(Const.ADMIN_NAME)
     @ResponseBody
-    public Object list(UserLoginLogSearchDto loginLogSearchDto) {
+    public PageResponseDto<UserLoginLogDto> list(UserLoginLogSearchDto loginLogSearchDto) {
         loginLogSearchDto.setPage(1);
         loginLogSearchDto.setPageSize(10);
-        List<UserLoginLogDto> result = systemLogService.getLoginLogs(loginLogSearchDto);
-        return packForBT(result);
+        PageResponseDto<UserLoginLogDto> result = systemLogService.getLoginLogs(loginLogSearchDto);
+        return result;
     }
 }

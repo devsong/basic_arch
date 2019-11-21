@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.gzs.learn.common.util.IpUtil;
+import com.gzs.learn.inf.PageResponseDto;
 import com.gzs.learn.log.dao.SysPerfLogMapper;
 import com.gzs.learn.log.enums.SysPerfLogDurationEnum;
 import com.gzs.learn.log.inf.SysPerfLogDto;
@@ -44,7 +45,7 @@ public class SysPerfLogServiceTest {
         SysPerfLogSearchDto searchDto = SysPerfLogSearchDto.builder().product("perf").groupName("perf").app("dubbo-app").build();
         searchDto.setPage(1);
         searchDto.setPageSize(10);
-        LogPageResponseDto<SysPerfLogDto> searchPerfLogs = perfLogService.searchPerfLogs(searchDto);
+        PageResponseDto<SysPerfLogDto> searchPerfLogs = perfLogService.searchPerfLogs(searchDto);
         Assert.assertNotNull(searchPerfLogs);
     }
 

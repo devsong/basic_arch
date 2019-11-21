@@ -1,7 +1,5 @@
 package com.gzs.learn.web.common.page;
 
-import com.github.pagehelper.Page;
-
 import java.util.List;
 
 /**
@@ -14,14 +12,9 @@ public class PageInfoBT<T> {
     // 总数
     private long total;
 
-    @SuppressWarnings("rawtypes")
     public PageInfoBT(List<T> page) {
         this.rows = page;
-        if (page instanceof Page) {
-            this.total = ((Page) page).getTotal();
-        } else {
-            this.total = page.size();
-        }
+        this.total = page.size();
     }
 
     public List<T> getRows() {

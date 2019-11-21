@@ -1,7 +1,6 @@
 package com.gzs.learn.web.modular.biz.service;
 
-import java.util.List;
-
+import com.gzs.learn.inf.PageResponseDto;
 import com.gzs.learn.log.inf.SysPerfLogDto;
 import com.gzs.learn.log.inf.UserLoginLogDto;
 import com.gzs.learn.log.inf.UserOperationLogDto;
@@ -14,7 +13,7 @@ public interface ISystemLogService {
      * @param queryLogBo
      * @return
      */
-    List<UserLoginLogDto> getLoginLogs(UserLoginLogSearchDto loginLogSearchDto);
+    PageResponseDto<UserLoginLogDto> getLoginLogs(UserLoginLogSearchDto loginLogSearchDto);
 
     /**
      * 获取登陆日志详情
@@ -35,7 +34,7 @@ public interface ISystemLogService {
      * @param queryLogBo
      * @return
      */
-    List<UserOperationLogDto> getOperationLogs(UserOperationLogSearchDto operationLogSearchDto);
+    PageResponseDto<UserOperationLogDto> getOperationLogs(UserOperationLogSearchDto operationLogSearchDto);
 
     /**
      * 查询详情

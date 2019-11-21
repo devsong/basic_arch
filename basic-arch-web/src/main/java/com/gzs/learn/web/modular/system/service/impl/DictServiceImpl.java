@@ -9,7 +9,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.gzs.learn.rbac.dubbo.DubboRbacCommonService;
 import com.gzs.learn.rbac.inf.DictDto;
@@ -18,7 +17,6 @@ import com.gzs.learn.web.common.exception.BussinessException;
 import com.gzs.learn.web.modular.system.service.IDictService;
 
 @Service
-@Transactional
 public class DictServiceImpl implements IDictService {
     @Autowired
     private DubboRbacCommonService dubboRbacCommonService;

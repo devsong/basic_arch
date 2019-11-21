@@ -3,8 +3,6 @@ package com.gzs.learn.web.modular.system.service;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
-
 import com.gzs.learn.rbac.inf.MenuNodeDto;
 import com.gzs.learn.rbac.inf.ZTreeNode;
 
@@ -26,14 +24,14 @@ public interface IMenuService {
      *
      * @return
      */
-    List<Map<String, Object>> selectMenus(@Param("condition") String condition, @Param("level") String level);
+    List<Map<String, Object>> selectMenus(String condition, String level);
 
     /**
      * 根据条件查询菜单
      *
      * @return
      */
-    List<Long> getMenuIdsByRoleId(@Param("roleId") Long roleId);
+    List<Long> getMenuIdsByRoleId(Long roleId);
 
     /**
      * 获取菜单列表树

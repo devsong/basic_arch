@@ -1,6 +1,6 @@
 package com.gzs.learn.log.service;
 
-import com.gzs.learn.log.LogPageResponseDto;
+import com.gzs.learn.inf.PageResponseDto;
 import com.gzs.learn.log.inf.SysPerfLogDto;
 import com.gzs.learn.log.inf.search.SysPerfLogSearchDto;
 import com.gzs.learn.log.po.SysPerfLogMetaPo;
@@ -11,6 +11,6 @@ public interface IPerfLogService {
 
     boolean insertPerfLog(SysPerfLogDto sysLogDto);
 
-    LogPageResponseDto<SysPerfLogDto> searchPerfLogs(SysPerfLogSearchDto searchDto);
+    PageResponseDto<SysPerfLogDto> searchPerfLogs(SysPerfLogSearchDto searchDto);
 
 }

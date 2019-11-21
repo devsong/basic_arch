@@ -1,4 +1,4 @@
-package com.gzs.learn.log;
+package com.gzs.learn.inf;
 
 import java.io.Serializable;
 
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LogPageRequestDto implements Serializable {
+public class PageRequestDto implements Serializable {
     /**
      * 
      */

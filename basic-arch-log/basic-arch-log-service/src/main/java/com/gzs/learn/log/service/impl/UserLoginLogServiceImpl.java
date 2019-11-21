@@ -6,7 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.gzs.learn.common.util.BeanUtil;
+import com.gzs.learn.inf.PageResponseDto;
+import com.gzs.learn.inf.PageResponseDto.PageResponse;
+import com.gzs.learn.inf.PageResponseDto.PageResponseDtoBuilder;
 import com.gzs.learn.log.dao.UserLoginLogMapper;
 import com.gzs.learn.log.inf.UserLoginLogDto;
 import com.gzs.learn.log.inf.search.UserLoginLogSearchDto;
@@ -28,10 +33,17 @@ public class UserLoginLogServiceImpl implements IUserLoginLogService {
     }
 
     @Override
-    public List<UserLoginLogDto> searchUserLoginLogs(UserLoginLogSearchDto userLoginLogSearchDto) {
-        List<UserLoginLogPo> pos = userLoginLogMapper.getLoginLogs(userLoginLogSearchDto);
-        List<UserLoginLogDto> result = BeanUtil.copyList(pos, UserLoginLogDto.class);
-        return result;
+    public PageResponseDto<UserLoginLogDto> searchUserLoginLogs(UserLoginLogSearchDto userLoginLogSearchDto) {
+        PageInfo<UserLoginLogPo> pageInfo = PageHelper.startPage(userLoginLogSearchDto.getPage(), userLoginLogSearchDto.getPageSize())
+                .doSelectPageInfo(() -> {
+                    userLoginLogMapper.getLoginLogs(userLoginLogSearchDto);
+                });
+        List<UserLoginLogDto> dtos = BeanUtil.copyList(pageInfo.getList(), UserLoginLogDto.class);
+        PageResponseDtoBuilder<UserLoginLogDto> builder = PageResponseDto.builder();
+        PageResponse pageResponse = PageResponse.builder().page(userLoginLogSearchDto.getPage())
+                .pageSize(userLoginLogSearchDto.getPageSize()).total((int) pageInfo.getTotal()).build();
+        PageResponseDto<UserLoginLogDto> logResp = builder.code(0).msg("success").data(dtos).page(pageResponse).build();
+        return logResp;
     }
 
     @Override

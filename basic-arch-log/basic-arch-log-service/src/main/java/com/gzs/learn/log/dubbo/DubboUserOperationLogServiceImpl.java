@@ -1,10 +1,9 @@
 package com.gzs.learn.log.dubbo;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.gzs.learn.inf.PageResponseDto;
 import com.gzs.learn.log.inf.UserOperationLogDto;
 import com.gzs.learn.log.inf.search.UserOperationLogSearchDto;
 import com.gzs.learn.log.service.IUserOperationLogService;
@@ -22,7 +21,7 @@ public class DubboUserOperationLogServiceImpl implements DubboUserOperationLogSe
     }
 
     @Override
-    public List<UserOperationLogDto> searchOperationLogs(UserOperationLogSearchDto userOperationLogSearchDto) {
+    public PageResponseDto<UserOperationLogDto> searchOperationLogs(UserOperationLogSearchDto userOperationLogSearchDto) {
         LogSystemUtil.setDefaultSearchRange(userOperationLogSearchDto);
         return userOperationLogService.searchOperationLogs(userOperationLogSearchDto);
     }

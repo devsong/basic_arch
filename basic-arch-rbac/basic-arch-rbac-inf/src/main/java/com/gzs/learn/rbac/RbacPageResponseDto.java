@@ -1,4 +1,4 @@
-package com.gzs.learn.log;
+package com.gzs.learn.rbac;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LogPageResponseDto<T> implements Serializable {
+public class RbacPageResponseDto<T> implements Serializable {
     /**
      * 
      */
