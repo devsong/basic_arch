@@ -28,9 +28,6 @@ import com.gzs.learn.web.modular.system.wrapper.DictWrapper;
 
 /**
  * 字典控制器
- *
- * @author fengshuonan
- * @Date 2017年4月26日 12:55:31
  */
 @Controller
 @RequestMapping("/dict")

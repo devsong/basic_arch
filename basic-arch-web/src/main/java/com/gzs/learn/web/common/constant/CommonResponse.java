@@ -12,10 +12,8 @@ import lombok.EqualsAndHashCode;
 public class CommonResponse<T> extends Tip {
     private T data;
 
-    private Long count;
-
-    public static <T> CommonResponse<T> build(Integer code, String msg, T data, Long count) {
-        return new CommonResponse<>(code, msg, data, count);
+    public static <T> CommonResponse<T> build(Integer code, String msg, T data) {
+        return new CommonResponse<>(code, msg, data);
     }
 
     public static <T> CommonResponse<T> buildSuccess(T data) {
@@ -23,16 +21,15 @@ public class CommonResponse<T> extends Tip {
     }
 
     public static <T> CommonResponse<T> buildSuccess(T data, Long count) {
-        return new CommonResponse<>(SUCCESS.getCode(), SUCCESS.getMsg(), data, count);
+        return new CommonResponse<>(SUCCESS.getCode(), SUCCESS.getMsg(), data);
     }
 
     public CommonResponse() {
         super();
     }
 
-    public CommonResponse(int code, String msg, T data, long count) {
+    public CommonResponse(int code, String msg, T data) {
         super(code, msg);
         this.data = data;
-        this.count = count;
     }
 }

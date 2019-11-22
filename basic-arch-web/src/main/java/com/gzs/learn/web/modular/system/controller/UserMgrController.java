@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.collect.Maps;
+import com.gzs.learn.inf.PageResponseDto;
 import com.gzs.learn.rbac.inf.DataScope;
 import com.gzs.learn.rbac.inf.UserDto;
 import com.gzs.learn.rbac.inf.UserSearchDto;
@@ -39,6 +40,7 @@ import com.gzs.learn.web.common.constant.tips.Tip;
 import com.gzs.learn.web.common.controller.BaseController;
 import com.gzs.learn.web.common.exception.BizExceptionEnum;
 import com.gzs.learn.web.common.exception.BussinessException;
+import com.gzs.learn.web.common.page.PageInfoBT;
 import com.gzs.learn.web.config.properties.GunsProperties;
 import com.gzs.learn.web.core.log.LogObjectHolder;
 import com.gzs.learn.web.core.shiro.ShiroKit;
@@ -51,9 +53,6 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * 系统管理员控制器
- *
- * @author fengshuonan
- * @Date 2017年1月11日 下午1:08:17
  */
 @Controller
 @RequestMapping("/mgr")
@@ -164,16 +163,17 @@ public class UserMgrController extends BaseController {
     /**
      * 查询管理员列表
      */
+    @SuppressWarnings("unchecked")
     @RequestMapping("/list")
     @Permission
     @ResponseBody
-    public Object list(UserSearchDto userSearchDto) {
+    public PageInfoBT<Object> list(UserSearchDto userSearchDto) {
         if (StringUtils.isNotEmpty(userSearchDto.getTimeLimit())) {
             String[] split = userSearchDto.getTimeLimit().split(" - ");
             userSearchDto.setBeginTime(split[0]);
             userSearchDto.setEndTime(split[1]);
         }
-        List<UserDto> users = null;
+        PageResponseDto<UserDto> users = null;
         if (ShiroKit.isAdmin()) {
             users = userService.selectUsers(null, userSearchDto);
         } else {
@@ -183,7 +183,8 @@ public class UserMgrController extends BaseController {
             users = userService.selectUsers(dataScope, userSearchDto);
         }
 
-        return CommonResponse.buildSuccess((List<?>) new UserWarpper(users).warp());
+        List<Object> obj = (List<Object>) new UserWarpper(users.getData()).warp();
+        return new PageInfoBT<Object>(obj, users.getPage().getTotal());
     }
 
     /**

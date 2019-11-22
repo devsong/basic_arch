@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.gzs.learn.rbac.inf.MenuDto;
+import com.gzs.learn.web.common.BaseControllerWarpper;
 import com.gzs.learn.web.common.constant.enums.IsMenu;
 import com.gzs.learn.web.common.constant.factory.ConstantFactory;
-import com.gzs.learn.web.common.warpper.BaseControllerWarpper;
 
 /**
  * 菜单列表的包装类

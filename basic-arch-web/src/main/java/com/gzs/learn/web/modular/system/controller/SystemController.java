@@ -48,7 +48,6 @@ public class SystemController extends BaseController {
             model.addAttribute("treeUrl", URLDecoder.decode(treeUrl, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
         }
-
         return "/common/tree_dlg.html";
     }
 }

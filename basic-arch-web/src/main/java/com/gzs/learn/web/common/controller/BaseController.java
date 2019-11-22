@@ -5,11 +5,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
+import com.gzs.learn.inf.PageResponseDto;
+import com.gzs.learn.web.common.BaseControllerWarpper;
 import com.gzs.learn.web.common.constant.enums.Order;
 import com.gzs.learn.web.common.constant.tips.SuccessTip;
 import com.gzs.learn.web.common.page.PageInfoBT;
 import com.gzs.learn.web.common.page.PageReq;
-import com.gzs.learn.web.common.warpper.BaseControllerWarpper;
 import com.gzs.learn.web.core.support.HttpKit;
 import com.gzs.learn.web.core.util.FileUtil;
 import com.gzs.learn.web.core.util.ToolUtil;
@@ -63,6 +64,10 @@ public class BaseController {
      * 把service层的分页信息，封装为bootstrap table通用的分页封装
      */
     protected <T> PageInfoBT<T> packForBT(List<T> page) {
+        return new PageInfoBT<T>(page);
+    }
+
+    protected <T> PageInfoBT<T> packForBT(PageResponseDto<T> page) {
         return new PageInfoBT<T>(page);
     }
 

@@ -290,10 +290,8 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
 
     // 修改user状态
     form.on('switch(status)', function (obj) {
-
         var userId = obj.elem.value;
         var checked = obj.elem.checked ? true : false;
-
         MgrUser.changeUserStatus(userId, checked);
     });
 

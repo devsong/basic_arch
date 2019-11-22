@@ -26,9 +26,6 @@ import com.gzs.learn.web.modular.system.wrapper.NoticeWrapper;
 
 /**
  * 通知控制器
- *
- * @author fengshuonan
- * @Date 2017-05-09 23:02:21
  */
 @Controller
 @RequestMapping("/notice")

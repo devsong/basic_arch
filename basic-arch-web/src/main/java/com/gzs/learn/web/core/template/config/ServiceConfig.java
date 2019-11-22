@@ -10,7 +10,7 @@ import com.gzs.learn.web.core.template.TemplateConstant;
  */
 public class ServiceConfig {
     private static final String BASE_PACKAGE = TemplateConstant.BASE_PACKAGE + ".web.modular.";
-    private static final String BASE_PACKAGE_DIR = TemplateConstant.BASE_PACKAGE_DIR + "\\web\\modular\\";
+    private static final String BASE_PACKAGE_DIR = TemplateConstant.BASE_PACKAGE_DIR + "/web/modular/";
     private ContextConfig contextConfig;
 
     private String servicePathTemplate;
@@ -25,8 +25,8 @@ public class ServiceConfig {
         imports.add("org.springframework.stereotype.Service");
         imports.add(BASE_PACKAGE + contextConfig.getModuleName() + ".service.I" + contextConfig.getBizEnBigName() + "Service");
         this.serviceImplImports = imports;
-        this.servicePathTemplate = BASE_PACKAGE_DIR + contextConfig.getModuleName() + "\\service\\I{}Service.java";
-        this.serviceImplPathTemplate = BASE_PACKAGE_DIR + contextConfig.getModuleName() + "\\service\\impl\\{}ServiceImpl.java";
+        this.servicePathTemplate = BASE_PACKAGE_DIR + contextConfig.getModuleName() + "/service/I{}Service.java";
+        this.serviceImplPathTemplate = BASE_PACKAGE_DIR + contextConfig.getModuleName() + "/service/impl/{}ServiceImpl.java";
         this.packageName = BASE_PACKAGE + contextConfig.getModuleName() + ".service";
     }
 

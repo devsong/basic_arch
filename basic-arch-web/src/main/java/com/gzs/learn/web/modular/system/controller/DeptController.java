@@ -28,9 +28,6 @@ import com.gzs.learn.web.modular.system.wrapper.DeptWarpper;
 
 /**
  * 部门控制器
- *
- * @author fengshuonan
- * @Date 2017年2月17日20:27:22
  */
 @Controller
 @RequestMapping("/dept")
@@ -101,9 +98,9 @@ public class DeptController extends BaseController {
     @RequestMapping(value = "/list")
     @Permission
     @ResponseBody
-    public Object list(String condition) {
+    public CommonResponse<Object> list(String condition) {
         List<DeptDto> list = dubboRbacDeptService.searchDepts(condition);
-        return super.warpObject(new DeptWarpper(list));
+        return CommonResponse.buildSuccess(warpObject(new DeptWarpper(list)));
     }
 
     /**

@@ -1,7 +1,6 @@
 package com.gzs.learn.rbac.dubbo;
 
-import java.util.List;
-
+import com.gzs.learn.inf.PageResponseDto;
 import com.gzs.learn.rbac.inf.DataScope;
 import com.gzs.learn.rbac.inf.UserDto;
 import com.gzs.learn.rbac.inf.UserSearchDto;
@@ -32,7 +31,7 @@ public interface DubboRbacUserService {
      * @param searchDto
      * @return
      */
-    List<UserDto> search(DataScope dataScope, UserSearchDto searchDto);
+    PageResponseDto<UserDto> search(DataScope dataScope, UserSearchDto searchDto);
 
     /**
      * 写入用户信息

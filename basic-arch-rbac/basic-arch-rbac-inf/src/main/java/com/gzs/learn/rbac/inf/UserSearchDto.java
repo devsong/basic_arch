@@ -2,6 +2,8 @@ package com.gzs.learn.rbac.inf;
 
 import java.io.Serializable;
 
+import com.gzs.learn.inf.PageRequestDto;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

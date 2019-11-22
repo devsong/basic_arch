@@ -10,7 +10,6 @@ import com.gzs.learn.web.common.exception.ToolBoxException;
 
 /**
  * 时间工具类
- * @author xiaoleilu
  */
 public class DateTimeKit {
 	/** 毫秒 */
@@ -51,15 +50,11 @@ public class DateTimeKit {
 			return new SimpleDateFormat(NORM_TIME_PATTERN);
 		};
 	};
-	/** 标准日期时间格式化器 */
-	// private final static SimpleDateFormat NORM_DATETIME_FORMAT = new SimpleDateFormat(NORM_DATETIME_PATTERN);
 	private static ThreadLocal<SimpleDateFormat> NORM_DATETIME_FORMAT = new ThreadLocal<SimpleDateFormat>(){
 		synchronized protected SimpleDateFormat initialValue() {
 			return new SimpleDateFormat(NORM_DATETIME_PATTERN);
 		};
 	};
-	/** HTTP日期时间格式化器 */
-	// private final static SimpleDateFormat HTTP_DATETIME_FORMAT = new SimpleDateFormat(HTTP_DATETIME_PATTERN, Locale.US);
 	private static ThreadLocal<SimpleDateFormat> HTTP_DATETIME_FORMAT = new ThreadLocal<SimpleDateFormat>(){
 		synchronized protected SimpleDateFormat initialValue() {
 			return new SimpleDateFormat(HTTP_DATETIME_PATTERN, Locale.US);

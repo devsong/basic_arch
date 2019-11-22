@@ -18,4 +18,10 @@ public class PageRequestDto implements Serializable {
     private static final long serialVersionUID = 1L;
     protected Integer page;
     protected Integer pageSize;
+    // 兼容已有分页逻辑
+    protected Integer limit;
+
+    public Integer getPageSize() {
+        return pageSize == null ? limit : pageSize;
+    }
 }

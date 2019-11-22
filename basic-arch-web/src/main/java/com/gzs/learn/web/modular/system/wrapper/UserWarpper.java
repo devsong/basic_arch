@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.gzs.learn.rbac.inf.UserDto;
+import com.gzs.learn.web.common.BaseControllerWarpper;
 import com.gzs.learn.web.common.constant.factory.ConstantFactory;
-import com.gzs.learn.web.common.warpper.BaseControllerWarpper;
 
 /**
  * 用户管理的包装类

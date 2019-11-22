@@ -1,7 +1,6 @@
 package com.gzs.learn.rbac.service;
 
-import java.util.List;
-
+import com.gzs.learn.inf.PageResponseDto;
 import com.gzs.learn.rbac.inf.DataScope;
 import com.gzs.learn.rbac.inf.UserDto;
 import com.gzs.learn.rbac.inf.UserSearchDto;
@@ -13,7 +12,7 @@ public interface IUserService {
 
     UserDto getUser(Long id);
 
-    List<UserDto> selectUsers(DataScope dataScope, UserSearchDto searchDto);
+    PageResponseDto<UserDto> selectUsers(DataScope dataScope, UserSearchDto searchDto);
 
     int insert(UserPo userPo);
 

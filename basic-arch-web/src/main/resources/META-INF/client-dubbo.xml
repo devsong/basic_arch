@@ -32,4 +32,12 @@
     <dubbo:reference id="dubboPerfLogService" loadbalance="random" registry="clientZk"
         interface="com.gzs.learn.log.dubbo.DubboPerfLogService" version="${dubbo.zk.version}" check="false">
     </dubbo:reference>
+
+    <dubbo:reference id="dubboUserLoginLogService" loadbalance="random" registry="clientZk"
+        interface="com.gzs.learn.log.dubbo.DubboUserLoginLogService" version="${dubbo.zk.version}" check="false">
+    </dubbo:reference>
+
+    <dubbo:reference id="dubboUserOperationLogService" loadbalance="random" registry="clientZk"
+        interface="com.gzs.learn.log.dubbo.DubboUserOperationLogService" version="${dubbo.zk.version}" check="false">
+    </dubbo:reference>
 </beans>

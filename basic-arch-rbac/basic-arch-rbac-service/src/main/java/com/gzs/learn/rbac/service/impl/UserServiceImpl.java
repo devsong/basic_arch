@@ -6,7 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.gzs.learn.common.util.BeanUtil;
+import com.gzs.learn.inf.PageResponseDto;
+import com.gzs.learn.inf.PageResponseDto.PageResponse;
+import com.gzs.learn.inf.PageResponseDto.PageResponseDtoBuilder;
 import com.gzs.learn.rbac.RbacConsts;
 import com.gzs.learn.rbac.dao.UserMapper;
 import com.gzs.learn.rbac.inf.DataScope;
@@ -39,10 +44,17 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public List<UserDto> selectUsers(DataScope dataScope, UserSearchDto searchDto) {
-        List<UserPo> users = userMapper.selectUsers(dataScope, searchDto);
-        List<UserDto> userDtos = BeanUtil.copyList(users, UserDto.class);
-        return userDtos;
+    public PageResponseDto<UserDto> selectUsers(DataScope dataScope, UserSearchDto searchDto) {
+        PageResponseDtoBuilder<UserDto> builder = PageResponseDto.builder();
+        PageInfo<UserPo> users = PageHelper.startPage(searchDto.getPage(), searchDto.getPageSize(), true).doSelectPageInfo(() -> {
+            userMapper.selectUsers(dataScope, searchDto);
+        });
+        PageResponse page = PageResponse.builder().page(searchDto.getPage()).pageSize(searchDto.getPageSize()).total((int) users.getTotal())
+                .build();
+
+        List<UserDto> userDtos = BeanUtil.copyList(users.getList(), UserDto.class);
+        PageResponseDto<UserDto> result = builder.code(0).msg("success").data(userDtos).page(page).build();
+        return result;
     }
 
     @Override

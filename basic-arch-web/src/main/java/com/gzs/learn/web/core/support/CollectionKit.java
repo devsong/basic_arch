@@ -27,7 +27,6 @@ import com.gzs.learn.web.common.exception.ToolBoxException;
  * 
  */
 public class CollectionKit {
-
     private CollectionKit() {
         // 静态类不可实例化
     }

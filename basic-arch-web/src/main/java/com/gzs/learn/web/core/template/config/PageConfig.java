@@ -4,8 +4,8 @@ package com.gzs.learn.web.core.template.config;
  * 页面 模板生成的配置
  */
 public class PageConfig {
-    private static final String VIEW_BASE_DIR = "\\src\\main\\webapp\\WEB-INF\\view\\";
-    private static final String STATIC_BASE_DIR = "\\src\\main\\webapp\\static\\modular\\";
+    private static final String VIEW_BASE_DIR = "src/main/webapp/WEB-INF/view/";
+    private static final String STATIC_BASE_DIR = "src/main/webapp/static/modular/";
     private ContextConfig contextConfig;
 
     private String pagePathTemplate;
@@ -15,11 +15,11 @@ public class PageConfig {
     private String pageInfoJsPathTemplate;
 
     public void init() {
-        pagePathTemplate = VIEW_BASE_DIR + contextConfig.getModuleName() + "\\{}\\{}.html";
-        pageAddPathTemplate = VIEW_BASE_DIR + contextConfig.getModuleName() + "\\{}\\{}_add.html";
-        pageEditPathTemplate = VIEW_BASE_DIR + contextConfig.getModuleName() + "\\{}\\{}_edit.html";
-        pageJsPathTemplate = STATIC_BASE_DIR + contextConfig.getModuleName() + "\\{}\\{}.js";
-        pageInfoJsPathTemplate = STATIC_BASE_DIR + contextConfig.getModuleName() + "\\{}\\{}_info.js";
+        pagePathTemplate = VIEW_BASE_DIR + contextConfig.getModuleName() + "/{}/{}.html";
+        pageAddPathTemplate = VIEW_BASE_DIR + contextConfig.getModuleName() + "/{}/{}_add.html";
+        pageEditPathTemplate = VIEW_BASE_DIR + contextConfig.getModuleName() + "/{}/{}_edit.html";
+        pageJsPathTemplate = STATIC_BASE_DIR + contextConfig.getModuleName() + "/{}/{}.js";
+        pageInfoJsPathTemplate = STATIC_BASE_DIR + contextConfig.getModuleName() + "/{}/{}_info.js";
     }
 
     public String getPagePathTemplate() {

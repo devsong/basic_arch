@@ -27,9 +27,6 @@ import com.gzs.learn.web.modular.system.service.IUserService;
 
 /**
  * 登录控制器
- *
- * @author fengshuonan
- * @Date 2017年1月10日 下午8:25:24
  */
 @Controller
 public class LoginController extends BaseController {

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.gzs.learn.inf.PageResponseDto;
 import com.gzs.learn.rbac.dubbo.DubboRbacMenuService;
 import com.gzs.learn.rbac.dubbo.DubboRbacUserService;
 import com.gzs.learn.rbac.inf.DataScope;
@@ -22,7 +23,7 @@ public class UserServiceImpl implements IUserService {
     private DubboRbacMenuService dubboRbacMenuService;
 
     @Override
-    public List<UserDto> selectUsers(DataScope dataScope, UserSearchDto userSearchDto) {
+    public PageResponseDto<UserDto> selectUsers(DataScope dataScope, UserSearchDto userSearchDto) {
         return dubboRbacUserService.search(dataScope, userSearchDto);
     }
 
