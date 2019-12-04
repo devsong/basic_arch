@@ -24,7 +24,7 @@ import com.gzs.learn.web.common.exception.BizExceptionEnum;
 import com.gzs.learn.web.common.exception.BussinessException;
 import com.gzs.learn.web.core.log.LogObjectHolder;
 import com.gzs.learn.web.core.util.ToolUtil;
-import com.gzs.learn.web.modular.system.wrapper.DeptWarpper;
+import com.gzs.learn.web.modular.system.wrapper.DeptWrapper;
 
 /**
  * 部门控制器
@@ -100,7 +100,7 @@ public class DeptController extends BaseController {
     @ResponseBody
     public CommonResponse<Object> list(String condition) {
         List<DeptDto> list = dubboRbacDeptService.searchDepts(condition);
-        return CommonResponse.buildSuccess(warpObject(new DeptWarpper(list)));
+        return CommonResponse.buildSuccess(warpObject(new DeptWrapper(list)));
     }
 
     /**

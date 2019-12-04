@@ -1,6 +1,6 @@
-package com.gzs.learn.rbac.inf;
+package com.gzs.learn.web.modular.system.vo;
 
-import java.util.Date;
+import java.io.Serializable;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,9 +13,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class UserDto extends Base {
+public class UserEditVo implements Serializable {
     private static final long serialVersionUID = 1L;
-
+    /**
+     * 用户的ID
+     */
+    private Long id;
     /**
      * 头像
      */
@@ -29,17 +32,13 @@ public class UserDto extends Base {
      */
     private String password;
     /**
-     * md5密码盐
-     */
-    private String salt;
-    /**
      * 名字
      */
     private String name;
     /**
      * 生日
      */
-    private Date birthday;
+    private String birthday;
     /**
      * 性别（1：男 2：女）
      */

@@ -17,7 +17,7 @@ import com.gzs.learn.web.common.constant.Const;
 import com.gzs.learn.web.common.controller.BaseController;
 import com.gzs.learn.web.core.support.BeanKit;
 import com.gzs.learn.web.modular.biz.service.ISystemLogService;
-import com.gzs.learn.web.modular.system.wrapper.LogWarpper;
+import com.gzs.learn.web.modular.system.wrapper.LogWrapper;
 
 /**
  * 日志管理的控制器
@@ -58,7 +58,7 @@ public class LogController extends BaseController {
     public Object detail(@PathVariable Long id) {
         UserOperationLogDto operationLog = systemLogService.getOperationLogDetail(id);
         Map<String, Object> stringObjectMap = BeanKit.beanToMap(operationLog);
-        return super.warpObject(new LogWarpper(stringObjectMap));
+        return super.warpObject(new LogWrapper(stringObjectMap));
     }
 
     /**

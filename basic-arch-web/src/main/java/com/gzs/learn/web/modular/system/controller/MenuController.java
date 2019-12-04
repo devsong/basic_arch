@@ -32,7 +32,7 @@ import com.gzs.learn.web.core.log.LogObjectHolder;
 import com.gzs.learn.web.core.support.BeanKit;
 import com.gzs.learn.web.core.util.Convert;
 import com.gzs.learn.web.core.util.ToolUtil;
-import com.gzs.learn.web.modular.system.wrapper.MenuWarpper;
+import com.gzs.learn.web.modular.system.wrapper.MenuWrapper;
 
 /**
  * 菜单控制器
@@ -119,7 +119,7 @@ public class MenuController extends BaseController {
     @ResponseBody
     public Object list(@RequestParam(required = false) String menuName, @RequestParam(required = false) String level) {
         List<MenuDto> menus = dubboRbacMenuService.searchMenus(menuName, level);
-        return super.warpObject(new MenuWarpper(menus));
+        return super.warpObject(new MenuWrapper(menus));
     }
 
     /**

@@ -34,7 +34,7 @@ import com.gzs.learn.web.core.util.Convert;
 import com.gzs.learn.web.core.util.ToolUtil;
 import com.gzs.learn.web.modular.system.service.IRoleService;
 import com.gzs.learn.web.modular.system.service.IUserService;
-import com.gzs.learn.web.modular.system.wrapper.RoleWarpper;
+import com.gzs.learn.web.modular.system.wrapper.RoleWrapper;
 
 /**
  * 角色控制器
@@ -108,7 +108,7 @@ public class RoleController extends BaseController {
     @ResponseBody
     public Object list(@RequestParam(required = false) String roleName) {
         List<RoleDto> roles = dubboRbacRoleService.searchRoles(roleName);
-        return CommonResponse.buildSuccess((List<?>) new RoleWarpper(roles).warp());
+        return CommonResponse.buildSuccess((List<?>) new RoleWrapper(roles).wrap());
     }
 
     /**

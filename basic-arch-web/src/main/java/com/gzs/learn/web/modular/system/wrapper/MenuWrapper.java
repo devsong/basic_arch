@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.gzs.learn.rbac.inf.MenuDto;
-import com.gzs.learn.web.common.BaseControllerWarpper;
+import com.gzs.learn.web.common.BaseControllerWrapper;
 import com.gzs.learn.web.common.constant.enums.IsMenu;
 import com.gzs.learn.web.common.constant.factory.ConstantFactory;
 
@@ -14,9 +14,9 @@ import com.gzs.learn.web.common.constant.factory.ConstantFactory;
  * @author fengshuonan
  * @date 2017年2月19日15:07:29
  */
-public class MenuWarpper extends BaseControllerWarpper {
+public class MenuWrapper extends BaseControllerWrapper {
 
-    public MenuWarpper(List<MenuDto> list) {
+    public MenuWrapper(List<MenuDto> list) {
         super(list);
     }
 

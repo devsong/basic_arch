@@ -6,7 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 import com.gzs.learn.inf.PageResponseDto;
-import com.gzs.learn.web.common.BaseControllerWarpper;
+import com.gzs.learn.web.common.BaseControllerWrapper;
 import com.gzs.learn.web.common.constant.enums.Order;
 import com.gzs.learn.web.common.constant.tips.SuccessTip;
 import com.gzs.learn.web.common.page.PageInfoBT;
@@ -94,8 +94,8 @@ public class BaseController {
     /**
      * 包装一个list，让list增加额外属性
      */
-    protected Object warpObject(BaseControllerWarpper warpper) {
-        return warpper.warp();
+    protected Object warpObject(BaseControllerWrapper warpper) {
+        return warpper.wrap();
     }
 
     /**

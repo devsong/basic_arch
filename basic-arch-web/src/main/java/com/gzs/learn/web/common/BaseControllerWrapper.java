@@ -11,15 +11,15 @@ import net.sf.cglib.beans.BeanMap;
 /**
  * 控制器查询结果的包装类基类
  */
-public abstract class BaseControllerWarpper {
+public abstract class BaseControllerWrapper {
     public Object obj = null;
 
-    public BaseControllerWarpper(Object obj) {
+    public BaseControllerWrapper(Object obj) {
         this.obj = obj;
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public Object warp() {
+    public Object wrap() {
         if (this.obj instanceof List) {
             List list = (List) this.obj;
             List result = Lists.newArrayListWithExpectedSize(list.size());

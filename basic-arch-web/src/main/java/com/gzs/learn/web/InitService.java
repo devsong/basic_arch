@@ -30,7 +30,7 @@ public class InitService {
     public void init() {
         log.info("init execute...");
 
-        registerPerfMetaData();
+        //registerPerfMetaData();
     }
 
     private void registerPerfMetaData() {

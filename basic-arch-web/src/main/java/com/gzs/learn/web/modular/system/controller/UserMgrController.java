@@ -2,6 +2,7 @@ package com.gzs.learn.web.modular.system.controller;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import javax.validation.Valid;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.collect.Maps;
+import com.gzs.learn.common.util.BeanUtil;
 import com.gzs.learn.inf.PageResponseDto;
 import com.gzs.learn.rbac.inf.DataScope;
 import com.gzs.learn.rbac.inf.UserDto;
@@ -40,14 +43,14 @@ import com.gzs.learn.web.common.constant.tips.Tip;
 import com.gzs.learn.web.common.controller.BaseController;
 import com.gzs.learn.web.common.exception.BizExceptionEnum;
 import com.gzs.learn.web.common.exception.BussinessException;
-import com.gzs.learn.web.common.page.PageInfoBT;
 import com.gzs.learn.web.config.properties.GunsProperties;
 import com.gzs.learn.web.core.log.LogObjectHolder;
 import com.gzs.learn.web.core.shiro.ShiroKit;
 import com.gzs.learn.web.core.shiro.ShiroUser;
 import com.gzs.learn.web.core.util.ToolUtil;
 import com.gzs.learn.web.modular.system.service.IUserService;
-import com.gzs.learn.web.modular.system.wrapper.UserWarpper;
+import com.gzs.learn.web.modular.system.vo.UserEditVo;
+import com.gzs.learn.web.modular.system.wrapper.UserWrapper;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -124,7 +127,7 @@ public class UserMgrController extends BaseController {
         }
         UserDto user = userService.selectByPrimaryKey(userId);
         user.setAvatar(gunsProperties.getFilePrefix() + user.getAvatar());
-        model.addAttribute(user);
+        model.addAttribute("user", user);
         model.addAttribute("roleName", ConstantFactory.me().getRoleName(user.getRoleid()));
         model.addAttribute("deptName", ConstantFactory.me().getDeptName(user.getDeptid()));
         LogObjectHolder.me().set(user);
@@ -144,7 +147,7 @@ public class UserMgrController extends BaseController {
      */
     @RequestMapping("/changePwd")
     @ResponseBody
-    public Object changePwd(@RequestParam String oldPassword, @RequestParam String newPassword, @RequestParam String repeatPassword) {
+    public Tip changePwd(@RequestParam String oldPassword, @RequestParam String newPassword, @RequestParam String repeatPassword) {
         if (!newPassword.equals(repeatPassword)) {
             throw new BussinessException(BizExceptionEnum.TWO_PWD_NOT_MATCH);
         }
@@ -167,7 +170,7 @@ public class UserMgrController extends BaseController {
     @RequestMapping("/list")
     @Permission
     @ResponseBody
-    public PageInfoBT<Object> list(UserSearchDto userSearchDto) {
+    public CommonResponse<Object> list(UserSearchDto userSearchDto) {
         if (StringUtils.isNotEmpty(userSearchDto.getTimeLimit())) {
             String[] split = userSearchDto.getTimeLimit().split(" - ");
             userSearchDto.setBeginTime(split[0]);
@@ -183,8 +186,9 @@ public class UserMgrController extends BaseController {
             users = userService.selectUsers(dataScope, userSearchDto);
         }
 
-        List<Object> obj = (List<Object>) new UserWarpper(users.getData()).warp();
-        return new PageInfoBT<Object>(obj, users.getPage().getTotal());
+        List<Object> obj = (List<Object>) new UserWrapper(users.getData()).wrap();
+        return CommonResponse.buildSuccess(obj);
+        // return new PageInfoBT<Object>(obj, users.getPage().getTotal());
     }
 
     /**
@@ -230,18 +234,25 @@ public class UserMgrController extends BaseController {
     @RequestMapping("/edit")
     @BussinessLog(value = "修改管理员", key = "account", dict = Dict.UserDict)
     @ResponseBody
-    public Tip edit(@Valid UserDto user, BindingResult result) throws NoPermissionException {
+    public Tip edit(@Valid UserEditVo userEditVo, BindingResult result) throws NoPermissionException {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
+        UserDto userDto = new UserDto();
+        BeanUtil.copyProperties(userEditVo, userDto, "birthday");
+        try {
+            userDto.setBirthday(DateUtils.parseDate(userEditVo.getBirthday(), "yyyy-MM-dd"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         if (ShiroKit.hasRole(Const.ADMIN_NAME)) {
-            userService.updateByPrimaryKeySelective(user);
+            userService.updateByPrimaryKeySelective(userDto);
             return SUCCESS_TIP;
         }
-        assertAuth(user.getId());
+        assertAuth(userDto.getId());
         ShiroUser shiroUser = ShiroKit.getUser();
-        if (shiroUser.getId().equals(user.getId())) {
-            userService.updateByPrimaryKeySelective(user);
+        if (shiroUser.getId().equals(userDto.getId())) {
+            userService.updateByPrimaryKeySelective(userDto);
             return SUCCESS_TIP;
         }
         throw new BussinessException(BizExceptionEnum.NO_PERMITION);
@@ -395,7 +406,7 @@ public class UserMgrController extends BaseController {
      */
     @RequestMapping("/currentUserInfo")
     @ResponseBody
-    public CommonResponse<UserDto> currentUserInfo() {
+    public CommonResponse<Object> currentUserInfo() {
         ShiroUser currentUser = ShiroKit.getUser();
         UserDto user = userService.selectByPrimaryKey(currentUser.getId());
         UserDto userDto = new UserDto();
@@ -407,7 +418,8 @@ public class UserMgrController extends BaseController {
         userDto.setAvatar(gunsProperties.getFilePrefix() + userDto.getAvatar());
         userDto.setRoleName(ConstantFactory.me().getRoleName(user.getRoleid()));
         userDto.setDeptName(ConstantFactory.me().getDeptName(user.getDeptid()));
-        return CommonResponse.buildSuccess(userDto);
+        Object obj = new UserWrapper(userDto).wrap();
+        return CommonResponse.buildSuccess(obj);
     }
 
     /**

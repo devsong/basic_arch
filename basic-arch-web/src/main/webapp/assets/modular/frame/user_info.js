@@ -16,7 +16,7 @@ layui.use(['form', 'upload', 'element', 'ax', 'laydate'], function () {
     var result = ajax.start();
 
     //用这个方法必须用在class有layui-form的元素上
-    form.val('userInfoForm', result.data);
+    form.val('userInfoForm', result.data);    
 
     //表单提交事件
     form.on('submit(userInfoSubmit)', function (data) {
