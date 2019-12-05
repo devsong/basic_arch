@@ -52,7 +52,7 @@ layui.use(['layer', 'form', 'admin', 'ax'], function () {
             //关掉对话框
             admin.closeThisDialog();
         }, function (data) {
-            Feng.error("修改失败!" + data.responseJSON.message + "!");
+            Feng.error("修改失败!" + data.msg + "!");
         });
         ajax.set(data.field);
         ajax.start();

@@ -31,7 +31,6 @@ layui.use(['layer', 'form', 'admin', 'laydate', 'ax'], function () {
             area: ['300px', '400px'],
             content: Feng.ctxPath + '/system/commonTree?formName=' + formName + "&formId=" + formId + "&treeUrl=" + treeUrl,
             end: function () {
-                console.log(UserInfoDlg.data);
                 $("#deptId").val(UserInfoDlg.data.deptId);
                 $("#deptName").val(UserInfoDlg.data.deptName);
             }
@@ -64,7 +63,7 @@ layui.use(['layer', 'form', 'admin', 'laydate', 'ax'], function () {
             //关掉对话框
             admin.closeThisDialog();
         }, function (data) {
-            Feng.error("添加失败！" + data.responseJSON.message)
+            Feng.error("添加失败！" + data.msg)
         });
         ajax.set(data.field);
         ajax.start();

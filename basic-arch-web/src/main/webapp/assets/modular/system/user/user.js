@@ -165,7 +165,7 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
                 table.reload(MgrUser.tableId);
                 Feng.success("删除成功!");
             }, function (data) {
-                Feng.error("删除失败!" + data.responseJSON.message + "!");
+                Feng.error("删除失败!" + data.msg + "!");
             });
             ajax.set("userId", data.id);
             ajax.start();
@@ -227,7 +227,7 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
             var ajax = new $ax(Feng.ctxPath + "/mgr/freeze", function (data) {
                 Feng.success("冻结成功!");
             }, function (data) {
-                Feng.error("冻结失败!" + data.responseJSON.message + "!");
+                Feng.error("冻结失败!" + data.msg + "!");
                 table.reload(MgrUser.tableId);
             });
             ajax.set("userId", userId);

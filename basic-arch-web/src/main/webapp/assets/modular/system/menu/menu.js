@@ -113,7 +113,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
                 Menu.condition.menuId = "";
                 Menu.initTable(Menu.tableId);
             }, function (data) {
-                Feng.error("删除失败!" + data.responseJSON.message + "!");
+                Feng.error("删除失败!" + data.msg + "!");
             });
             ajax.set("menuId", data.menuId);
             ajax.start();

@@ -121,5 +121,4 @@ public interface IConstantFactory {
      * 获取所有父部门id
      */
     List<Long> getParentDeptIds(Long deptid);
-
 }

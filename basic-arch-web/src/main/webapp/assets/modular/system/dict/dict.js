@@ -93,7 +93,7 @@ layui.use(['layer', 'form', 'table', 'admin', 'ax'], function () {
                 Feng.success("删除成功!");
                 table.reload(Dict.tableId);
             }, function (data) {
-                Feng.error("删除失败!" + data.responseJSON.message + "!");
+                Feng.error("删除失败!" + data.msg + "!");
             });
             ajax.set("dictId", data.dictId);
             ajax.start();

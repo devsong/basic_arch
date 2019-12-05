@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 public class JsonUtil {
     private static final ObjectMapper jsonConvertInstance = new ObjectMapper();
@@ -16,6 +17,8 @@ public class JsonUtil {
     static {
         // 忽略未识别的属性
         jsonConvertInstance.configure(FAIL_ON_UNKNOWN_PROPERTIES, false);
+        //
+        jsonConvertInstance.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         // 输出非空字段
         jsonConvertInstance.setSerializationInclusion(Include.NON_NULL);
     }
