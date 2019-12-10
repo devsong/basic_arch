@@ -40,12 +40,14 @@ public class LogAop implements Ordered {
     @Around("cutService()")
     public Object recordSysLog(ProceedingJoinPoint point) throws Throwable {
         // 先执行业务
-        Object result = point.proceed();
-
+        Object result = null;
         try {
-            handle(point);
+            result = point.proceed();
         } catch (Exception e) {
             log.error("日志记录出错!", e);
+            throw e;
+        } finally {
+            handle(point);
         }
 
         return result;

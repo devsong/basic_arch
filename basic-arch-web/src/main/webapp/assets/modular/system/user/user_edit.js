@@ -24,6 +24,12 @@ layui.use(['layer', 'form', 'admin', 'laydate', 'ax'], function () {
     var result = ajax.start();
     form.val('userForm', result.data);
 
+    // 渲染时间选择框
+    laydate.render({
+        elem: '#birthday'
+        ,trigger: 'click'
+    });
+
     // 点击部门时
     $('#deptName').click(function () {
         var formName = encodeURIComponent("parent.UserInfoDlg.data.deptName");
@@ -50,11 +56,6 @@ layui.use(['layer', 'form', 'admin', 'laydate', 'ax'], function () {
                 return '两次密码输入不一致';
             }
         }
-    });
-
-    // 渲染时间选择框
-    laydate.render({
-        elem: '#birthday'
     });
 
     // 表单提交事件

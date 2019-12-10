@@ -227,7 +227,7 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
             var ajax = new $ax(Feng.ctxPath + "/mgr/freeze", function (data) {
                 Feng.success("冻结成功!");
             }, function (data) {
-                Feng.error("冻结失败!" + data.msg + "!");
+                Feng.error("冻结失败!" + data.responseJSON.msg + "!");
                 table.reload(MgrUser.tableId);
             });
             ajax.set("userId", userId);

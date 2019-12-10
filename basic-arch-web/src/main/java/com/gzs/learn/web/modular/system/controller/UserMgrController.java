@@ -427,7 +427,7 @@ public class UserMgrController extends BaseController {
      */
     @RequestMapping("/getUserInfo")
     @ResponseBody
-    public CommonResponse<UserDto> getUserInfo(Long id) {
+    public CommonResponse<Object> getUserInfo(Long id) {
         UserDto user = userService.selectByPrimaryKey(id);
         UserDto userDto = new UserDto();
         try {
@@ -438,6 +438,6 @@ public class UserMgrController extends BaseController {
         userDto.setAvatar(gunsProperties.getFilePrefix() + userDto.getAvatar());
         userDto.setRoleName(ConstantFactory.me().getRoleName(user.getRoleid()));
         userDto.setDeptName(ConstantFactory.me().getDeptName(user.getDeptid()));
-        return CommonResponse.buildSuccess(userDto);
+        return CommonResponse.buildSuccess(new UserWrapper(userDto).wrap());
     }
 }

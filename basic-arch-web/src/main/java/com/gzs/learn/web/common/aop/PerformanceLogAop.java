@@ -50,6 +50,7 @@ public class PerformanceLogAop {
         } catch (Exception e) {
             exception = e;
             success = false;
+            throw e;
         } finally {
             stopwatch.stop();
             long cost = stopwatch.elapsed(TimeUnit.MICROSECONDS);

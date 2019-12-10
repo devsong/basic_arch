@@ -1,18 +1,25 @@
 package com.gzs.learn.web.common.aop;
 
+import static com.gzs.learn.web.core.support.HttpKit.getIp;
+import static com.gzs.learn.web.core.support.HttpKit.getRequest;
+
+import java.lang.reflect.UndeclaredThrowableException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.CredentialsException;
 import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.session.InvalidSessionException;
 import org.apache.shiro.session.UnknownSessionException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.gzs.learn.web.common.constant.tips.ErrorTip;
 import com.gzs.learn.web.common.exception.BizExceptionEnum;
@@ -22,23 +29,15 @@ import com.gzs.learn.web.core.log.LogManager;
 import com.gzs.learn.web.core.log.factory.LogTaskFactory;
 import com.gzs.learn.web.core.shiro.ShiroKit;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import static com.gzs.learn.web.core.support.HttpKit.getIp;
-import static com.gzs.learn.web.core.support.HttpKit.getRequest;
-
-import java.lang.reflect.UndeclaredThrowableException;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 全局的的异常拦截器（拦截所有的控制器）（带有@RequestMapping注解的方法上都会拦截）
  *
  */
 @ControllerAdvice
-public class GlobalExceptionHandler {
-
-    private Logger log = LoggerFactory.getLogger(this.getClass());
-
+@Slf4j
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     /**
      * 拦截业务异常
      *
@@ -46,11 +45,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BussinessException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
-    public ErrorTip notFount(BussinessException e) {
+    public ErrorTip notFound(BussinessException e) {
         LogManager.me().executeLog(LogTaskFactory.exceptionLog(ShiroKit.getUser().getId(), e));
         getRequest().setAttribute("tip", e.getMessage());
         log.error("业务异常:", e);
-        return new ErrorTip(e.getCode(), e.getMessage());
+        return new ErrorTip(e.getCode(), e.getMsg());
     }
 
     /**
