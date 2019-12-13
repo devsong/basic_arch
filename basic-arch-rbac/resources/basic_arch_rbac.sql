@@ -223,6 +223,19 @@ CREATE TABLE `sys_relation` (
   KEY `idx_role_id` (`role_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色和菜单关联表';
 
+DROP TABLE IF EXISTS `sys_user_role`;
+
+CREATE TABLE `sys_user_role` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `user_id` bigint(11) NOT NULL COMMENT '用户id',
+  `role_id` bigint(11) NOT NULL COMMENT '角色id',
+  `create_time` datetime NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '创建时间',
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_user_id` (`user_id`),
+  KEY `idx_role_id` (`role_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户和角色关联表';
+
 LOCK TABLES `sys_relation` WRITE;
 /*!40000 ALTER TABLE `sys_relation` DISABLE KEYS */;
 

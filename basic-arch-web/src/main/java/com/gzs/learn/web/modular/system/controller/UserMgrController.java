@@ -16,7 +16,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.google.common.collect.Maps;
 import com.gzs.learn.common.util.BeanUtil;
@@ -88,14 +88,15 @@ public class UserMgrController extends BaseController {
      */
     @Permission
     @RequestMapping("/role_assign")
-    public String roleAssign(Long userId, Model model) {
+    public ModelAndView roleAssign(Long userId) {
         if (ToolUtil.isEmpty(userId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
+        ModelAndView mav = new ModelAndView(PREFIX + "user_roleassign.html");
         UserDto user = userService.selectByPrimaryKey(userId);
-        model.addAttribute("userId", userId);
-        model.addAttribute("userAccount", user.getAccount());
-        return PREFIX + "user_roleassign.html";
+        mav.addObject("userId", userId);
+        mav.addObject("userAccount", user.getAccount());
+        return mav;
     }
 
     /**
@@ -103,35 +104,37 @@ public class UserMgrController extends BaseController {
      */
     @Permission
     @RequestMapping("/user_edit")
-    public String userEdit(Long id, Model model) {
+    public ModelAndView userEdit(Long id) {
         if (ToolUtil.isEmpty(id)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         assertAuth(id);
+        ModelAndView mav = new ModelAndView(PREFIX + "user_edit.html");
         UserDto user = userService.selectByPrimaryKey(id);
-        model.addAttribute(user);
-        model.addAttribute("roleName", ConstantFactory.me().getRoleName(user.getRoleid()));
-        model.addAttribute("deptName", ConstantFactory.me().getDeptName(user.getDeptid()));
+        mav.addObject(user);
+        mav.addObject("roleName", ConstantFactory.me().getRoleName(user.getRoleid()));
+        mav.addObject("deptName", ConstantFactory.me().getDeptName(user.getDeptid()));
         LogObjectHolder.me().set(user);
-        return PREFIX + "user_edit.html";
+        return mav;
     }
 
     /**
      * 跳转到查看用户详情页面
      */
     @RequestMapping("/user_info")
-    public String userInfo(Model model) {
+    public ModelAndView userInfo() {
         Long userId = ShiroKit.getUser().getId();
         if (ToolUtil.isEmpty(userId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
+        ModelAndView mav = new ModelAndView("/frame/user_info.html");
         UserDto user = userService.selectByPrimaryKey(userId);
         user.setAvatar(gunsProperties.getFilePrefix() + user.getAvatar());
-        model.addAttribute("user", user);
-        model.addAttribute("roleName", ConstantFactory.me().getRoleName(user.getRoleid()));
-        model.addAttribute("deptName", ConstantFactory.me().getDeptName(user.getDeptid()));
+        mav.addObject("user", user);
+        mav.addObject("roleName", ConstantFactory.me().getRoleName(user.getRoleid()));
+        mav.addObject("deptName", ConstantFactory.me().getDeptName(user.getDeptid()));
         LogObjectHolder.me().set(user);
-        return "/frame/user_info.html";
+        return mav;
     }
 
     /**

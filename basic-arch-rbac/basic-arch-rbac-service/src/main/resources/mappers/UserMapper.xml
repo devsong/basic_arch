@@ -51,7 +51,7 @@
         FROM
             sys_user
         where 
-            account = #{account} 
+            account = #{account}
             <if test="status != null">
                 and status in (
                 <foreach collection="status" item="item" separator=",">

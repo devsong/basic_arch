@@ -58,7 +58,7 @@
         	(CASE WHEN (m3.ID = 0 OR m3.ID IS NULL) THEN 'false' ELSE 'true' END) as "checked"
         FROM
         	sys_menu m1
-        	left join sys_menu m2 ON m1.pcode = m2. CODE
+        	left join sys_menu m2 ON m1.pcode = m2.code
         	left join 
         	(
         		SELECT
@@ -67,8 +67,8 @@
         			sys_menu
        			WHERE
         			ID IN
-       			 	<foreach collection="list" index="index" item="i" open="(" separator="," close=")">
-            			#{i}
+       			 	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            			#{item}
         			</foreach>
         	) m3 on m1.id = m3.id
         ORDER BY
@@ -81,8 +81,14 @@
         from
         	sys_relation rel
          	join sys_menu m on rel.menu_id = m.id
-        where 
-        	rel.role_id = #{roleId}
+        <where>
+            <if test="roleId != null">
+                rel.role_id in
+                <foreach collection="roleId" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
     </select>
 
     <select id="getMenusByRoleIds" resultType="com.gzs.learn.rbac.inf.MenuNodeDto" parameterType="java.util.Map">

@@ -30,7 +30,7 @@ public interface IShiro {
      *
      * @param roleId 角色id
      */
-    List<String> findPermissionsByRoleId(Long roleId);
+    List<String> findPermissionsByRoleId(List<Long> roleId);
 
     /**
      * 根据角色id获取角色名称

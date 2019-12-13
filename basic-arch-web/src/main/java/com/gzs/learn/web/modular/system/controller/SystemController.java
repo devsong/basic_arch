@@ -4,9 +4,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.gzs.learn.web.common.controller.BaseController;
 
@@ -40,14 +40,15 @@ public class SystemController extends BaseController {
      * @Date 2018/12/23 6:59 PM
      */
     @RequestMapping("/commonTree")
-    public String deptTreeList(@RequestParam("formName") String formName, @RequestParam("formId") String formId,
-            @RequestParam("treeUrl") String treeUrl, Model model) {
+    public ModelAndView deptTreeList(@RequestParam("formName") String formName, @RequestParam("formId") String formId,
+            @RequestParam("treeUrl") String treeUrl) {
+        ModelAndView mav = new ModelAndView("/common/tree_dlg.html");
         try {
-            model.addAttribute("formName", URLDecoder.decode(formName, "UTF-8"));
-            model.addAttribute("formId", URLDecoder.decode(formId, "UTF-8"));
-            model.addAttribute("treeUrl", URLDecoder.decode(treeUrl, "UTF-8"));
+            mav.addObject("formName", URLDecoder.decode(formName, "UTF-8"));
+            mav.addObject("formId", URLDecoder.decode(formId, "UTF-8"));
+            mav.addObject("treeUrl", URLDecoder.decode(treeUrl, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
         }
-        return "/common/tree_dlg.html";
+        return mav;
     }
 }

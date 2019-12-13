@@ -71,7 +71,7 @@ public class ShiroFactroy implements IShiro {
     }
 
     @Override
-    public List<String> findPermissionsByRoleId(Long roleId) {
+    public List<String> findPermissionsByRoleId(List<Long> roleId) {
         List<String> resUrls = dubboRbacMenuService.findPermissionsByRoleId(roleId);
         return resUrls;
     }

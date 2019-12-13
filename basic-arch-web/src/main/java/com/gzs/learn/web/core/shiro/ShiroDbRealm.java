@@ -27,8 +27,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
      * 登录认证
      */
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken)
-            throws AuthenticationException {
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
         IShiro shiroFactory = ShiroFactroy.me();
         UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
         UserDto user = shiroFactory.user(token.getUsername());
@@ -49,15 +48,15 @@ public class ShiroDbRealm extends AuthorizingRealm {
         Set<String> permissionSet = new HashSet<>();
         Set<String> roleNameSet = new HashSet<>();
 
-        for (Long roleId : roleList) {
-            List<String> permissions = shiroFactory.findPermissionsByRoleId(roleId);
-            if (permissions != null) {
-                for (String permission : permissions) {
-                    if (ToolUtil.isNotEmpty(permission)) {
-                        permissionSet.add(permission);
-                    }
+        List<String> permissions = shiroFactory.findPermissionsByRoleId(roleList);
+        if (permissions != null) {
+            for (String permission : permissions) {
+                if (ToolUtil.isNotEmpty(permission)) {
+                    permissionSet.add(permission);
                 }
             }
+        }
+        for (Long roleId : roleList) {
             String roleName = shiroFactory.findRoleNameByRoleId(roleId);
             roleNameSet.add(roleName);
         }

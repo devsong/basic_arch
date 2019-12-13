@@ -17,7 +17,7 @@ public interface DubboRbacMenuService {
      * @param roleId
      * @return
      */
-    List<String> findPermissionsByRoleId(Long roleId);
+    List<String> findPermissionsByRoleId(List<Long> roleId);
 
     /**
      * 查询菜单

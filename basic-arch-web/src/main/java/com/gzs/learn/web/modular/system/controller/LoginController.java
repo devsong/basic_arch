@@ -8,9 +8,9 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.google.code.kaptcha.Constants;
 import com.gzs.learn.rbac.inf.MenuNodeDto;
@@ -40,24 +40,26 @@ public class LoginController extends BaseController {
      * 跳转到主页
      */
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String index(Model model) {
+    public ModelAndView index() {
+        ModelAndView mav = new ModelAndView("/index.html");
         // 获取菜单列表
         List<Long> roleList = ShiroKit.getUser().getRoleList();
         if (roleList == null || roleList.size() == 0) {
             ShiroKit.getSubject().logout();
-            model.addAttribute("tips", "该用户没有角色，无法登陆");
-            return "/login.html";
+            mav = new ModelAndView("/login.html");
+            mav.addObject("tips", "该用户没有角色，无法登陆");
+            return mav;
         }
         List<MenuNodeDto> menus = userService.getMenusByRoleIds(roleList);
         List<MenuNodeDto> titles = MenuNodeDto.buildTitle(menus);
-        model.addAttribute("menus", titles);
+        mav.addObject("menus", titles);
         // 获取用户头像
         Long id = ShiroKit.getUser().getId();
         UserDto user = userService.selectByPrimaryKey(id);
         String avatar = user.getAvatar();
-        model.addAttribute("name", user.getName());
-        model.addAttribute("avatar", gunsProperties.getFilePrefix() + avatar);
-        return "/index.html";
+        mav.addObject("name", user.getName());
+        mav.addObject("avatar", gunsProperties.getFilePrefix() + avatar);
+        return mav;
     }
 
     /**

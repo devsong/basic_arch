@@ -1,6 +1,7 @@
 package com.gzs.learn.rbac.inf;
 
 import java.util.Date;
+import java.util.Set;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -56,6 +57,10 @@ public class UserDto extends Base {
      * 角色id
      */
     private String roleid;
+    /**
+     * 角色列表
+     */
+    private Set<Long> roleIds;
     /**
      * 角色名
      */

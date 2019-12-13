@@ -8,7 +8,7 @@ import com.gzs.learn.rbac.inf.ZTreeNode;
 
 public interface IMenuService {
 
-    List<String> findPermissionsByRoleId(Long roleId);
+    List<String> findPermissionsByRoleId(List<Long> roleId);
 
     MenuDto getMenu(Long menuId);
 

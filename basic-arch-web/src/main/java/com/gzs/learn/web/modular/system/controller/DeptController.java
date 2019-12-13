@@ -4,11 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.gzs.learn.rbac.dubbo.DubboRbacDeptService;
 import com.gzs.learn.rbac.inf.DeptDto;
@@ -57,12 +57,13 @@ public class DeptController extends BaseController {
      */
     @Permission
     @RequestMapping("/dept_update/{deptId}")
-    public String deptUpdate(@PathVariable Long deptId, Model model) {
+    public ModelAndView deptUpdate(@PathVariable Long deptId) {
+        ModelAndView mav = new ModelAndView(PREFIX + "dept_edit.html"); 
         DeptDto dept = dubboRbacDeptService.getDept(deptId);
-        model.addAttribute(dept);
-        model.addAttribute("pName", ConstantFactory.me().getDeptName(dept.getPid()));
+        mav.addObject(dept);
+        mav.addObject("pName", ConstantFactory.me().getDeptName(dept.getPid()));
         LogObjectHolder.me().set(dept);
-        return PREFIX + "dept_edit.html";
+        return mav;
     }
 
     /**

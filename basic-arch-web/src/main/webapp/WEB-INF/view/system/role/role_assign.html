@@ -4,12 +4,10 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>${systemName}</title>
     <meta name="description" content="${systemName}">
-    <meta name="author" content="stylefeng">
 
-    <link rel="stylesheet" href="${ctxPath}/assets/common/layui/css/layui.css"/>
+    <link href="${ctxPath}/assets/common/layui/css/layui.css" rel="stylesheet" type="text/css"/>
     <link href="${ctxPath}/assets/common/plugins/ztree/zTreeStyle.css" rel="stylesheet" type="text/css"/>
 </head>
 
@@ -83,7 +81,7 @@
             }
         };
 
-        var ztree = new $ZTree("zTree", "/menu/menuTreeListByRoleId/${roleId}");
+        var ztree = new $ZTree("zTree", "/role/roleTreeListByRoleIds/${roleId}");
         ztree.setSettings(setting);
         ztree.init();
     });

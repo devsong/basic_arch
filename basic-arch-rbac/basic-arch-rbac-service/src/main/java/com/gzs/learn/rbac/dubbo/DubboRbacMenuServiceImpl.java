@@ -16,7 +16,7 @@ public class DubboRbacMenuServiceImpl implements DubboRbacMenuService {
     private IMenuService menuService;
 
     @Override
-    public List<String> findPermissionsByRoleId(Long roleId) {
+    public List<String> findPermissionsByRoleId(List<Long> roleId) {
         List<String> res = menuService.findPermissionsByRoleId(roleId);
         return res;
     }

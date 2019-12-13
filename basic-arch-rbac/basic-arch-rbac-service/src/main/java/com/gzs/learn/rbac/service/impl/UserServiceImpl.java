@@ -1,10 +1,15 @@
 package com.gzs.learn.rbac.service.impl;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -14,10 +19,13 @@ import com.gzs.learn.inf.PageResponseDto.PageResponse;
 import com.gzs.learn.inf.PageResponseDto.PageResponseDtoBuilder;
 import com.gzs.learn.rbac.RbacConsts;
 import com.gzs.learn.rbac.dao.UserMapper;
+import com.gzs.learn.rbac.dao.UserRoleMapper;
+import com.gzs.learn.rbac.exception.RbacException;
 import com.gzs.learn.rbac.inf.DataScope;
 import com.gzs.learn.rbac.inf.UserDto;
 import com.gzs.learn.rbac.inf.UserSearchDto;
 import com.gzs.learn.rbac.po.UserPo;
+import com.gzs.learn.rbac.po.UserRolePo;
 import com.gzs.learn.rbac.service.IUserService;
 
 @Component
@@ -26,12 +34,30 @@ public class UserServiceImpl implements IUserService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private UserRoleMapper userRoleMapper;
+
     @Override
     public UserDto getUser(String account) {
         Integer[] invalidStatus = new Integer[] { RbacConsts.DATA_STATUS_ENABLED, RbacConsts.DATA_STATUS_DISABLED };
         UserPo userPo = userMapper.getByAccount(account, invalidStatus);
+        if (userPo == null) {
+            throw new RbacException("can not find account:" + account);
+        }
+        long userId = userPo.getId();
+        Set<Long> roleIds = userRoleMapper.selectRoleIdsByUserId(userId);
+        if (StringUtils.isNotBlank(userPo.getRoleid())) {
+            String[] roleArray = userPo.getRoleid().split(",");
+            for (String roleId : roleArray) {
+                roleIds.add(Long.parseLong(roleId));
+            }
+        }
         UserDto userDto = new UserDto();
         BeanUtil.copyProperties(userPo, userDto);
+        if (!CollectionUtils.isEmpty(roleIds)) {
+            userDto.setRoleIds(roleIds);
+            userDto.setRoleid(roleIds.stream().map(r -> r.toString()).collect(Collectors.joining(",")));
+        }
         return userDto;
     }
 
@@ -74,7 +100,19 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public boolean setRoles(Long userId, String roleIds) {
-        return userMapper.setRoles(userId, roleIds) == 1;
+        userMapper.setRoles(userId, roleIds);
+        String[] roleIdArray = roleIds.split(",");
+        UserRolePo deletePo = new UserRolePo();
+        deletePo.setUserid(userId);
+        userRoleMapper.delete(deletePo);
+        for (String roleId : roleIdArray) {
+            UserRolePo po = new UserRolePo();
+            po.setUserid(userId);
+            po.setRoleid(Long.parseLong(roleId));
+            po.setCreatetime(new Date());
+            userRoleMapper.insertSelective(po);
+        }
+        return true;
     }
 
 }

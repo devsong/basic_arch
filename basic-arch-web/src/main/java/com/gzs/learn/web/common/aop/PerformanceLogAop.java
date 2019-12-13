@@ -2,6 +2,7 @@ package com.gzs.learn.web.common.aop;
 
 import java.lang.reflect.Method;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.google.common.base.Stopwatch;
+import com.google.common.collect.Lists;
 import com.gzs.learn.common.util.JsonUtil;
 import com.gzs.learn.log.enums.SysPerfLogDurationEnum;
 import com.gzs.learn.log.inf.SysPerfLogDto;
@@ -75,6 +77,7 @@ public class PerformanceLogAop {
         } catch (Exception e) {
             exception = e;
             success = false;
+            throw e;
         } finally {
             stopwatch.stop();
             long cost = stopwatch.elapsed(TimeUnit.MICROSECONDS);
@@ -102,7 +105,8 @@ public class PerformanceLogAop {
 
         // 获取拦截方法的参数
         String className = point.getTarget().getClass().getName();
-        Object[] params = point.getArgs();
+        Object[] params = filterParam(point.getArgs());
+
         String argsJson = (params == null || params.length == 0) ? "" : JsonUtil.toJSONString(params);
         String retJson = (ret == null ? "" : JsonUtil.toJSONString(ret));
 
@@ -111,5 +115,21 @@ public class PerformanceLogAop {
                 .errMsg(exception == null ? "" : JsonUtil.toJSONString(exception)).paramsIn(argsJson).paramsOut(retJson)
                 .createTime(new Date()).durationEnum(SysPerfLogDurationEnum.BY_MINUTE).build();
         systemLogService.savePerfLog(sysPerfLogDto);
+    }
+
+    private Object[] filterParam(Object[] args) {
+        String ignorePackage = "org.springframework.validation";
+        List<Object> list = Lists.newArrayListWithCapacity(args.length);
+        for (Object obj : args) {
+            if (obj == null) {
+                continue;
+            }
+            String className = obj.getClass().getName();
+            if (className.startsWith(ignorePackage)) {
+                continue;
+            }
+            list.add(obj);
+        }
+        return list.toArray();
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.gzs.learn.rbac.dubbo.DubboRbacMenuService;
 import com.gzs.learn.rbac.dubbo.DubboRbacRoleService;
@@ -70,15 +71,14 @@ public class MenuController extends BaseController {
      */
     @Permission(Const.ADMIN_NAME)
     @RequestMapping(value = "/menu_edit/{menuId}")
-    public String menuEdit(@PathVariable Long menuId, Model model) {
+    public ModelAndView menuEdit(@PathVariable Long menuId, Model model) {
         if (ToolUtil.isEmpty(menuId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         MenuDto menu = dubboRbacMenuService.getMenu(menuId);
-
         // 获取父级菜单的id
         MenuDto pMenu = dubboRbacMenuService.getMenuByCode(menu.getPcode());
-
+        ModelAndView mav = new ModelAndView(PREFIX + "menu_edit.html");
         // 如果父级是顶级菜单
         if (pMenu == null) {
             menu.setPcode("0");
@@ -89,9 +89,9 @@ public class MenuController extends BaseController {
 
         Map<String, Object> menuMap = BeanKit.beanToMap(menu);
         menuMap.put("pcodeName", ConstantFactory.me().getMenuNameByCode(menu.getCode()));
-        model.addAttribute("menu", menuMap);
+        mav.addObject("menu", menuMap);
         LogObjectHolder.me().set(menu);
-        return PREFIX + "menu_edit.html";
+        return mav;
     }
 
     /**

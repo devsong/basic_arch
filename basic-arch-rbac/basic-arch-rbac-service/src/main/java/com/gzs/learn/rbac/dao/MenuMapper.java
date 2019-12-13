@@ -32,7 +32,7 @@ public interface MenuMapper extends Mapper<MenuPo> {
      * @return
      * @date 2017年2月12日 下午9:14:34
      */
-    @Select("select menuid from sys_relation where roleid = #{roleId}")
+    @Select("select menu_id from sys_relation where role_id = #{roleId}")
     List<Long> getMenuIdsByRoleId(@Param("roleId") Long roleId);
 
     /**
@@ -68,7 +68,7 @@ public interface MenuMapper extends Mapper<MenuPo> {
      * @return
      * @date 2017年2月19日 下午7:12:38
      */
-    List<String> getResUrlsByRoleId(Long roleId);
+    List<String> getResUrlsByRoleId(List<Long> roleId);
 
     /**
      * 根据角色获取菜单

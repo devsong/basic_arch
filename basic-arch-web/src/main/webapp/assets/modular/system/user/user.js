@@ -183,7 +183,7 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
             type: 2,
             title: '角色分配',
             area: ['300px', '400px'],
-            content: Feng.ctxPath + '/mgr/role_assign/' + data.id,
+            content: Feng.ctxPath + '/role/role_assign/' + data.id,
             end: function () {
                 table.reload(MgrUser.tableId);
             }

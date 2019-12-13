@@ -6,12 +6,12 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.gzs.learn.rbac.dubbo.DubboRbacRoleService;
 import com.gzs.learn.rbac.inf.RoleDto;
@@ -74,16 +74,17 @@ public class RoleController extends BaseController {
      */
     @Permission
     @RequestMapping(value = "/role_edit/{roleId}")
-    public String roleEdit(@PathVariable Long roleId, Model model) {
+    public ModelAndView roleEdit(@PathVariable Long roleId) {
         if (ToolUtil.isEmpty(roleId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
+        ModelAndView mav = new ModelAndView(PREFIX + "/role_edit.html");
         RoleDto role = dubboRbacRoleService.getRole(roleId);
-        model.addAttribute(role);
-        model.addAttribute("pName", ConstantFactory.me().getSingleRoleName(role.getPid()));
-        model.addAttribute("deptName", ConstantFactory.me().getDeptName(role.getDeptid()));
+        mav.addObject(role);
+        mav.addObject("pName", ConstantFactory.me().getSingleRoleName(role.getPid()));
+        mav.addObject("deptName", ConstantFactory.me().getDeptName(role.getDeptid()));
         LogObjectHolder.me().set(role);
-        return PREFIX + "/role_edit.html";
+        return mav;
     }
 
     /**
@@ -91,13 +92,14 @@ public class RoleController extends BaseController {
      */
     @Permission
     @RequestMapping(value = "/role_assign/{roleId}")
-    public String roleAssign(@PathVariable("roleId") Long roleId, Model model) {
+    public ModelAndView roleAssign(@PathVariable("roleId") Long roleId) {
+        ModelAndView mav = new ModelAndView(PREFIX + "/role_assign.html");
         if (ToolUtil.isEmpty(roleId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
-        model.addAttribute("roleId", roleId);
-        model.addAttribute("roleName", ConstantFactory.me().getSingleRoleName(roleId));
-        return PREFIX + "/role_assign.html";
+        mav.addObject("roleId", roleId);
+        mav.addObject("roleName", ConstantFactory.me().getSingleRoleName(roleId));
+        return mav;
     }
 
     /**
@@ -139,7 +141,6 @@ public class RoleController extends BaseController {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         dubboRbacRoleService.updateRole(role);
-
         // 删除缓存
         CacheKit.removeAll(Cache.CONSTANT);
         return SUCCESS_TIP;
@@ -201,7 +202,7 @@ public class RoleController extends BaseController {
      */
     @RequestMapping(value = "/roleTreeList")
     @ResponseBody
-    public List<ZTreeNode> roleTreeList() {
+    public List<ZTreeNode> roleTreeList(@PathVariable() Long roleId) {
         List<ZTreeNode> roleTreeList = dubboRbacRoleService.roleTreeList();
         roleTreeList.add(ZTreeNode.createParent());
         return roleTreeList;
@@ -225,4 +226,14 @@ public class RoleController extends BaseController {
         }
     }
 
+    /**
+     * 获取角色列表
+     */
+    @RequestMapping(value = "/roleTreeListByRoleIds/{roleIds}")
+    @ResponseBody
+    public List<ZTreeNode> roleTreeList(@PathVariable("roleIds") String roleIds) {
+        List<ZTreeNode> roleTreeList = dubboRbacRoleService.roleTreeListByRoleId(roleIds.split(","));
+        roleTreeList.add(ZTreeNode.createParent());
+        return roleTreeList;
+    }
 }

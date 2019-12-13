@@ -30,7 +30,7 @@ public class MenuServiceImpl implements IMenuService {
     private RelationMapper relationMapper;
 
     @Override
-    public List<String> findPermissionsByRoleId(Long roleId) {
+    public List<String> findPermissionsByRoleId(List<Long> roleId) {
         List<String> resUrls = menuMapper.getResUrlsByRoleId(roleId);
         return resUrls;
     }
@@ -126,5 +126,4 @@ public class MenuServiceImpl implements IMenuService {
         List<MenuNodeDto> menus = menuMapper.getMenusByRoleIds(roleList);
         return menus;
     }
-
 }
