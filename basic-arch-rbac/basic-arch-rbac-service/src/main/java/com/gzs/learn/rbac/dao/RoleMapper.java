@@ -39,5 +39,5 @@ public interface RoleMapper extends Mapper<RolePo> {
      *
      * @return
      */
-    List<ZTreeNode> roleTreeListByRoleId(String[] roleId);
+    List<ZTreeNode> roleTreeListByRoleIds(String[] roleId);
 }

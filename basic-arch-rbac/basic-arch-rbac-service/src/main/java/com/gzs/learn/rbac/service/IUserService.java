@@ -21,5 +21,4 @@ public interface IUserService {
     boolean setStatus(Long userId, int status);
 
     boolean setRoles(Long userId, String roleIds);
-
 }

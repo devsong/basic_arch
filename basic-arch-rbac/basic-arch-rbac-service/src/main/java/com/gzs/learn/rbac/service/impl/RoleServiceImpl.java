@@ -11,10 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gzs.learn.common.util.BeanUtil;
 import com.gzs.learn.rbac.dao.RelationMapper;
 import com.gzs.learn.rbac.dao.RoleMapper;
+import com.gzs.learn.rbac.dao.UserRoleMapper;
 import com.gzs.learn.rbac.inf.RoleDto;
 import com.gzs.learn.rbac.inf.ZTreeNode;
 import com.gzs.learn.rbac.po.RelationPo;
 import com.gzs.learn.rbac.po.RolePo;
+import com.gzs.learn.rbac.po.UserRolePo;
 import com.gzs.learn.rbac.service.IRoleService;
 
 import tk.mybatis.mapper.entity.Example;
@@ -28,14 +30,17 @@ public class RoleServiceImpl implements IRoleService {
     @Autowired
     private RelationMapper relationMapper;
 
+    @Autowired
+    private UserRoleMapper userRoleMapper;
+
     @Override
     public List<ZTreeNode> roleTreeList() {
         return roleMapper.roleTreeList();
     }
 
     @Override
-    public List<ZTreeNode> roleTreeListByRoleId(String[] roleId) {
-        return roleMapper.roleTreeListByRoleId(roleId);
+    public List<ZTreeNode> roleTreeListByRoleId(String[] roleIds) {
+        return roleMapper.roleTreeListByRoleIds(roleIds);
     }
 
     @Override
@@ -72,10 +77,16 @@ public class RoleServiceImpl implements IRoleService {
 
     @Override
     public boolean delRole(Long roleId) {
+        // 删除角色
         roleMapper.deleteByPrimaryKey(roleId);
+        // 角色菜单表
         Example delExample = new Example(RelationPo.class);
         delExample.createCriteria().andEqualTo("roleid", roleId);
         relationMapper.deleteByExample(delExample);
+        // 角色用户关系表
+        delExample = new Example(UserRolePo.class);
+        delExample.createCriteria().andEqualTo("roleid", roleId);
+        userRoleMapper.deleteByExample(delExample);
         return true;
     }
 

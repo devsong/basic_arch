@@ -40,19 +40,20 @@
 
     <select id="roleTreeListByRoleId" resultType="com.gzs.learn.rbac.inf.ZTreeNode">
         SELECT
-            r.id as id,pId ,name,
-            (CASE WHEN (pId = 0 OR pId IS NULL) THEN 'true' ELSE 'false' END) as open,
-            (CASE WHEN (r1.ID = 0 OR r1.ID IS NULL) THEN 'false' ELSE 'true' END) as  checked
+            r.id,r.pId,r.name,
+            (CASE WHEN (r.pId = 0 OR r.pId IS NULL) THEN 'true' ELSE 'false' END) as open
         FROM
-            sys_role r LEFT JOIN 
-            (
-                SELECT  id FROM sys_role WHERE ID IN
-                <foreach collection="array" index="index" item="i" open="(" separator="," close=")">
+            sys_role r
+        <where>
+            <if test="roleId != null">
+                id in 
+                <foreach collection="roleId" index="index" item="i" open="(" separator="," close=")">
                     #{i}
                 </foreach>
-            ) r1 ON r.ID = r1.ID
+            </if>
+        </where>
         ORDER BY
-            pId,num ASC
+            r.pId,r.num ASC
     </select>
 
 </mapper>
