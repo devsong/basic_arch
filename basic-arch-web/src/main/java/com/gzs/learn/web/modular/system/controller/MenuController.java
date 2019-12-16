@@ -194,7 +194,7 @@ public class MenuController extends BaseController {
     @RequestMapping(value = "/selectMenuTreeList")
     @ResponseBody
     public List<ZTreeNode> selectMenuTreeList() {
-        List<ZTreeNode> roleTreeList = dubboRbacRoleService.roleTreeList();
+        List<ZTreeNode> roleTreeList = dubboRbacRoleService.roleTreeListByRoleId(null);
         roleTreeList.add(ZTreeNode.createParent());
         return roleTreeList;
     }

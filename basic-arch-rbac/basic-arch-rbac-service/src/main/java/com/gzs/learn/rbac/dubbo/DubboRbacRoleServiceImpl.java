@@ -1,10 +1,12 @@
 package com.gzs.learn.rbac.dubbo;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.google.common.collect.Sets;
 import com.gzs.learn.rbac.inf.RoleDto;
 import com.gzs.learn.rbac.inf.ZTreeNode;
 import com.gzs.learn.rbac.service.IRoleService;
@@ -16,13 +18,8 @@ public class DubboRbacRoleServiceImpl implements DubboRbacRoleService {
     private IRoleService roleService;
 
     @Override
-    public List<ZTreeNode> roleTreeList() {
-        return roleService.roleTreeList();
-    }
-
-    @Override
-    public List<ZTreeNode> roleTreeListByRoleId(String[] roleId) {
-        return roleService.roleTreeListByRoleId(roleId);
+    public List<ZTreeNode> roleTreeListByRoleId(Set<Long> roleIds) {
+        return roleService.roleTreeListByRoleIds(roleIds);
     }
 
     @Override
@@ -53,5 +50,10 @@ public class DubboRbacRoleServiceImpl implements DubboRbacRoleService {
     @Override
     public boolean setAuthority(Long roleId, String menuIds) {
         return roleService.setAuthority(roleId, menuIds);
+    }
+
+    @Override
+    public Set<Long> getUserRoles(Long userId) {
+        return Sets.newHashSet(roleService.getRoleByUserId(userId));
     }
 }

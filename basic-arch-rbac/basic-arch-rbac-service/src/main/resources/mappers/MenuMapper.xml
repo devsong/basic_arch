@@ -75,16 +75,16 @@
         	m1.id ASC
     </select>
 
-    <select id="getResUrlsByRoleId" resultType="string" parameterType="java.util.Map">
+    <select id="getResUrlsByRoleIds" resultType="string" parameterType="java.util.Map">
         select 
         	url 
         from
         	sys_relation rel
          	join sys_menu m on rel.menu_id = m.id
         <where>
-            <if test="roleId != null">
+            <if test="roleIds != null">
                 rel.role_id in
-                <foreach collection="roleId" item="item" separator="," open="(" close=")">
+                <foreach collection="roleIds" item="item" separator="," open="(" close=")">
                     #{item}
                 </foreach>
             </if>
@@ -118,7 +118,7 @@
         					sys_relation rela
         				WHERE
         				rela.role_id IN
-				        <foreach collection="list" item="item" open="(" separator="," close=")">
+				        <foreach collection="roleIds" item="item" open="(" separator="," close=")">
 				            #{item}
 				        </foreach>
         			)

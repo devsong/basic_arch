@@ -1,12 +1,14 @@
 package com.gzs.learn.web.modular.system.service.impl;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.gzs.learn.inf.PageResponseDto;
 import com.gzs.learn.rbac.dubbo.DubboRbacMenuService;
+import com.gzs.learn.rbac.dubbo.DubboRbacRoleService;
 import com.gzs.learn.rbac.dubbo.DubboRbacUserService;
 import com.gzs.learn.rbac.inf.DataScope;
 import com.gzs.learn.rbac.inf.MenuNodeDto;
@@ -21,6 +23,9 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     private DubboRbacMenuService dubboRbacMenuService;
+
+    @Autowired
+    private DubboRbacRoleService dubboRbacRoleService;
 
     @Override
     public PageResponseDto<UserDto> selectUsers(DataScope dataScope, UserSearchDto userSearchDto) {
@@ -65,6 +70,11 @@ public class UserServiceImpl implements IUserService {
     @Override
     public List<MenuNodeDto> getMenusByRoleIds(List<Long> roleList) {
         return dubboRbacMenuService.getMenuIdsByRoleIds(roleList);
+    }
+
+    @Override
+    public Set<Long> getUserRoles(Long userId) {
+        return dubboRbacRoleService.getUserRoles(userId);
     }
 
 }

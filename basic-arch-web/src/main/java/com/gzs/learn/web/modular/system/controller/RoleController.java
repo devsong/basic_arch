@@ -1,9 +1,11 @@
 package com.gzs.learn.web.modular.system.controller;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.validation.Valid;
 
+import org.apache.curator.shaded.com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -13,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.gzs.learn.rbac.RbacConsts;
 import com.gzs.learn.rbac.dubbo.DubboRbacRoleService;
 import com.gzs.learn.rbac.inf.RoleDto;
-import com.gzs.learn.rbac.inf.UserDto;
 import com.gzs.learn.rbac.inf.ZTreeNode;
 import com.gzs.learn.web.common.annotion.Permission;
 import com.gzs.learn.web.common.annotion.log.BussinessLog;
@@ -203,7 +205,7 @@ public class RoleController extends BaseController {
     @RequestMapping(value = "/roleTreeList")
     @ResponseBody
     public List<ZTreeNode> roleTreeList(@PathVariable() Long roleId) {
-        List<ZTreeNode> roleTreeList = dubboRbacRoleService.roleTreeList();
+        List<ZTreeNode> roleTreeList = dubboRbacRoleService.roleTreeListByRoleId(null);
         roleTreeList.add(ZTreeNode.createParent());
         return roleTreeList;
     }
@@ -214,16 +216,20 @@ public class RoleController extends BaseController {
     @RequestMapping(value = "/roleTreeListByUserId/{userId}")
     @ResponseBody
     public List<ZTreeNode> roleTreeListByUserId(@PathVariable Long userId) {
-        UserDto theUser = userService.selectByPrimaryKey(userId);
-        String roleid = theUser.getRoleid();
-        if (ToolUtil.isEmpty(roleid)) {
-            List<ZTreeNode> roleTreeList = dubboRbacRoleService.roleTreeList();
-            return roleTreeList;
+        Set<Long> userRoles = userService.getUserRoles(userId);
+        List<ZTreeNode> roleTreeList = null;
+        if (userRoles.contains(RbacConsts.SUPER_USER_ROLE)) {
+            roleTreeList = dubboRbacRoleService.roleTreeListByRoleId(null);
         } else {
-            String[] strArray = Convert.toStrArray(",", roleid);
-            List<ZTreeNode> roleTreeListByUserId = dubboRbacRoleService.roleTreeListByRoleId(strArray);
-            return roleTreeListByUserId;
+            roleTreeList = dubboRbacRoleService.roleTreeListByRoleId(userRoles);
         }
+        for (ZTreeNode node : roleTreeList) {
+            if (userRoles.contains(node.getId().longValue())) {
+                node.setChecked(true);
+            }
+        }
+        roleTreeList.add(ZTreeNode.createParent());
+        return roleTreeList;
     }
 
     /**
@@ -232,7 +238,18 @@ public class RoleController extends BaseController {
     @RequestMapping(value = "/roleTreeListByRoleIds/{roleIds}")
     @ResponseBody
     public List<ZTreeNode> roleTreeList(@PathVariable("roleIds") String roleIds) {
-        List<ZTreeNode> roleTreeList = dubboRbacRoleService.roleTreeListByRoleId(roleIds.split(","));
+        Set<Long> roleSet = Sets.newHashSet(Convert.toLongArray(roleIds));
+        List<ZTreeNode> roleTreeList = null;
+        if (roleSet.contains(RbacConsts.SUPER_USER_ROLE)) {
+            roleTreeList = dubboRbacRoleService.roleTreeListByRoleId(null);
+        } else {
+            roleTreeList = dubboRbacRoleService.roleTreeListByRoleId(roleSet);
+        }
+        for (ZTreeNode node : roleTreeList) {
+            if (roleSet.contains(node.getId().longValue())) {
+                node.setChecked(true);
+            }
+        }
         roleTreeList.add(ZTreeNode.createParent());
         return roleTreeList;
     }

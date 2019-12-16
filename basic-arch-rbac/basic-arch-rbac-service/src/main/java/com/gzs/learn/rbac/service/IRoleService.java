@@ -1,6 +1,7 @@
 package com.gzs.learn.rbac.service;
 
 import java.util.List;
+import java.util.Set;
 
 import com.gzs.learn.rbac.inf.RoleDto;
 import com.gzs.learn.rbac.inf.ZTreeNode;
@@ -10,9 +11,9 @@ public interface IRoleService {
 
     List<RoleDto> searchRoles(String roleName);
 
-    List<ZTreeNode> roleTreeList();
+    List<ZTreeNode> roleTreeListByRoleIds(Set<Long> roleIds);
 
-    List<ZTreeNode> roleTreeListByRoleId(String[] roleId);
+    List<Long> getRoleByUserId(Long userId);
 
     boolean insertRole(RoleDto role);
 

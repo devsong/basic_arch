@@ -8,5 +8,5 @@ public interface RbacConsts {
     int DATA_STATUS_DELETE = 3;
 
     // 超级管理员账号角色
-    int SUPER_USER_ROLE = 1;
+    long SUPER_USER_ROLE = 1;
 }

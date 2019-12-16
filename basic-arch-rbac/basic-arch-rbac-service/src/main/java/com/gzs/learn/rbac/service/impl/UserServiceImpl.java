@@ -13,6 +13,7 @@ import org.springframework.util.CollectionUtils;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Sets;
 import com.gzs.learn.common.util.BeanUtil;
 import com.gzs.learn.inf.PageResponseDto;
 import com.gzs.learn.inf.PageResponseDto.PageResponse;
@@ -45,7 +46,7 @@ public class UserServiceImpl implements IUserService {
             throw new RbacException("can not find account:" + account);
         }
         long userId = userPo.getId();
-        Set<Long> roleIds = userRoleMapper.selectRoleIdsByUserId(userId);
+        Set<Long> roleIds = Sets.newHashSet(userRoleMapper.selectRoleIdsByUserId(userId));
         if (StringUtils.isNotBlank(userPo.getRoleid())) {
             String[] roleArray = userPo.getRoleid().split(",");
             for (String roleId : roleArray) {

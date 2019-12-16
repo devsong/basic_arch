@@ -1,6 +1,7 @@
 package com.gzs.learn.rbac.dao;
 
 import java.util.List;
+import java.util.Set;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
@@ -32,12 +33,5 @@ public interface RoleMapper extends Mapper<RolePo> {
      *
      * @return
      */
-    List<ZTreeNode> roleTreeList();
-
-    /**
-     * 获取角色列表树
-     *
-     * @return
-     */
-    List<ZTreeNode> roleTreeListByRoleIds(String[] roleId);
+    List<ZTreeNode> roleTreeListByRoleIds(@Param("roleIds") Set<Long> roleIds);
 }

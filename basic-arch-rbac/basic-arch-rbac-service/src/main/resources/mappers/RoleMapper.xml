@@ -30,14 +30,6 @@
         </where>
     </select>
 
-    <select id="roleTreeList" resultType="com.gzs.learn.rbac.inf.ZTreeNode">
-        select 
-            id ,pId,name,
-            (case when (pId=0 or pId is null) then 'true' else 'false' end) open 
-        from 
-            sys_role
-    </select>
-
     <select id="roleTreeListByRoleId" resultType="com.gzs.learn.rbac.inf.ZTreeNode">
         SELECT
             r.id,r.pId,r.name,
@@ -45,9 +37,9 @@
         FROM
             sys_role r
         <where>
-            <if test="roleId != null">
+            <if test="roleIds != null">
                 id in 
-                <foreach collection="roleId" index="index" item="i" open="(" separator="," close=")">
+                <foreach collection="roleIds" index="index" item="i" open="(" separator="," close=")">
                     #{i}
                 </foreach>
             </if>

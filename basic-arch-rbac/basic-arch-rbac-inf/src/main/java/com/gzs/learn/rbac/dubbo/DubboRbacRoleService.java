@@ -1,24 +1,18 @@
 package com.gzs.learn.rbac.dubbo;
 
 import java.util.List;
+import java.util.Set;
 
 import com.gzs.learn.rbac.inf.RoleDto;
 import com.gzs.learn.rbac.inf.ZTreeNode;
 
 public interface DubboRbacRoleService {
-    /*
-     * 获取角色列表树
-     *
-     * @return
-     */
-    List<ZTreeNode> roleTreeList();
-
     /**
     * 获取角色列表树
     *
     * @return
     */
-    List<ZTreeNode> roleTreeListByRoleId(String[] roleId);
+    List<ZTreeNode> roleTreeListByRoleId(Set<Long> roleIds);
 
     /**
     * 查询角色列表
@@ -62,4 +56,11 @@ public interface DubboRbacRoleService {
      * @return
      */
     boolean setAuthority(Long roleId, String menuIds);
+
+    /**
+     * 获取用户角色列表
+     * @param userId
+     * @return
+     */
+    Set<Long> getUserRoles(Long userId);
 }

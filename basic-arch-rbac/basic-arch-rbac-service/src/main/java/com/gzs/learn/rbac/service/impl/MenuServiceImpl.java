@@ -31,7 +31,7 @@ public class MenuServiceImpl implements IMenuService {
 
     @Override
     public List<String> findPermissionsByRoleId(List<Long> roleId) {
-        List<String> resUrls = menuMapper.getResUrlsByRoleId(roleId);
+        List<String> resUrls = menuMapper.getResUrlsByRoleIds(roleId);
         return resUrls;
     }
 

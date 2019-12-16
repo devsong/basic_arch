@@ -59,7 +59,7 @@ public interface MenuMapper extends Mapper<MenuPo> {
      * @date 2017年2月19日 下午4:10:59
      */
     @Delete("delete from sys_relation where menuid = #{menuId}")
-    int deleteRelationByMenu(@Param("menuId")Long menuId);
+    int deleteRelationByMenu(@Param("menuId") Long menuId);
 
     /**
      * 获取资源url通过角色id
@@ -68,7 +68,7 @@ public interface MenuMapper extends Mapper<MenuPo> {
      * @return
      * @date 2017年2月19日 下午7:12:38
      */
-    List<String> getResUrlsByRoleId(List<Long> roleId);
+    List<String> getResUrlsByRoleIds(@Param("roleIds") List<Long> roleId);
 
     /**
      * 根据角色获取菜单
@@ -77,5 +77,5 @@ public interface MenuMapper extends Mapper<MenuPo> {
      * @return
      * @date 2017年2月19日 下午10:35:40
      */
-    List<MenuNodeDto> getMenusByRoleIds(List<Long> roleIds);
+    List<MenuNodeDto> getMenusByRoleIds(@Param("roleIds") List<Long> roleIds);
 }

@@ -1,6 +1,7 @@
 package com.gzs.learn.rbac.service.impl;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -34,12 +35,7 @@ public class RoleServiceImpl implements IRoleService {
     private UserRoleMapper userRoleMapper;
 
     @Override
-    public List<ZTreeNode> roleTreeList() {
-        return roleMapper.roleTreeList();
-    }
-
-    @Override
-    public List<ZTreeNode> roleTreeListByRoleId(String[] roleIds) {
+    public List<ZTreeNode> roleTreeListByRoleIds(Set<Long> roleIds) {
         return roleMapper.roleTreeListByRoleIds(roleIds);
     }
 
@@ -48,6 +44,11 @@ public class RoleServiceImpl implements IRoleService {
         List<RolePo> roles = roleMapper.searchRoles(roleName);
         List<RoleDto> roleDtos = BeanUtil.copyList(roles, RoleDto.class);
         return roleDtos;
+    }
+
+    @Override
+    public List<Long> getRoleByUserId(Long userId) {
+        return userRoleMapper.selectRoleIdsByUserId(userId);
     }
 
     @Override

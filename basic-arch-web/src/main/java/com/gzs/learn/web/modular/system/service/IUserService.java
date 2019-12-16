@@ -1,6 +1,7 @@
 package com.gzs.learn.web.modular.system.service;
 
 import java.util.List;
+import java.util.Set;
 
 import com.gzs.learn.inf.PageResponseDto;
 import com.gzs.learn.rbac.inf.DataScope;
@@ -26,4 +27,6 @@ public interface IUserService {
     List<MenuNodeDto> getMenusByRoleIds(List<Long> roleList);
 
     PageResponseDto<UserDto> selectUsers(DataScope dataScope, UserSearchDto userSearchDto);
+
+    Set<Long> getUserRoles(Long userId);
 }
