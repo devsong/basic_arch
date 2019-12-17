@@ -12,7 +12,7 @@ public interface DubboRbacRoleService {
     *
     * @return
     */
-    List<ZTreeNode> roleTreeListByRoleId(Set<Long> roleIds);
+    List<ZTreeNode> roleTreeListByRoleIds(Set<Long> roleIds);
 
     /**
     * 查询角色列表

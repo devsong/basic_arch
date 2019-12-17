@@ -1,14 +1,18 @@
 package com.gzs.learn.web.common.aop;
 
+import java.util.Set;
+
 import org.apache.shiro.session.InvalidSessionException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 
+import com.google.common.collect.Sets;
 import com.gzs.learn.web.common.controller.BaseController;
 import com.gzs.learn.web.core.shiro.ShiroKit;
 import com.gzs.learn.web.core.support.HttpKit;
@@ -23,6 +27,9 @@ import com.gzs.learn.web.core.support.HttpKit;
 @Component
 @ConditionalOnProperty(prefix = "guns", name = "session-open", havingValue = "true")
 public class SessionTimeoutIAop extends BaseController implements Ordered {
+    @Value("${ignorePath:/kaptcha,/login,/global/sessionError}")
+    private String ignorePath;
+
     @Pointcut("within(@org.springframework.stereotype.Controller *)")
     public void cutService() {
     }
@@ -30,7 +37,8 @@ public class SessionTimeoutIAop extends BaseController implements Ordered {
     @Around("cutService()")
     public Object sessionTimeoutValidate(ProceedingJoinPoint point) throws Throwable {
         String servletPath = HttpKit.getRequest().getServletPath();
-        if (servletPath.equals("/kaptcha") || servletPath.equals("/login") || servletPath.equals("/global/sessionError")) {
+        Set<String> ignorePaths = Sets.newHashSet(ignorePath.split(","));
+        if (ignorePaths.contains(servletPath)) {
             return point.proceed();
         }
         if (ShiroKit.getSession().getAttribute("sessionFlag") == null) {

@@ -127,7 +127,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
     Menu.initTable = function (menuId, data) {
         return treetable.render({
             elem: '#' + menuId,
-            url: Feng.ctxPath + '/menu/listTree',
+            url: Feng.ctxPath + '/menu/list',
             where: data,
             page: false,
             height: "full-158",
@@ -191,10 +191,8 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
 
     // 修改user状态
     form.on('switch(status)', function (obj) {
-
         var userId = obj.elem.value;
         var checked = obj.elem.checked ? true : false;
-
         Menu.changeUserStatus(userId, checked);
     });
 

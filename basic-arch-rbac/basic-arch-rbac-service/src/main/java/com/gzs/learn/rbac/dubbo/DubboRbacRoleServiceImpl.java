@@ -18,7 +18,7 @@ public class DubboRbacRoleServiceImpl implements DubboRbacRoleService {
     private IRoleService roleService;
 
     @Override
-    public List<ZTreeNode> roleTreeListByRoleId(Set<Long> roleIds) {
+    public List<ZTreeNode> roleTreeListByRoleIds(Set<Long> roleIds) {
         return roleService.roleTreeListByRoleIds(roleIds);
     }
 

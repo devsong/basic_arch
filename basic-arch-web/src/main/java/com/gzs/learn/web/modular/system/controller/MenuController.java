@@ -21,6 +21,7 @@ import com.gzs.learn.rbac.inf.MenuDto;
 import com.gzs.learn.rbac.inf.ZTreeNode;
 import com.gzs.learn.web.common.annotion.Permission;
 import com.gzs.learn.web.common.annotion.log.BussinessLog;
+import com.gzs.learn.web.common.constant.CommonResponse;
 import com.gzs.learn.web.common.constant.Const;
 import com.gzs.learn.web.common.constant.Dict;
 import com.gzs.learn.web.common.constant.enums.MenuStatus;
@@ -119,7 +120,7 @@ public class MenuController extends BaseController {
     @ResponseBody
     public Object list(@RequestParam(required = false) String menuName, @RequestParam(required = false) String level) {
         List<MenuDto> menus = dubboRbacMenuService.searchMenus(menuName, level);
-        return super.warpObject(new MenuWrapper(menus));
+        return CommonResponse.buildSuccess(super.warpObject(new MenuWrapper(menus)));
     }
 
     /**
@@ -194,7 +195,7 @@ public class MenuController extends BaseController {
     @RequestMapping(value = "/selectMenuTreeList")
     @ResponseBody
     public List<ZTreeNode> selectMenuTreeList() {
-        List<ZTreeNode> roleTreeList = dubboRbacRoleService.roleTreeListByRoleId(null);
+        List<ZTreeNode> roleTreeList = dubboRbacRoleService.roleTreeListByRoleIds(null);
         roleTreeList.add(ZTreeNode.createParent());
         return roleTreeList;
     }

@@ -32,6 +32,7 @@ import com.gzs.learn.web.common.exception.BizExceptionEnum;
 import com.gzs.learn.web.common.exception.BussinessException;
 import com.gzs.learn.web.core.cache.CacheKit;
 import com.gzs.learn.web.core.log.LogObjectHolder;
+import com.gzs.learn.web.core.shiro.ShiroKit;
 import com.gzs.learn.web.core.util.Convert;
 import com.gzs.learn.web.core.util.ToolUtil;
 import com.gzs.learn.web.modular.system.service.IRoleService;
@@ -93,14 +94,15 @@ public class RoleController extends BaseController {
      * 跳转到角色分配
      */
     @Permission
-    @RequestMapping(value = "/role_assign/{roleId}")
-    public ModelAndView roleAssign(@PathVariable("roleId") Long roleId) {
+    @RequestMapping(value = "/role_assign/{userId}")
+    public ModelAndView roleAssign(@PathVariable("userId") Long userId) {
+        // long operatorUserId = ShiroKit.getUser().getId();
         ModelAndView mav = new ModelAndView(PREFIX + "/role_assign.html");
-        if (ToolUtil.isEmpty(roleId)) {
+        if (ToolUtil.isEmpty(userId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
-        mav.addObject("roleId", roleId);
-        mav.addObject("roleName", ConstantFactory.me().getSingleRoleName(roleId));
+        mav.addObject("userId", userId);
+        // mav.addObject("roleName", ConstantFactory.me().getSingleRoleName(userId));
         return mav;
     }
 
@@ -185,7 +187,7 @@ public class RoleController extends BaseController {
     }
 
     /**
-     * 配置权限
+     * 分配角色
      */
     @RequestMapping("/setAuthority")
     @BussinessLog(value = "配置权限", key = "roleId,ids", dict = Dict.RoleDict)
@@ -204,8 +206,8 @@ public class RoleController extends BaseController {
      */
     @RequestMapping(value = "/roleTreeList")
     @ResponseBody
-    public List<ZTreeNode> roleTreeList(@PathVariable() Long roleId) {
-        List<ZTreeNode> roleTreeList = dubboRbacRoleService.roleTreeListByRoleId(null);
+    public List<ZTreeNode> roleTreeList() {
+        List<ZTreeNode> roleTreeList = dubboRbacRoleService.roleTreeListByRoleIds(null);
         roleTreeList.add(ZTreeNode.createParent());
         return roleTreeList;
     }
@@ -216,12 +218,14 @@ public class RoleController extends BaseController {
     @RequestMapping(value = "/roleTreeListByUserId/{userId}")
     @ResponseBody
     public List<ZTreeNode> roleTreeListByUserId(@PathVariable Long userId) {
+        long operUserId = ShiroKit.getUser().getId();
+        Set<Long> operUserRoles = userService.getUserRoles(operUserId);
         Set<Long> userRoles = userService.getUserRoles(userId);
         List<ZTreeNode> roleTreeList = null;
-        if (userRoles.contains(RbacConsts.SUPER_USER_ROLE)) {
-            roleTreeList = dubboRbacRoleService.roleTreeListByRoleId(null);
+        if (operUserRoles.contains(RbacConsts.SUPER_USER_ROLE)) {
+            roleTreeList = dubboRbacRoleService.roleTreeListByRoleIds(null);
         } else {
-            roleTreeList = dubboRbacRoleService.roleTreeListByRoleId(userRoles);
+            roleTreeList = dubboRbacRoleService.roleTreeListByRoleIds(operUserRoles);
         }
         for (ZTreeNode node : roleTreeList) {
             if (userRoles.contains(node.getId().longValue())) {
@@ -241,9 +245,9 @@ public class RoleController extends BaseController {
         Set<Long> roleSet = Sets.newHashSet(Convert.toLongArray(roleIds));
         List<ZTreeNode> roleTreeList = null;
         if (roleSet.contains(RbacConsts.SUPER_USER_ROLE)) {
-            roleTreeList = dubboRbacRoleService.roleTreeListByRoleId(null);
+            roleTreeList = dubboRbacRoleService.roleTreeListByRoleIds(null);
         } else {
-            roleTreeList = dubboRbacRoleService.roleTreeListByRoleId(roleSet);
+            roleTreeList = dubboRbacRoleService.roleTreeListByRoleIds(roleSet);
         }
         for (ZTreeNode node : roleTreeList) {
             if (roleSet.contains(node.getId().longValue())) {

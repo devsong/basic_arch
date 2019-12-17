@@ -46,7 +46,7 @@ public interface UserMapper extends Mapper<UserPo> {
      * @return
      * @date 2017年2月13日 下午7:31:30
      */
-    @Update("update sys_user set roleid = #{roleIds} where id = #{userId}")
+    @Update("update sys_user set role_id = #{roleIds} where id = #{userId}")
     int setRoles(@Param("userId") Long userId, @Param("roleIds") String roleIds);
 
     /**

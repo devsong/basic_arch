@@ -116,11 +116,14 @@
         					menu_id
         				FROM
         					sys_relation rela
-        				WHERE
-        				rela.role_id IN
-				        <foreach collection="roleIds" item="item" open="(" separator="," close=")">
-				            #{item}
-				        </foreach>
+        				<where>
+                            <if test="roleIds != null">
+                                rela.role_id IN
+                                <foreach collection="roleIds" item="item" open="(" separator="," close=")">
+                                    #{item}
+                                </foreach>
+                            </if>
+                        </where>
         			)
         	) m3 ON m1.id = m3.id
         where 

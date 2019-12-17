@@ -30,7 +30,7 @@
         </where>
     </select>
 
-    <select id="roleTreeListByRoleId" resultType="com.gzs.learn.rbac.inf.ZTreeNode">
+    <select id="roleTreeListByRoleIds" resultType="com.gzs.learn.rbac.inf.ZTreeNode">
         SELECT
             r.id,r.pId,r.name,
             (CASE WHEN (r.pId = 0 OR r.pId IS NULL) THEN 'true' ELSE 'false' END) as open
