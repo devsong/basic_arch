@@ -7,7 +7,7 @@ import com.gzs.learn.serial.common.Result;
 import com.gzs.learn.serial.common.Status;
 import com.gzs.learn.serial.exception.SerialException;
 import com.gzs.learn.serial.service.SerialDistributeService;
-import com.gzs.learn.serial.service.SnowflakeIDGenImpl;
+import com.gzs.learn.serial.service.snowflake.SnowflakeIDGenImpl;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,7 +32,7 @@ public class DubboSerialDistributeServiceImp implements DubboSerialDistributeSer
         try {
             return this.serialDistributeService.getSerial(key, length);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("get serial error,key:[{}]", key, e);
             throw e;
         }
     }

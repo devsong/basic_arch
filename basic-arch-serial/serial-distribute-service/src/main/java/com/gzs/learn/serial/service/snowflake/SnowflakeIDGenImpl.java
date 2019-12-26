@@ -1,9 +1,9 @@
-package com.gzs.learn.serial.service;
+package com.gzs.learn.serial.service.snowflake;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,10 +11,11 @@ import com.google.common.base.Preconditions;
 import com.gzs.learn.serial.common.Result;
 import com.gzs.learn.serial.common.Status;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
 public class SnowflakeIDGenImpl {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SnowflakeIDGenImpl.class);
-
     private final long twepoch;
     private final long workerIdBits = 10L;
     private final long maxWorkerId = ~(-1L << workerIdBits);// 最大能够分配的workerid =1023
@@ -27,11 +28,11 @@ public class SnowflakeIDGenImpl {
     private long lastTimestamp = -1L;
 
     @Autowired
-    private SnowflakeZookeeperHolder holder;
+    private SnowflakeZookeeperHolder snowflakeZookeeperHolder;
 
     public SnowflakeIDGenImpl() {
         // Thu Nov 04 2010 09:42:54 GMT+0800 (中国标准时间)
-        this(1288834974657L);
+        this.twepoch = 1288834974657L;
     }
 
     /**
@@ -39,13 +40,13 @@ public class SnowflakeIDGenImpl {
      * @param port      snowflake监听端口
      * @param twepoch   起始的时间戳
      */
-    public SnowflakeIDGenImpl(long twepoch) {
-        this.twepoch = twepoch;
+    @PostConstruct
+    public void init() {
         Preconditions.checkArgument(timeGen() > twepoch, "Snowflake not support twepoch gt currentTime");
-        boolean initFlag = holder.init();
+        boolean initFlag = snowflakeZookeeperHolder.init();
         if (initFlag) {
-            workerId = holder.getWorkerID();
-            LOGGER.info("START SUCCESS USE ZK WORKERID-{}", workerId);
+            workerId = snowflakeZookeeperHolder.getWorkerID();
+            log.info("START SUCCESS USE ZK WORKERID-{}", workerId);
         } else {
             Preconditions.checkArgument(initFlag, "Snowflake Id Gen is not init ok");
         }
@@ -64,7 +65,7 @@ public class SnowflakeIDGenImpl {
                         return new Result(-1, Status.EXCEPTION);
                     }
                 } catch (InterruptedException e) {
-                    LOGGER.error("wait interrupted");
+                    log.error("wait interrupted");
                     return new Result(-2, Status.EXCEPTION);
                 }
             } else {
@@ -85,7 +86,6 @@ public class SnowflakeIDGenImpl {
         lastTimestamp = timestamp;
         long id = ((timestamp - twepoch) << timestampLeftShift) | (workerId << workerIdShift) | sequence;
         return new Result(id, Status.SUCCESS);
-
     }
 
     protected long tilNextMillis(long lastTimestamp) {

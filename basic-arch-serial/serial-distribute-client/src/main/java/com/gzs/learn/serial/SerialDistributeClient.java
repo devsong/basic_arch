@@ -44,4 +44,16 @@ public class SerialDistributeClient {
         context.close();
         System.out.println(distributeService.getSerial("order", 1));
     }
+
+    @Test
+    public void testGetSnowflakeKey() {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
+                new String[] { "/META-INF/SerialDistributeClient.xml" });
+        context.start();
+        DubboSerialDistributeService distributeService = context.getBean(DubboSerialDistributeService.class);
+        for (int i = 0; i < 10; i++) {
+            System.out.println(distributeService.getSnowflake());
+        }
+        context.close();
+    }
 }

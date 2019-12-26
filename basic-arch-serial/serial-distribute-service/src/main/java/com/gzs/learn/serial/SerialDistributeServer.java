@@ -6,12 +6,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
+
+import com.ctrip.framework.apollo.spring.annotation.EnableApolloConfig;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Configuration
+@EnableApolloConfig
 @EnableAutoConfiguration
 @ComponentScan(basePackages = "com.gzs.learn")
 @ImportResource("classpath:/META-INF/applicationContext.xml")

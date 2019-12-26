@@ -4,14 +4,14 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import com.gzs.learn.serial.domain.SerialNode;
 import com.gzs.learn.serial.domain.SerialVersion;
 import com.gzs.learn.serial.service.SerialDistributeService;
 import com.gzs.learn.serial.service.SerialManagerService;
 
-@Service
+@Component
 public class SerialDistributeServiceImp implements SerialDistributeService {
     private Map<String, SerialVersion> serialCache = new ConcurrentHashMap<>();
 

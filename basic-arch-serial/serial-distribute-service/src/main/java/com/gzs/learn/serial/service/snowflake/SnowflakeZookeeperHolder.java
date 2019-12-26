@@ -1,4 +1,4 @@
-package com.gzs.learn.serial.service;
+package com.gzs.learn.serial.service.snowflake;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,7 +17,6 @@ import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.RetryUntilElapsed;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.data.Stat;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -25,29 +24,26 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Maps;
 import com.gzs.learn.common.util.JsonUtil;
-import com.gzs.learn.serial.conf.SerialProperties;
 import com.gzs.learn.serial.exception.CheckLastTimeException;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-@Component
 @Slf4j
+@Component
 public class SnowflakeZookeeperHolder {
-    @Autowired
-    private SerialProperties serialProp;
+    @Value("${serial.appName}")
+    private String appName;
 
-    private String PREFIX_ZK_PATH = "/snowflake/" + serialProp.getAppName();
-    private String PROP_PATH = System.getProperty("java.io.tmpdir") + File.separator + serialProp.getAppName()
-            + "/serialconf/{port}/workerID.properties";
+    private String PREFIX_ZK_PATH = "/snowflake/" + appName;
+    private String PROP_PATH = System.getProperty("java.io.tmpdir") + File.separator + appName + "/serialconf/{port}/workerID.properties";
     private String PATH_FOREVER = PREFIX_ZK_PATH + "/forever";// 保存所有数据持久的节点
+    private String zk_AddressNode = null;// 保存自身的key ip:port-000000001
+
+    private int workerID;
 
     @Value("${notify.zk}")
     private String notifyZk;
-
-    private String zk_AddressNode = null;// 保存自身的key ip:port-000000001
-    private int workerID;
-
     private String ip;
     private String port;
     private long lastUpdateTime;
@@ -269,5 +265,4 @@ public class SnowflakeZookeeperHolder {
     public void setWorkerID(int workerID) {
         this.workerID = workerID;
     }
-
 }

@@ -3,12 +3,12 @@ package com.gzs.learn.serial.service.imp;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import com.gzs.learn.serial.service.SerialUpdateService;
 import com.gzs.learn.serial.service.ZookeeperNotifyService;
 
-@Service
+@Component
 public class InitService {
     @Autowired
     private SerialUpdateService serialUpdateService;

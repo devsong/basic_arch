@@ -36,8 +36,8 @@
 	</appender>
 
 	<root>
-		<level value="@log_level@"/>
-		<appender-ref ref="@log_appender@"/>
+		<level value="debug"/>
+		<appender-ref ref="console"/>
 		<appender-ref ref="error_file"/>
 	</root>
 </configuration>
