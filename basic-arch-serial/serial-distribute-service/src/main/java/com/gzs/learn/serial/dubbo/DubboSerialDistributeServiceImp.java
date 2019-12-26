@@ -3,16 +3,22 @@ package com.gzs.learn.serial.dubbo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.gzs.learn.serial.common.Result;
+import com.gzs.learn.serial.common.Status;
+import com.gzs.learn.serial.exception.SerialException;
 import com.gzs.learn.serial.service.SerialDistributeService;
+import com.gzs.learn.serial.service.SnowflakeIDGenImpl;
 
 import lombok.extern.slf4j.Slf4j;
-
 
 @Slf4j
 @Component("dubboSerialDistributeService")
 public class DubboSerialDistributeServiceImp implements DubboSerialDistributeService {
     @Autowired
     private SerialDistributeService serialDistributeService;
+
+    @Autowired
+    private SnowflakeIDGenImpl snowflakeIDGenImpl;
 
     /**
      * 获取序列号
@@ -29,5 +35,14 @@ public class DubboSerialDistributeServiceImp implements DubboSerialDistributeSer
             log.error(e.getMessage());
             throw e;
         }
+    }
+
+    @Override
+    public long getSnowflake() {
+        Result result = snowflakeIDGenImpl.get();
+        if (result.getStatus() == Status.SUCCESS) {
+            return result.getId();
+        }
+        throw new SerialException(result.getStatus().name());
     }
 }

@@ -1,4 +1,4 @@
-package com.gzs.learn.serial;
+package com.gzs.learn.serial.conf;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.gzs.learn.config.inf.DataSourceProperties;
+import com.gzs.learn.common.config.DataSourceProperties;
 
 import tk.mybatis.spring.annotation.MapperScan;
 
@@ -14,7 +14,6 @@ import tk.mybatis.spring.annotation.MapperScan;
 @EnableTransactionManagement(order = 2, proxyTargetClass = true)
 @MapperScan(basePackages = { "com.gzs.learn.serial.repository" })
 public class MybatisConfig {
-
     @Autowired
     DataSourceProperties dataSourceProperties;
 
