@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 
 import com.gzs.learn.serial.common.Result;
 import com.gzs.learn.serial.common.Status;
-import com.gzs.learn.serial.conf.SerialProperties;
 import com.gzs.learn.serial.exception.SerialException;
 import com.gzs.learn.serial.service.SerialDistributeService;
 import com.gzs.learn.serial.service.snowflake.SnowflakeIDGenImpl;
@@ -15,9 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component("dubboSerialDistributeService")
 public class DubboSerialDistributeServiceImp implements DubboSerialDistributeService {
-    @Autowired
-    private SerialProperties serialProperties;
-    
     @Autowired
     private SerialDistributeService serialDistributeService;
 

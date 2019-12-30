@@ -31,8 +31,8 @@ public class SnowflakeIDGenImpl {
     private SnowflakeZookeeperHolder snowflakeZookeeperHolder;
 
     public SnowflakeIDGenImpl() {
-        // Thu Nov 04 2010 09:42:54 GMT+0800 (中国标准时间)
-        this.twepoch = 1288834974657L;
+        // 2010-01-01 00:00:00
+        this.twepoch = 1262275200000L;
     }
 
     /**
