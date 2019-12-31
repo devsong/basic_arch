@@ -16,9 +16,6 @@ import tk.mybatis.spring.annotation.MapperScan;
 public class MybatisConfig {
     @Autowired
     DataSourceProperties dataSourceProperties;
-    
-    @Autowired
-    private SerialProperties serialProperties;
 
     /**
      * 单数据源连接池配置
@@ -27,7 +24,6 @@ public class MybatisConfig {
     public DruidDataSource dataSource() {
         DruidDataSource dataSource = new DruidDataSource();
         dataSourceProperties.config(dataSource);
-        System.out.println(serialProperties.getAppName());
         return dataSource;
     }
 }

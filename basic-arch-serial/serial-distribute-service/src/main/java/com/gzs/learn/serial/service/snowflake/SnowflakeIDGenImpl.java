@@ -10,19 +10,21 @@ import org.springframework.stereotype.Component;
 import com.google.common.base.Preconditions;
 import com.gzs.learn.serial.common.Result;
 import com.gzs.learn.serial.common.Status;
+import com.gzs.learn.serial.conf.SerialProperties;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
 public class SnowflakeIDGenImpl {
-    private final long twepoch;
-    private final long workerIdBits = 10L;
-    private final long maxWorkerId = ~(-1L << workerIdBits);// 最大能够分配的workerid =1023
-    private final long sequenceBits = 12L;
-    private final long workerIdShift = sequenceBits;
-    private final long timestampLeftShift = sequenceBits + workerIdBits;
-    private final long sequenceMask = ~(-1L << sequenceBits);
+    private final long twepoch = SnowflakeConst.TWEPOCH;
+    private final long workerIdBits = SnowflakeConst.WORKER_ID_BITS;
+    private final long maxWorkerId = SnowflakeConst.MAX_WORKER_ID;
+    private final long workerIdShift = SnowflakeConst.WORKER_ID_SHIFT;
+    private final long timestampShift = SnowflakeConst.TIMESTAMP_SHIFT;
+    private final long sequenceMask = SnowflakeConst.SEQUENCE_MASK;
+
+    private long dataCenterId;
     private long workerId;
     private long sequence = 0L;
     private long lastTimestamp = -1L;
@@ -30,9 +32,9 @@ public class SnowflakeIDGenImpl {
     @Autowired
     private SnowflakeZookeeperHolder snowflakeZookeeperHolder;
 
-    public SnowflakeIDGenImpl() {
-        // 2010-01-01 00:00:00
-        this.twepoch = 1262275200000L;
+    @Autowired
+    public SnowflakeIDGenImpl(SerialProperties serialProperties) {
+        this.dataCenterId = serialProperties.getDataCenterId();
     }
 
     /**
@@ -45,12 +47,13 @@ public class SnowflakeIDGenImpl {
         Preconditions.checkArgument(timeGen() > twepoch, "Snowflake not support twepoch gt currentTime");
         boolean initFlag = snowflakeZookeeperHolder.init();
         if (initFlag) {
-            workerId = snowflakeZookeeperHolder.getWorkerID();
+            // 添加数据中心的workerId
+            workerId = (dataCenterId << workerIdBits) | snowflakeZookeeperHolder.getWorkerID();
             log.info("START SUCCESS USE ZK WORKERID-{}", workerId);
         } else {
             Preconditions.checkArgument(initFlag, "Snowflake Id Gen is not init ok");
         }
-        Preconditions.checkArgument(workerId >= 0 && workerId <= maxWorkerId, "workerID must gte 0 and lte 1023");
+        Preconditions.checkArgument(workerId >= 0 && workerId <= maxWorkerId, "workerID must gte 0 and lte " + maxWorkerId);
     }
 
     public synchronized Result get() {
@@ -84,7 +87,7 @@ public class SnowflakeIDGenImpl {
             sequence = ThreadLocalRandom.current().nextInt(100);
         }
         lastTimestamp = timestamp;
-        long id = ((timestamp - twepoch) << timestampLeftShift) | (workerId << workerIdShift) | sequence;
+        long id = ((timestamp - twepoch) << timestampShift) | (workerId << workerIdShift) | sequence;
         return new Result(id, Status.SUCCESS);
     }
 
@@ -103,5 +106,4 @@ public class SnowflakeIDGenImpl {
     public long getWorkerId() {
         return workerId;
     }
-
 }

@@ -17,7 +17,7 @@ public class SerialDistributeClient {
         context.start();
         DubboSerialManagerService service = context.getBean(DubboSerialManagerService.class);
         SerialGroup group = new SerialGroup();
-        group.setName("order");
+        group.setName("order2");
         group.setStat(DataStatus.ENABLE);
         group.setVersion(1);
         group.setStep(10000);
@@ -39,10 +39,10 @@ public class SerialDistributeClient {
         context.start();
         DubboSerialDistributeService distributeService = context.getBean(DubboSerialDistributeService.class);
         for (int i = 0; i < 10; i++) {
-            System.out.println(distributeService.getSerial("order", 1));
+            System.out.println(distributeService.getSerial("order2", 1));
         }
         context.close();
-        System.out.println(distributeService.getSerial("order", 1));
+        System.out.println(distributeService.getSerial("order2", 1));
     }
 
     @Test
@@ -51,9 +51,8 @@ public class SerialDistributeClient {
                 new String[] { "/META-INF/SerialDistributeClient.xml" });
         context.start();
         DubboSerialDistributeService distributeService = context.getBean(DubboSerialDistributeService.class);
-        for (int i = 0; i < 10; i++) {
-            System.out.println(distributeService.getSnowflake());
-        }
+        long id = distributeService.getSnowflake();
+        System.out.println(((id<<44)>>44)>>17);
         context.close();
     }
 }

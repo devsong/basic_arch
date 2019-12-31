@@ -2,6 +2,8 @@ package com.gzs.learn.serial.service.imp;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.recipes.cache.PathChildrenCache;
@@ -44,8 +46,9 @@ public class ZookeeperNotifyServiceImp implements ZookeeperNotifyService {
     private SerialUpdateService serialUpdateService;
 
     @Autowired
-    public ZookeeperNotifyServiceImp(SerialProperties serialProperties) {
+    public ZookeeperNotifyServiceImp(SerialUpdateService serialUpdateService, SerialProperties serialProperties) {
         super();
+        this.serialUpdateService = serialUpdateService;
         this.notifyZk = serialProperties.getNotifyZk();
         this.client = CuratorFrameworkFactory.builder().connectString(notifyZk).namespace(PATH)
                 .retryPolicy(new RetryNTimes(Integer.MAX_VALUE, 1000)).connectionTimeoutMs(10000).build();
@@ -54,9 +57,8 @@ public class ZookeeperNotifyServiceImp implements ZookeeperNotifyService {
     }
 
     @SuppressWarnings("deprecation")
-    @Override
-    public void init(SerialUpdateService serialUpdateService) throws Exception {
-        this.serialUpdateService = serialUpdateService;
+    @PostConstruct
+    public void init() throws Exception {
         this.groupChildrenCache = new PathChildrenCache(client, SerialConsts.GROUP, true);
         groupChildrenCache.getListenable().addListener(serialGroupListener);
         groupChildrenCache.start(StartMode.NORMAL);

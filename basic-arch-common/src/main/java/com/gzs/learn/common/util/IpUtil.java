@@ -1,13 +1,20 @@
 package com.gzs.learn.common.util;
 
+import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-import java.net.UnknownHostException;
+import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class IpUtil {
     private static String serverIp;
     private static String serverName;
@@ -64,39 +71,62 @@ public class IpUtil {
         return xForwardIp;
     }
 
-    /**
-     * 获取本机ip地址
-     *
-     * @return
-     * @throws UnknownHostException
-     */
     public static String getLocalIp() {
+        String ip;
         try {
-            InetAddress candidateAddress = null;
-            for (Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces(); ifaces.hasMoreElements();) {
-                NetworkInterface iface = (NetworkInterface) ifaces.nextElement();
-                for (Enumeration<InetAddress> inetAddrs = iface.getInetAddresses(); inetAddrs.hasMoreElements();) {
-                    InetAddress inetAddr = (InetAddress) inetAddrs.nextElement();
-                    if (inetAddr.isLoopbackAddress()) {
-                        continue;
-                    }
-                    if (inetAddr.isSiteLocalAddress()) {
-                        return inetAddr.getHostAddress();
-                    } else if (candidateAddress == null) {
-                        candidateAddress = inetAddr;
-                    }
+            List<String> ipList = getHostAddress(null);
+            // default the first
+            ip = (!ipList.isEmpty()) ? ipList.get(0) : "";
+        } catch (Exception ex) {
+            ip = "";
+            log.warn("Iputil get IP warn", ex);
+        }
+        return ip;
+    }
+
+    public static String getLocalIp(String interfaceName) {
+        String ip;
+        interfaceName = interfaceName.trim();
+        try {
+            List<String> ipList = getHostAddress(interfaceName);
+            ip = (!ipList.isEmpty()) ? ipList.get(0) : "";
+        } catch (Exception ex) {
+            ip = "";
+            log.warn("Iputil get IP warn", ex);
+        }
+        return ip;
+    }
+
+    /**
+     * 获取已激活网卡的IP地址
+     *
+     * @param interfaceName 可指定网卡名称,null则获取全部
+     * @return List<String>
+     */
+    private static List<String> getHostAddress(String interfaceName) throws SocketException {
+        List<String> ipList = new ArrayList<String>(5);
+        Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+        while (interfaces.hasMoreElements()) {
+            NetworkInterface ni = interfaces.nextElement();
+            Enumeration<InetAddress> allAddress = ni.getInetAddresses();
+            while (allAddress.hasMoreElements()) {
+                InetAddress address = allAddress.nextElement();
+                if (address.isLoopbackAddress()) {
+                    // skip the loopback addr
+                    continue;
+                }
+                if (address instanceof Inet6Address) {
+                    // skip the IPv6 addr
+                    continue;
+                }
+                String hostAddress = address.getHostAddress();
+                if (null == interfaceName) {
+                    ipList.add(hostAddress);
+                } else if (interfaceName.equals(ni.getDisplayName())) {
+                    ipList.add(hostAddress);
                 }
             }
-            if (candidateAddress != null) {
-                return candidateAddress.getHostAddress();
-            }
-            InetAddress jdkSuppliedAddress = InetAddress.getLocalHost();
-            return jdkSuppliedAddress.getHostAddress();
-        } catch (Exception e) {
-            UnknownHostException unknownHostException = new UnknownHostException("Failed to determine LAN address: " + e);
-            unknownHostException.initCause(e);
-            e.printStackTrace();
-            return "";
         }
+        return ipList;
     }
 }

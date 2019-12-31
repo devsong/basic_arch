@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="false">
-	<property name="APP_NAME" value="serial-server-service" />
+	<property name="APP_NAME" value="serial-distribute-manager" />
 	<property name="LOG_HOME" value="./${log.dir:-logs}/" />
 	<property name="MAX_HISTORY" value="60" />
 	<property name="ENCODER_PATTERN" value="%d{yyyy-MM-dd  HH:mm:ss.SSS} %-5level [%10.10thread] %logger{20} - %msg%n" />
@@ -37,8 +37,9 @@
 	</appender>
 
 	<root>
-		<level value="@log_level@" />
-		<appender-ref ref="@log_appender@" />
+		<level value="info" />
+		<appender-ref ref="console" />
+        <appender-ref ref="file" />
 		<appender-ref ref="error_file" />
 	</root>
 </configuration>

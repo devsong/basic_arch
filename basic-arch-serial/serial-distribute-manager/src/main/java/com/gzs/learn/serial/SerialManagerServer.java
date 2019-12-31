@@ -9,8 +9,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
+import com.ctrip.framework.apollo.spring.annotation.EnableApolloConfig;
+
 import lombok.extern.slf4j.Slf4j;
 
+@EnableApolloConfig
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan(basePackages = { "com.gzs.learn" })

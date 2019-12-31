@@ -1,5 +1,7 @@
 package com.gzs.learn.serial.service.imp;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,15 +16,21 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class SerialUpdateServiceImp implements SerialUpdateService, Runnable {
-    @Autowired
+
     private SerialManagerService serialManagerService;
 
-    @Autowired
     private SerialDistributeService serialDistributeService;
 
-    @Override
+    @Autowired
+    public SerialUpdateServiceImp(SerialManagerService serialManagerService, SerialDistributeService serialDistributeService) {
+        this.serialDistributeService = serialDistributeService;
+        this.serialManagerService = serialManagerService;
+    }
+
+    @PostConstruct
     public void init() {
         SerialConst.POOLS.submit(this);
+        log.info("init listener success");
     }
 
     @Override

@@ -7,8 +7,12 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd http://www.springframework.org/schema/tx 
         http://www.springframework.org/schema/tx/spring-tx.xsd">
 	<context:component-scan base-package="com.gzs.learn.serial" />
+    <dubbo:application name="serial-distribute-client" owner="guanzhisong">
+        <dubbo:parameter key="qos.enable" value="false" />
+        <dubbo:parameter key="qos.accept.foreign.ip" value="false" />
+        <dubbo:parameter key="qos.port" value="33333" />
+    </dubbo:application>
 
-	<dubbo:application name="distribute-client" />
 	<dubbo:registry id="csZookeeper" protocol="zookeeper" address="127.0.0.1:2181" />
 	<dubbo:protocol port="-1" />
 

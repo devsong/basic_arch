@@ -72,6 +72,11 @@
         </dependency>
 
         <dependency>
+            <groupId>com.ctrip.framework.apollo</groupId>
+            <artifactId>apollo-client</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
@@ -79,9 +84,6 @@
     </dependencies>
 
     <build>
-        <filters>
-            <filter>src/main/filters/${env}.properties</filter>
-        </filters>
         <resources>
             <resource>
                 <directory>src/main/resources/</directory>

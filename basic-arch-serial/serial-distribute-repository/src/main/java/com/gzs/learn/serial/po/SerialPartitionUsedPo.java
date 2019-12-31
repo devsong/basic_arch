@@ -22,7 +22,7 @@ public class SerialPartitionUsedPo implements Serializable {
     /**
      * 分组版本
      */
-    @Column(name = "version")
+    @Column(name = "ver")
     private Integer version;
 
     /**

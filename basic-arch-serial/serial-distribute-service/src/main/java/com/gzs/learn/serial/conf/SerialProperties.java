@@ -10,13 +10,17 @@ import lombok.Data;
 @Configuration
 @ConfigurationProperties(prefix = "serial")
 @Data
-public class SerialProperties implements Serializable{
+public class SerialProperties implements Serializable {
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
 
     private String appName;
+
+    private String appPort;
+
+    private int dataCenterId;
 
     private String notifyZk;
 }
