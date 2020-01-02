@@ -29,12 +29,12 @@ public class SnowflakeIDGenImpl {
     private long sequence = 0L;
     private long lastTimestamp = -1L;
 
-    @Autowired
     private SnowflakeZookeeperHolder snowflakeZookeeperHolder;
 
     @Autowired
-    public SnowflakeIDGenImpl(SerialProperties serialProperties) {
+    public SnowflakeIDGenImpl(SerialProperties serialProperties,SnowflakeZookeeperHolder snowflakeZookeeperHolder) {
         this.dataCenterId = serialProperties.getDataCenterId();
+        this.snowflakeZookeeperHolder = snowflakeZookeeperHolder;
     }
 
     /**
@@ -49,7 +49,7 @@ public class SnowflakeIDGenImpl {
         if (initFlag) {
             // 添加数据中心的workerId
             workerId = (dataCenterId << workerIdBits) | snowflakeZookeeperHolder.getWorkerID();
-            log.info("START SUCCESS USE ZK WORKERID-{}", workerId);
+            log.info("start success for workerId-{}", workerId);
         } else {
             Preconditions.checkArgument(initFlag, "Snowflake Id Gen is not init ok");
         }
@@ -59,12 +59,15 @@ public class SnowflakeIDGenImpl {
     public synchronized Result get() {
         long timestamp = timeGen();
         if (timestamp < lastTimestamp) {
+            // 当前时间小于上次生成时间，说明时钟产生回拨,等待一个阈值,暂定5ms
             long offset = lastTimestamp - timestamp;
             if (offset <= 5) {
                 try {
+                    // wait两倍的阈值时间
                     wait(offset << 1);
                     timestamp = timeGen();
                     if (timestamp < lastTimestamp) {
+                        // 当前时间仍然小于上次生成时间,说明时钟产生大步长的回拨,抛出异常
                         return new Result(-1, Status.EXCEPTION);
                     }
                 } catch (InterruptedException e) {
@@ -72,10 +75,12 @@ public class SnowflakeIDGenImpl {
                     return new Result(-2, Status.EXCEPTION);
                 }
             } else {
+                // 时钟产生大步长的回拨,抛出异常
                 return new Result(-3, Status.EXCEPTION);
             }
         }
         if (lastTimestamp == timestamp) {
+            // 同一毫秒内,sequence做递增操作
             sequence = (sequence + 1) & sequenceMask;
             if (sequence == 0) {
                 // seq 为0的时候表示是下一毫秒时间开始对seq做随机
@@ -83,10 +88,11 @@ public class SnowflakeIDGenImpl {
                 timestamp = tilNextMillis(lastTimestamp);
             }
         } else {
-            // 如果是新的ms开始
+            // 新的ms开始,此处用Random与ThreadLocalRandom并无差别,方法本身是同步的方法
             sequence = ThreadLocalRandom.current().nextInt(100);
         }
         lastTimestamp = timestamp;
+        // 生成snowflake ID
         long id = ((timestamp - twepoch) << timestampShift) | (workerId << workerIdShift) | sequence;
         return new Result(id, Status.SUCCESS);
     }
@@ -94,6 +100,7 @@ public class SnowflakeIDGenImpl {
     protected long tilNextMillis(long lastTimestamp) {
         long timestamp = timeGen();
         while (timestamp <= lastTimestamp) {
+            // 类自旋操作
             timestamp = timeGen();
         }
         return timestamp;

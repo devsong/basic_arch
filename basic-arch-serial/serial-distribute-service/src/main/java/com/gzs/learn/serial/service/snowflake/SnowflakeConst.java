@@ -3,7 +3,7 @@ package com.gzs.learn.serial.service.snowflake;
 public interface SnowflakeConst {
     // 时间点纪元2010-01-01 00:00:00
     final long TWEPOCH = 1262275200000L;
-    // 数据中心bit位数,最大8个数据中心
+    // 数据中心bit位数,最大8个数据中心,可以根据需求自己定制
     final long DATA_CENTER_ID_BITS = 3;
     // 最大的数据中心ID数
     final long MAX_DATA_CENTER_ID = ~(-1L << DATA_CENTER_ID_BITS);
