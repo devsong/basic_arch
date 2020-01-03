@@ -18,13 +18,13 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class DataSourceProperties extends BaseDataSourceProperties {
-    private String name;
+    protected String name;
 
-    private String url;
+    protected String url;
 
-    private String username;
+    protected String username;
 
-    private String password;
+    protected String password;
 
     public void config(DruidDataSource dataSource) {
         dataSource.setName(getName());
