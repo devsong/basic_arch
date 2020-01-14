@@ -7,10 +7,9 @@
         http://dubbo.apache.org/schema/dubbo 
         http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
 
-    <dubbo:registry id="clientZk" address="${dubbo.zk.registry-center}" />
     <dubbo:consumer timeout="${dubbo.timeout}" />
 
-    <dubbo:reference id="dubboPerfLogService" interface="com.gzs.learn.log.dubbo.DubboPerfLogService" timeout="10000"
-        loadbalance="random" registry="clientZk" version="${dubbo.zk.version}">
+    <dubbo:reference id="dubboPerfLogService" interface="com.gzs.learn.log.dubbo.DubboPerfLogService" loadbalance="random"
+        registry="register" version="${dubbo.zk.version}">
     </dubbo:reference>
 </beans>

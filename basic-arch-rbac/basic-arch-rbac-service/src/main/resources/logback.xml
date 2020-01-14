@@ -6,7 +6,7 @@
 	<property name="ENCODER_PATTERN" value="%d{yyyy-MM-dd  HH:mm:ss.SSS} %-5level [%10.10thread] %logger{20} - %msg%n"/>
 	<contextName>${APP_NAME}</contextName>
 
-	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+	<appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<fileNamePattern>${LOG_HOME}/info.%d{yyyy-MM-dd}.log</fileNamePattern>
 			<maxHistory>${MAX_HISTORY}</maxHistory>
@@ -31,13 +31,14 @@
 
 	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
-			<pattern>[%-5level] %d{HH:mm:ss.SSS} [%thread] %logger{36} - %msg%n</pattern>
+			<pattern>${ENCODER_PATTERN}</pattern>
 		</encoder>
 	</appender>
 
 	<root>
-		<level value="@log_level@"/>
-		<appender-ref ref="@log_appender@"/>
+		<level value="INFO"/>
+		<appender-ref ref="console"/>
+        <appender-ref ref="file"/>
 		<appender-ref ref="error_file"/>
 	</root>
 </configuration>

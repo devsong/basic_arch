@@ -10,7 +10,6 @@
         http://www.ctrip.com/schema/apollo.xsd">
     <apollo:config namespaces="application,elong.dubbo.config" />
 
-    <import resource="config-bean.xml" />
     <import resource="server-dubbo.xml" />
     <import resource="client-dubbo.xml" />
 </beans>  

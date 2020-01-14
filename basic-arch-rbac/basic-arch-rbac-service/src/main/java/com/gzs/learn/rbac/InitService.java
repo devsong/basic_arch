@@ -29,8 +29,7 @@ public class InitService {
     @PostConstruct
     public void init() {
         log.info("init execute...");
-
-        // registerPerfMetaData();
+        registerPerfMetaData();
     }
 
     private void registerPerfMetaData() {

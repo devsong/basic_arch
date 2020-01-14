@@ -19,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class InitService {
-
     @Autowired
     private GunsProperties gunsProperties;
 
@@ -30,12 +29,12 @@ public class InitService {
     public void init() {
         log.info("init execute...");
 
-        //registerPerfMetaData();
+        registerPerfMetaData();
     }
 
     private void registerPerfMetaData() {
         String operatorIp = IpUtil.getLocalIp();
-       
+
         List<Class<?>> classes = ClassUtil.getClass("com.gzs.learn.web.modular.system.controller", true);
         for (Class<?> clazz : classes) {
             if (clazz.isInterface()) {

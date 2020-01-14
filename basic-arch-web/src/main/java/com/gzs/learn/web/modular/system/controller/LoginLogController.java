@@ -37,8 +37,7 @@ public class LoginLogController extends BaseController {
     @Permission(Const.ADMIN_NAME)
     @ResponseBody
     public PageResponseDto<UserLoginLogDto> list(UserLoginLogSearchDto loginLogSearchDto) {
-        loginLogSearchDto.setPage(1);
-        loginLogSearchDto.setPageSize(10);
+        defaultPageSearch(loginLogSearchDto);
         PageResponseDto<UserLoginLogDto> result = systemLogService.getLoginLogs(loginLogSearchDto);
         return result;
     }

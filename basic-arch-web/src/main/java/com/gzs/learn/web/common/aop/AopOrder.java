@@ -8,6 +8,8 @@ package com.gzs.learn.web.common.aop;
  *
  */
 public interface AopOrder {
+    int PARAM_SET_ORDER = 0;
+
     int SESSION_TIMEOUT_ORDER = 1;
 
     int SESSION_ORDER = 2;

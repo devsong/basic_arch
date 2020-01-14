@@ -1,11 +1,22 @@
 package com.gzs.learn.web.common.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 import com.gzs.learn.inf.PageResponseDto;
+import com.gzs.learn.log.inf.search.PageSearchRequestDto;
 import com.gzs.learn.web.common.BaseControllerWrapper;
 import com.gzs.learn.web.common.constant.enums.Order;
 import com.gzs.learn.web.common.constant.tips.SuccessTip;
@@ -14,13 +25,6 @@ import com.gzs.learn.web.common.page.PageReq;
 import com.gzs.learn.web.core.support.HttpKit;
 import com.gzs.learn.web.core.util.FileUtil;
 import com.gzs.learn.web.core.util.ToolUtil;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.UnsupportedEncodingException;
-import java.util.List;
 
 public class BaseController {
 
@@ -89,6 +93,25 @@ public class BaseController {
             }
         }
         return pageReq;
+    }
+
+    public void defaultPageSearch(PageSearchRequestDto pageSearchRequestDto) {
+        if (pageSearchRequestDto == null) {
+            throw new IllegalArgumentException("pageSearchRequestDto must not be null");
+        }
+        if (pageSearchRequestDto.getPage() == null) {
+            pageSearchRequestDto.setPage(1);
+        }
+        if (pageSearchRequestDto.getPageSize() == null) {
+            pageSearchRequestDto.setPageSize(10);
+        }
+        if (pageSearchRequestDto.getCreateTimeEnd() == null) {
+            pageSearchRequestDto.setCreateTimeEnd(new Date());
+        }
+        if (pageSearchRequestDto.getCreateTimeStart() == null) {
+            // 默认查询最近一个月的数据
+            pageSearchRequestDto.setCreateTimeStart(DateUtils.addMonths(pageSearchRequestDto.getCreateTimeEnd(), -1));
+        }
     }
 
     /**

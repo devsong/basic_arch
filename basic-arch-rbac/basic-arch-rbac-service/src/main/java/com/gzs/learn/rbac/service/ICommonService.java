@@ -15,5 +15,4 @@ public interface ICommonService {
     List<DictDto> getDictByPid(Long pid);
 
     List<DictDto> searchDict(String condition);
-
 }
