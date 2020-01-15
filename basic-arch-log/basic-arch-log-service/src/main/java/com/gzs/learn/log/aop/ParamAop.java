@@ -1,4 +1,4 @@
-package com.gzs.learn.web.common.aop;
+package com.gzs.learn.log.aop;
 
 import java.util.Date;
 
@@ -7,7 +7,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.gzs.learn.log.inf.search.PageSearchRequestDto;
@@ -18,10 +18,12 @@ import lombok.extern.slf4j.Slf4j;
  * 日志记录
  */
 @Aspect
+@Order(2)
 @Component
 @Slf4j
-public class ParamAop implements Ordered {
-    @Pointcut("within(@org.springframework.stereotype.Controller *)")
+public class ParamAop {
+
+    @Pointcut("execution(* com.gzs.learn.log.dubbo.*Impl.*(..))")
     public void cutService() {
     }
 
@@ -50,15 +52,12 @@ public class ParamAop implements Ordered {
                     pageSearchRequestDto.setCreateTimeStart(DateUtils.addMonths(pageSearchRequestDto.getCreateTimeEnd(), -1));
                 }
             }
+            result = point.proceed();
         } catch (Exception e) {
-            log.error("设置默认参数出错", e);
+            log.error("设置默认参数出错!", e);
+            throw e;
         }
-        result = point.proceed();
-        return result;
-    }
 
-    @Override
-    public int getOrder() {
-        return AopOrder.PARAM_SET_ORDER;
+        return result;
     }
 }

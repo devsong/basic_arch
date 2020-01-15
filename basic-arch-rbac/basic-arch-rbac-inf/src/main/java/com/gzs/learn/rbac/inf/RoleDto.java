@@ -28,7 +28,7 @@ public class RoleDto extends Base {
     /**
      * 部门名称
      */
-    private Long deptid;
+    private Long deptId;
     /**
      * 提示
      */

@@ -1,19 +1,21 @@
 package com.gzs.learn.web.common.aop;
 
+import java.lang.reflect.Method;
+import java.util.Map;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 
 import com.gzs.learn.web.common.annotion.log.BussinessLog;
 import com.gzs.learn.web.common.constant.dictmap.base.AbstractDictMap;
 import com.gzs.learn.web.common.constant.dictmap.factory.DictMapFactory;
+import com.gzs.learn.web.common.exception.BussinessException;
 import com.gzs.learn.web.core.log.LogManager;
 import com.gzs.learn.web.core.log.LogObjectHolder;
 import com.gzs.learn.web.core.log.factory.LogTaskFactory;
@@ -22,17 +24,15 @@ import com.gzs.learn.web.core.shiro.ShiroUser;
 import com.gzs.learn.web.core.support.HttpKit;
 import com.gzs.learn.web.core.util.Contrast;
 
-import java.lang.reflect.Method;
-import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 日志记录
  */
 @Aspect
 @Component
+@Slf4j
 public class LogAop implements Ordered {
-    private Logger log = LoggerFactory.getLogger(this.getClass());
-
     @Pointcut(value = "@annotation(com.gzs.learn.web.common.annotion.log.BussinessLog)")
     public void cutService() {
     }
@@ -44,7 +44,9 @@ public class LogAop implements Ordered {
         try {
             result = point.proceed();
         } catch (Exception e) {
-            log.error("日志记录出错!", e);
+            if (!(e instanceof BussinessException)) {
+                log.error("日志记录出错!", e);
+            }
             throw e;
         } finally {
             handle(point);

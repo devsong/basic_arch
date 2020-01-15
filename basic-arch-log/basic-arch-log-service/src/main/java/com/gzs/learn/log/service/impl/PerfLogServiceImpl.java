@@ -47,6 +47,8 @@ public class PerfLogServiceImpl implements IPerfLogService {
     @Override
     public boolean insertPerfLogMeta(SysPerfLogMetaPo po) {
         try {
+            po.setClazz(handleProxy(po.getClazz()));
+            po.setMethod(handleProxy(po.getMethod()));
             sysPerfLogMetaMapper.insertSelective(po);
         } catch (DuplicateKeyException e) {
             // ignore
@@ -56,6 +58,8 @@ public class PerfLogServiceImpl implements IPerfLogService {
 
     @Override
     public boolean insertPerfLog(SysPerfLogDto sysLogDto) {
+        sysLogDto.setClazz(handleProxy(sysLogDto.getClazz()));
+        sysLogDto.setMethod(handleProxy(sysLogDto.getMethod()));
         SysPerfLogMetaPo metaPo = new SysPerfLogMetaPo();
         BeanUtil.copyProperties(sysLogDto, metaPo);
         long metaId = 0;
@@ -180,5 +184,13 @@ public class PerfLogServiceImpl implements IPerfLogService {
             return exists.get(0);
         }
         return null;
+    }
+
+    private static final String handleProxy(String proxy) {
+        int index = proxy.indexOf('$');
+        if (index == -1) {
+            return proxy;
+        }
+        return proxy.substring(0, index);
     }
 }

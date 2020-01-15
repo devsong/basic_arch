@@ -112,8 +112,8 @@ public class UserMgrController extends BaseController {
         ModelAndView mav = new ModelAndView(PREFIX + "user_edit.html");
         UserDto user = userService.selectByPrimaryKey(id);
         mav.addObject(user);
-        mav.addObject("roleName", ConstantFactory.me().getRoleName(user.getRoleid()));
-        mav.addObject("deptName", ConstantFactory.me().getDeptName(user.getDeptid()));
+        mav.addObject("roleName", ConstantFactory.me().getRoleName(user.getRoleId()));
+        mav.addObject("deptName", ConstantFactory.me().getDeptName(user.getDeptId()));
         LogObjectHolder.me().set(user);
         return mav;
     }
@@ -131,8 +131,8 @@ public class UserMgrController extends BaseController {
         UserDto user = userService.selectByPrimaryKey(userId);
         user.setAvatar(gunsProperties.getFilePrefix() + user.getAvatar());
         mav.addObject("user", user);
-        mav.addObject("roleName", ConstantFactory.me().getRoleName(user.getRoleid()));
-        mav.addObject("deptName", ConstantFactory.me().getDeptName(user.getDeptid()));
+        mav.addObject("roleName", ConstantFactory.me().getRoleName(user.getRoleId()));
+        mav.addObject("deptName", ConstantFactory.me().getDeptName(user.getDeptId()));
         LogObjectHolder.me().set(user);
         return mav;
     }
@@ -397,7 +397,7 @@ public class UserMgrController extends BaseController {
     private void assertAuth(Long userId) {
         UserDto user = userService.selectByPrimaryKey(userId);
         List<Long> deptDataScope = ShiroKit.getDeptDataScope(user);
-        Long deptid = user.getDeptid();
+        Long deptid = user.getDeptId();
         if (deptDataScope.contains(deptid)) {
             return;
         }
@@ -419,8 +419,8 @@ public class UserMgrController extends BaseController {
             e.printStackTrace();
         }
         userDto.setAvatar(gunsProperties.getFilePrefix() + userDto.getAvatar());
-        userDto.setRoleName(ConstantFactory.me().getRoleName(user.getRoleid()));
-        userDto.setDeptName(ConstantFactory.me().getDeptName(user.getDeptid()));
+        userDto.setRoleName(ConstantFactory.me().getRoleName(user.getRoleId()));
+        userDto.setDeptName(ConstantFactory.me().getDeptName(user.getDeptId()));
         Object obj = new UserWrapper(userDto).wrap();
         return CommonResponse.buildSuccess(obj);
     }
@@ -439,8 +439,8 @@ public class UserMgrController extends BaseController {
             e.printStackTrace();
         }
         userDto.setAvatar(gunsProperties.getFilePrefix() + userDto.getAvatar());
-        userDto.setRoleName(ConstantFactory.me().getRoleName(user.getRoleid()));
-        userDto.setDeptName(ConstantFactory.me().getDeptName(user.getDeptid()));
+        userDto.setRoleName(ConstantFactory.me().getRoleName(user.getRoleId()));
+        userDto.setDeptName(ConstantFactory.me().getDeptName(user.getDeptId()));
         return CommonResponse.buildSuccess(new UserWrapper(userDto).wrap());
     }
 }

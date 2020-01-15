@@ -33,7 +33,7 @@ public class RolePo extends Base {
      * 部门名称
      */
     @Column(name = "dept_id")
-    private Long deptid;
+    private Long deptId;
     /**
      * 提示
      */

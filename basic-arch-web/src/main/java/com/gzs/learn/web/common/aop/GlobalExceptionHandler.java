@@ -1,6 +1,5 @@
 package com.gzs.learn.web.common.aop;
 
-import static com.gzs.learn.web.core.support.HttpKit.getIp;
 import static com.gzs.learn.web.core.support.HttpKit.getRequest;
 
 import java.lang.reflect.UndeclaredThrowableException;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.gzs.learn.common.util.IpUtil;
 import com.gzs.learn.web.common.constant.tips.ErrorTip;
 import com.gzs.learn.web.common.exception.BizExceptionEnum;
 import com.gzs.learn.web.common.exception.BussinessException;
@@ -48,7 +48,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ErrorTip notFound(BussinessException e) {
         LogManager.me().executeLog(LogTaskFactory.exceptionLog(ShiroKit.getUser().getId(), e));
         getRequest().setAttribute("tip", e.getMessage());
-        log.error("业务异常:", e);
         return new ErrorTip(e.getCode(), e.getMsg());
     }
 
@@ -71,7 +70,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public String accountLocked(DisabledAccountException e, Model model) {
         String username = getRequest().getParameter("username");
-        LogManager.me().executeLog(LogTaskFactory.loginLog(username, "账号被冻结", getIp()));
+        LogManager.me().executeLog(LogTaskFactory.loginLog(username, "账号被冻结", IpUtil.getIpAdrress(getRequest())));
         model.addAttribute("tips", "账号被冻结");
         return "/login.html";
     }
@@ -84,7 +83,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public String credentials(CredentialsException e, Model model) {
         String username = getRequest().getParameter("username");
-        LogManager.me().executeLog(LogTaskFactory.loginLog(username, "账号密码错误", getIp()));
+        LogManager.me().executeLog(LogTaskFactory.loginLog(username, "账号密码错误", IpUtil.getIpAdrress(getRequest())));
         model.addAttribute("tips", "账号密码错误");
         return "/login.html";
     }
@@ -97,7 +96,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String credentials(InvalidKaptchaException e, Model model) {
         String username = getRequest().getParameter("username");
-        LogManager.me().executeLog(LogTaskFactory.loginLog(username, "验证码错误", getIp()));
+        LogManager.me().executeLog(LogTaskFactory.loginLog(username, "验证码错误", IpUtil.getIpAdrress(getRequest())));
         model.addAttribute("tips", "验证码错误");
         return "/login.html";
     }

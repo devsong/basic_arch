@@ -23,7 +23,7 @@ public class RoleWrapper extends BaseControllerWrapper {
     @Override
     public void warpTheMap(Map<String, Object> map) {
         map.put("pName", ConstantFactory.me().getSingleRoleName(Convert.toLong(map.get("pid"))));
-        map.put("deptName", ConstantFactory.me().getDeptName(Convert.toLong(map.get("deptid"))));
+        map.put("deptName", ConstantFactory.me().getDeptName(Convert.toLong(map.get("deptId"))));
     }
 
 }

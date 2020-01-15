@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.code.kaptcha.Constants;
+import com.gzs.learn.common.util.IpUtil;
 import com.gzs.learn.rbac.inf.MenuNodeDto;
 import com.gzs.learn.rbac.inf.UserDto;
 import com.gzs.learn.web.common.controller.BaseController;
@@ -101,8 +102,8 @@ public class LoginController extends BaseController {
         super.getSession().setAttribute("shiroUser", shiroUser);
         super.getSession().setAttribute("username", shiroUser.getAccount());
 
-        LogManager.me().executeLog(LogTaskFactory.loginLog(shiroUser.getId(), getIp()));
-        ShiroKit.getSession().setAttribute("sessionFlag", true);
+        LogManager.me().executeLog(LogTaskFactory.loginLog(shiroUser.getId(), IpUtil.getIpAdrress(getHttpServletRequest())));
+        ShiroKit.setSessionAttr("sessionFlag", true);
         return REDIRECT + "/";
     }
 

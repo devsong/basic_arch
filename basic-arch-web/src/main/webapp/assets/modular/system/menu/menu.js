@@ -195,5 +195,4 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
         var checked = obj.elem.checked ? true : false;
         Menu.changeUserStatus(userId, checked);
     });
-
 });

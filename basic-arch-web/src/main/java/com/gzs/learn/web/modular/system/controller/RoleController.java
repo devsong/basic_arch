@@ -85,7 +85,7 @@ public class RoleController extends BaseController {
         RoleDto role = dubboRbacRoleService.getRole(roleId);
         mav.addObject(role);
         mav.addObject("pName", ConstantFactory.me().getSingleRoleName(role.getPid()));
-        mav.addObject("deptName", ConstantFactory.me().getDeptName(role.getDeptid()));
+        mav.addObject("deptName", ConstantFactory.me().getDeptName(role.getDeptId()));
         LogObjectHolder.me().set(role);
         return mav;
     }

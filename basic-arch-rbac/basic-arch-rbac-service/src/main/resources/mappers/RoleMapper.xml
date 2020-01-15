@@ -7,7 +7,7 @@
         <result column="num" jdbcType="INTEGER" property="num" />
         <result column="pid" jdbcType="INTEGER" property="pid" />
         <result column="name" jdbcType="VARCHAR" property="name" />
-        <result column="dept_id" jdbcType="INTEGER" property="deptid" />
+        <result column="dept_id" jdbcType="INTEGER" property="deptId" />
         <result column="tips" jdbcType="VARCHAR" property="tips" />
         <result column="version" jdbcType="INTEGER" property="version" />
         <result column="create_time" jdbcType="TIMESTAMP" property="createtime" />

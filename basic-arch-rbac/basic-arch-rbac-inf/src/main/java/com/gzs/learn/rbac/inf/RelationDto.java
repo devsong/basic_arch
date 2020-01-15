@@ -17,9 +17,9 @@ public class RelationDto extends Base {
     /**
      * 菜单id
      */
-    private Long menuid;
+    private Long menuId;
     /**
      * 角色id
      */
-    private Long roleid;
+    private Long roleId;
 }

@@ -20,10 +20,10 @@ public class RelationPo extends Base {
      * 菜单id
      */
     @Column(name = "menu_id")
-    private Long menuid;
+    private Long menuId;
     /**
      * 角色id
      */
     @Column(name = "role_id")
-    private Long roleid;
+    private Long roleId;
 }

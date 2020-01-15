@@ -38,20 +38,15 @@ spring:
     host: 127.0.0.1
     port: 6379
     password:
-  profiles:
-    active: dev
+  resources:
+    static-locations: classpath:/assets/**
   mvc:
-    static-path-pattern: /**
+    #static-path-pattern: /**
     view:
       prefix: /WEB-INF/view
     multipart:
-      max-request-size: 100MB #最大请求大小
-      max-file-size: 100MB #最大文件大小
-  devtools:
-    restart:
-      enabled: true #是否开启开发者工具（true/false）
-      additional-paths: src/main/java
-      exclude: static/**,WEB-INF/view/**,assets/**
+      max-request-size: 10MB #最大请求大小
+      max-file-size: 10MB #最大文件大小
 logging:
   path: logs/
   file: guns.log

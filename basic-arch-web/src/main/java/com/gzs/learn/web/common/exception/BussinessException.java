@@ -20,6 +20,10 @@ public class BussinessException extends RuntimeException {
     // 业务异常跳转的页面
     private String urlPath;
 
+    public BussinessException() {
+
+    }
+
     public BussinessException(BizExceptionEnum bizExceptionEnum) {
         this.code = bizExceptionEnum.getCode();
         this.msg = bizExceptionEnum.getMsg();

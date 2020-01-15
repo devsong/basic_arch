@@ -21,9 +21,13 @@ layui.use(['form', 'upload', 'element', 'ax', 'laydate'], function () {
     //表单提交事件
     form.on('submit(userInfoSubmit)', function (data) {
         var ajax = new $ax(Feng.ctxPath + "/mgr/edit", function (data) {
-            Feng.success("修改成功!");
+            if(data.code == 0){
+                Feng.success("修改成功!");
+            }else{
+                Feng.error("修改失败!" + data.msg + "!");
+            }
         }, function (data) {
-            Feng.error("修改失败!" + data.msg + "!");
+            Feng.error("修改失败!" + data.responseJSON.msg + "!");
         });
         ajax.set(data.field);
         ajax.start();

@@ -34,8 +34,8 @@ public class UserWrapper extends BaseControllerWrapper {
     public void warpTheMap(Map<String, Object> map) {
         map.put("birthday", DateFormatUtils.format((Date) map.get("birthday"), "yyyy-MM-dd"));
         map.put("sexName", ConstantFactory.me().getSexName(toInt(map.get("sex"))));
-        map.put("roleName", ConstantFactory.me().getRoleName(toStr(map.get("roleid"))));
-        map.put("deptName", ConstantFactory.me().getDeptName(toLong(map.get("deptid"))));
+        map.put("roleName", ConstantFactory.me().getRoleName(toStr(map.get("roleId"))));
+        map.put("deptName", ConstantFactory.me().getDeptName(toLong(map.get("deptId"))));
         map.put("statusName", ConstantFactory.me().getStatusName(toInt(map.get("status"))));
     }
 

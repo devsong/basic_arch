@@ -41,7 +41,8 @@ public class SessionTimeoutIAop extends BaseController implements Ordered {
         if (ignorePaths.contains(servletPath)) {
             return point.proceed();
         }
-        if (ShiroKit.getSession().getAttribute("sessionFlag") == null) {
+        Object sessionFlag = ShiroKit.getSessionAttr("sessionFlag");
+        if (sessionFlag == null) {
             ShiroKit.getSubject().logout();
             throw new InvalidSessionException();
         }

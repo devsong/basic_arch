@@ -88,11 +88,11 @@ public class PerformanceLogAop {
 
     private void postProcess(ProceedingJoinPoint point, boolean success, Object ret, Exception exception, long cost) {
         point.getSignature();
-        MethodSignature msig = (MethodSignature) point.getSignature();
+        MethodSignature mSignature = (MethodSignature) point.getSignature();
         Object target = point.getTarget();
         Method currentMethod = null;
         try {
-            currentMethod = target.getClass().getMethod(msig.getName(), msig.getParameterTypes());
+            currentMethod = target.getClass().getMethod(mSignature.getName(), mSignature.getParameterTypes());
         } catch (NoSuchMethodException | SecurityException e) {
             e.printStackTrace();
         }

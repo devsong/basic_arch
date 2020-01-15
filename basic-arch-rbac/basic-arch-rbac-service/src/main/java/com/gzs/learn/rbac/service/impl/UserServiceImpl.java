@@ -47,8 +47,8 @@ public class UserServiceImpl implements IUserService {
         }
         long userId = userPo.getId();
         Set<Long> roleIds = Sets.newHashSet(userRoleMapper.selectRoleIdsByUserId(userId));
-        if (StringUtils.isNotBlank(userPo.getRoleid())) {
-            String[] roleArray = userPo.getRoleid().split(",");
+        if (StringUtils.isNotBlank(userPo.getRoleId())) {
+            String[] roleArray = userPo.getRoleId().split(",");
             for (String roleId : roleArray) {
                 roleIds.add(Long.parseLong(roleId));
             }
@@ -57,7 +57,7 @@ public class UserServiceImpl implements IUserService {
         BeanUtil.copyProperties(userPo, userDto);
         if (!CollectionUtils.isEmpty(roleIds)) {
             userDto.setRoleIds(roleIds);
-            userDto.setRoleid(roleIds.stream().map(r -> r.toString()).collect(Collectors.joining(",")));
+            userDto.setRoleId(roleIds.stream().map(r -> r.toString()).collect(Collectors.joining(",")));
         }
         return userDto;
     }

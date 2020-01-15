@@ -56,7 +56,7 @@ public class UserDto extends Base {
     /**
      * 角色id
      */
-    private String roleid;
+    private String roleId;
     /**
      * 角色列表
      */
@@ -68,7 +68,7 @@ public class UserDto extends Base {
     /**
      * 部门id
      */
-    private Long deptid;
+    private Long deptId;
     /**
      * 部门名
      */

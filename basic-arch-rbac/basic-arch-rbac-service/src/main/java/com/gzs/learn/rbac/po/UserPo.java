@@ -59,12 +59,12 @@ public class UserPo extends Base {
      * 角色id
      */
     @Column(name = "role_id")
-    private String roleid;
+    private String roleId;
     /**
      * 部门id
      */
     @Column(name = "dept_id")
-    private Long deptid;
+    private Long deptId;
     /**
      * 状态(1：启用  2：冻结  3：删除）
      */

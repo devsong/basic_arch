@@ -97,8 +97,8 @@ public class RoleServiceImpl implements IRoleService {
         // 添加新的权限
         for (Long id : menus) {
             RelationPo relation = new RelationPo();
-            relation.setRoleid(roleId);
-            relation.setMenuid(id);
+            relation.setRoleId(roleId);
+            relation.setMenuId(id);
             relationMapper.insertSelective(relation);
         }
         return true;

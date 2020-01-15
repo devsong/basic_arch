@@ -284,7 +284,7 @@ public class ShiroKit {
      * 获取当前用户的部门数据范围的集合
      */
     public static List<Long> getDeptDataScope(UserDto user) {
-        Long deptId = user == null ? getUser().getDeptId() : user.getDeptid();
+        Long deptId = user == null ? getUser().getDeptId() : user.getDeptId();
         List<Long> subDeptIds = ConstantFactory.me().getSubDeptId(deptId);
         subDeptIds.add(deptId);
         return subDeptIds;

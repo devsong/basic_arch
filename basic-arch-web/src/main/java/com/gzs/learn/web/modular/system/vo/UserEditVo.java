@@ -62,7 +62,7 @@ public class UserEditVo implements Serializable {
     /**
      * 部门id
      */
-    private Long deptid;
+    private Long deptId;
     /**
      * 部门名
      */

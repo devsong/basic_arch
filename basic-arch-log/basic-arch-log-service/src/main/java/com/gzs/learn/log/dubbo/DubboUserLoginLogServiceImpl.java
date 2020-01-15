@@ -11,7 +11,6 @@ import com.gzs.learn.log.util.LogSystemUtil;
 
 @Component("dubboUserLoginLogService")
 public class DubboUserLoginLogServiceImpl implements DubboUserLoginLogService {
-
     @Autowired
     private IUserLoginLogService userLoginLogService;
 
@@ -30,5 +29,4 @@ public class DubboUserLoginLogServiceImpl implements DubboUserLoginLogService {
     public UserLoginLogDto getLoginDetail(Long id) {
         return userLoginLogService.getDetail(id);
     }
-
 }

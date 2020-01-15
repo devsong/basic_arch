@@ -12,8 +12,8 @@
         <result column="sex" jdbcType="INTEGER" property="sex" />
         <result column="email" jdbcType="VARCHAR" property="email" />
         <result column="phone" jdbcType="VARCHAR" property="phone" />
-        <result column="role_id" jdbcType="VARCHAR" property="roleid" />
-        <result column="dept_id" jdbcType="INTEGER" property="deptid" />
+        <result column="role_id" jdbcType="VARCHAR" property="roleId" />
+        <result column="dept_id" jdbcType="INTEGER" property="deptId" />
         <result column="status" jdbcType="INTEGER" property="status" />
         <result column="version" jdbcType="INTEGER" property="version" />
         <result column="create_time" jdbcType="TIMESTAMP" property="createtime" />

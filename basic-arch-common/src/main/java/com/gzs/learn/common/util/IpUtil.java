@@ -38,7 +38,6 @@ public class IpUtil {
     }
 
     public static String getIpAdrress(HttpServletRequest request) {
-        String xRealIp = request.getHeader("X-Real-IP");
         String xForwardIp = request.getHeader("X-Forwarded-For");
         if (StringUtils.isNotEmpty(xForwardIp) && !"unKnown".equalsIgnoreCase(xForwardIp)) {
             // 多次反向代理后会有多个ip值，第一个ip才是真实ip
@@ -49,6 +48,7 @@ public class IpUtil {
                 return xForwardIp;
             }
         }
+        String xRealIp = request.getHeader("X-Real-IP");
         xForwardIp = xRealIp;
         if (StringUtils.isNotEmpty(xForwardIp) && !"unKnown".equalsIgnoreCase(xForwardIp)) {
             return xForwardIp;

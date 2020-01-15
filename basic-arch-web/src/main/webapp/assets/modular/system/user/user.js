@@ -162,8 +162,12 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
     MgrUser.onDeleteUser = function (data) {
         var operation = function () {
             var ajax = new $ax(Feng.ctxPath + "/mgr/delete", function () {
-                table.reload(MgrUser.tableId);
-                Feng.success("删除成功!");
+                if (data.code == 0) {
+                    table.reload(MgrUser.tableId);
+                    Feng.success("删除成功!");
+                } else {
+                    Feng.error("删除失败!" + data.msg + "!");
+                }
             }, function (data) {
                 Feng.error("删除失败!" + data.msg + "!");
             });
@@ -198,7 +202,11 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
     MgrUser.resetPassword = function (data) {
         Feng.confirm("是否重置密码为111111 ?", function () {
             var ajax = new $ax(Feng.ctxPath + "/mgr/reset", function (data) {
-                Feng.success("重置密码成功!");
+                if (data.code == 0) {
+                    Feng.success("重置密码成功!");
+                } else {
+                    Feng.error(data.msg);
+                }
             }, function (data) {
                 Feng.error("重置密码失败!");
             });
@@ -216,7 +224,12 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
     MgrUser.changeUserStatus = function (userId, checked) {
         if (checked) {
             var ajax = new $ax(Feng.ctxPath + "/mgr/unfreeze", function (data) {
-                Feng.success("解除冻结成功!");
+                if (data.code == 0) {
+                    Feng.success("解除冻结成功!");
+                } else {
+                    Feng.error(data.msg);
+                    table.reload(MgrUser.tableId);
+                }
             }, function (data) {
                 Feng.error("解除冻结失败!");
                 table.reload(MgrUser.tableId);
@@ -225,7 +238,12 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
             ajax.start();
         } else {
             var ajax = new $ax(Feng.ctxPath + "/mgr/freeze", function (data) {
-                Feng.success("冻结成功!");
+                if (data.code == 0) {
+                    Feng.success("冻结成功!");
+                } else {
+                    Feng.error(data.msg);
+                    table.reload(MgrUser.tableId);
+                }
             }, function (data) {
                 Feng.error("冻结失败!" + data.responseJSON.msg + "!");
                 table.reload(MgrUser.tableId);
