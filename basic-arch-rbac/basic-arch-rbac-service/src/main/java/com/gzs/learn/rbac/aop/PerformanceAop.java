@@ -50,7 +50,7 @@ public class PerformanceAop {
         Object target = point.getTarget();
         Method currentMethod = target.getClass().getMethod(sig.getName(), sig.getParameterTypes());
         String clazz = sig.getDeclaringTypeName();
-        String methodName = sig.getName();
+        String methodName = currentMethod.getName();
         Object[] args = point.getArgs();
         Object returnValue = null;
         Exception exception = null;
@@ -59,7 +59,7 @@ public class PerformanceAop {
         } catch (Exception e) {
             // 记录系统调用异常日志
             exception = e;
-            log.error("system error,method:{} args:{}", currentMethod.getName(), JSON.toJSONString(point.getArgs()), e);
+            log.error("system error,method:{} args:{}", methodName, JSON.toJSONString(point.getArgs()), e);
             throw e;
         } finally {
             // 记录方法调用日志

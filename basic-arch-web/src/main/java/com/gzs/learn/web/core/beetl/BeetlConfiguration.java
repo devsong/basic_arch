@@ -17,6 +17,7 @@ public class BeetlConfiguration extends BeetlGroupUtilConfiguration {
         Map<String, Object> shared = new HashMap<>();
         shared.put("systemName", Const.DEFAULT_SYSTEM_NAME);
         shared.put("welcomeTip", Const.DEFAULT_WELCOME_TIP);
+        shared.put("_t", System.currentTimeMillis());
         groupTemplate.setSharedVars(shared);
 
         // 全局共享方法
