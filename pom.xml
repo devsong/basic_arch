@@ -18,5 +18,6 @@
         <module>basic-arch-log</module>
         <module>basic-arch-serial</module>
         <module>basic-arch-web</module>
+        <module>basic-arch-ruoyi</module>
     </modules>
 </project>
