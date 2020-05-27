@@ -11,7 +11,6 @@ import com.gzs.learn.log.inf.search.SysPerfLogMetaSearchDto;
 import com.gzs.learn.log.inf.search.SysPerfLogSearchDto;
 import com.gzs.learn.log.po.SysPerfLogMetaPo;
 import com.gzs.learn.log.service.IPerfLogService;
-import com.gzs.learn.log.util.LogSystemUtil;
 
 @Component("dubboPerflogService")
 public class DubboPerfLogServiceImpl implements DubboPerfLogService {
@@ -22,23 +21,34 @@ public class DubboPerfLogServiceImpl implements DubboPerfLogService {
     @Override
     public boolean insertPerfLogMeta(SysPerfLogDto sysLogDto) {
         SysPerfLogMetaPo metaPo = new SysPerfLogMetaPo();
+        sysLogDto.setMethod(dealProxyMethod(sysLogDto.getMethod()));
         BeanUtil.copyProperties(sysLogDto, metaPo);
         return perfLogService.insertPerfLogMeta(metaPo);
     }
 
     @Override
     public boolean insertPerflog(SysPerfLogDto sysLogDto) {
+        sysLogDto.setMethod(dealProxyMethod(sysLogDto.getMethod()));
         return perfLogService.insertPerfLog(sysLogDto);
     }
 
     @Override
     public PageResponseDto<SysPerfLogDto> searchPerfLogs(SysPerfLogSearchDto searchDto) {
-        LogSystemUtil.setDefaultSearchRange(searchDto);
         return perfLogService.searchPerfLogs(searchDto);
     }
 
     @Override
     public PageResponseDto<SysPerfLogMetaDto> searchMetas(SysPerfLogMetaSearchDto searchDto) {
         return null;
+    }
+
+    private String dealProxyMethod(String methodName) {
+        String method = methodName;
+        int index = method.indexOf("$");
+        if (index != -1) {
+            // 代理类方法
+            method = method.substring(0, index);
+        }
+        return method;
     }
 }

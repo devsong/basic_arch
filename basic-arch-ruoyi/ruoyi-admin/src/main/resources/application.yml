@@ -35,6 +35,8 @@ user:
 
 # Spring配置
 spring:
+  profiles: 
+    active: druid
   # 模板引擎
   thymeleaf:
     mode: HTML
@@ -48,8 +50,7 @@ spring:
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
-  profiles: 
-    active: druid
+  
   # 文件上传
   servlet:
      multipart:
@@ -91,7 +92,7 @@ shiro:
     # 验证码开关
     captchaEnabled: true
     # 验证码类型 math 数组计算 char 字符
-    captchaType: math
+    captchaType: char
   cookie:
     # 设置Cookie的域名 默认空，即当前访问的域名
     domain: 

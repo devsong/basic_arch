@@ -1,9 +1,12 @@
 package com.ruoyi.system.service.impl;
 
 import java.util.List;
+
 import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.text.Convert;
@@ -120,7 +123,6 @@ public class SysConfigServiceImpl implements ISysConfigService {
     public int deleteConfigByIds(String ids) {
         int count = configMapper.deleteConfigByIds(Convert.toStrArray(ids));
         if (count > 0) {
-
             CacheUtils.removeAll(getCacheName());
         }
         return count;

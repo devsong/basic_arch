@@ -2,9 +2,11 @@ package com.ruoyi.system.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.domain.Ztree;
@@ -89,7 +91,6 @@ public class SysDeptServiceImpl implements ISysDeptService {
      * @return 树结构列表
      */
     public List<Ztree> initZtree(List<SysDept> deptList, List<String> roleDeptList) {
-
         List<Ztree> ztrees = new ArrayList<Ztree>();
         boolean isCheck = StringUtils.isNotNull(roleDeptList);
         for (SysDept dept : deptList) {
@@ -232,6 +233,7 @@ public class SysDeptServiceImpl implements ISysDeptService {
      * @param deptId 部门ID
      * @return 子部门数
      */
+    @Override
     public int selectNormalChildrenDeptById(Long deptId) {
         return deptMapper.selectNormalChildrenDeptById(deptId);
     }
