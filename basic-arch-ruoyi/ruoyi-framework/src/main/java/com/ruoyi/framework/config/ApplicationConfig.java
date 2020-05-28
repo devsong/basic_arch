@@ -1,10 +1,9 @@
 package com.ruoyi.framework.config;
 
-import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
-import com.ruoyi.common.constant.Constants;
+import lombok.Data;
 
 /**
  * 程序注解配置
@@ -12,10 +11,15 @@ import com.ruoyi.common.constant.Constants;
  * @author guanzhisong
  */
 @Configuration
-// 表示通过aop框架暴露该代理对象,AopContext能够访问
-@EnableAspectJAutoProxy(exposeProxy = true)
-// 指定要扫描的Mapper类的包的路径
-@MapperScan(Constants.SYSTEM_PREFIX + ".**.mapper")
+@ConfigurationProperties(prefix = "app")
+@Data
 public class ApplicationConfig {
+    // apollo appid
+    private Integer id;
 
+    private String product;
+
+    private String group;
+
+    private String app;
 }

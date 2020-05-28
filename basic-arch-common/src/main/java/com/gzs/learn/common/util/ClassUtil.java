@@ -17,6 +17,9 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Stream;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class ClassUtil {
     /** jar中的文件路径分隔符 */
     private static final char SLASH_CHAR = '/';
@@ -49,7 +52,7 @@ public class ClassUtil {
                     break;
                 default:
                     // 在某些WEB服务器中运行WAR包时，它不会像TOMCAT一样将WAR包解压为目录的，如JBOSS7，它是使用了一种叫VFS的协议
-                    System.out.println("unknown protocol " + protocol);
+                    log.info("unknown protocol {}", protocol);
                     break;
                 }
                 classList.addAll(childClassList);

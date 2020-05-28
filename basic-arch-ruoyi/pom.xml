@@ -38,6 +38,7 @@
         <commons.fileupload.version>1.3.3</commons.fileupload.version>
         <poi.version>3.17</poi.version>
         <velocity.version>1.7</velocity.version>
+        <basic-arch-version>1.0.0-SNAPSHOT</basic-arch-version>
     </properties>
 
     <!-- 依赖声明 -->

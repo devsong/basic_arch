@@ -1,4 +1,11 @@
 # 项目相关配置
+app:
+   id: 1000009
+   product: basic-arch-ruoyi
+   group: ruoyi-admin
+   app: ruoyi-web-app
+apollo:
+   meta: http://dev.meta.apollo.com
 ruoyi:
   # 名称
   name: RuoYi
@@ -16,7 +23,7 @@ ruoyi:
 # 开发环境配置
 server:
   # 服务器的HTTP端口，默认为80
-  port: 8080
+  port: 8081
   servlet:
     # 应用的访问路径
     context-path: /
