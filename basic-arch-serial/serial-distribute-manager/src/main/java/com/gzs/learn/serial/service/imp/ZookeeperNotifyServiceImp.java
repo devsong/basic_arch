@@ -5,7 +5,7 @@ import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.RetryNTimes;
 import org.apache.zookeeper.CreateMode;
 
-import com.alibaba.fastjson.JSON;
+import com.gzs.learn.common.util.JsonUtil;
 import com.gzs.learn.serial.SerialConsts;
 import com.gzs.learn.serial.inf.pk.SerialGroupPK;
 import com.gzs.learn.serial.service.ZookeeperNotifyService;
@@ -34,7 +34,7 @@ public class ZookeeperNotifyServiceImp implements ZookeeperNotifyService {
             String path = String.format(PATH_FORMAT, primaryKey.getName(), primaryKey.getVersion());
             if (this.client.checkExists().forPath(path) == null) {
                 this.client.create().creatingParentsIfNeeded().withMode(CreateMode.PERSISTENT).forPath(path,
-                        JSON.toJSONString(primaryKey).getBytes());
+                        JsonUtil.toJSONString(primaryKey).getBytes());
             }
             return true;
         } catch (Exception e) {

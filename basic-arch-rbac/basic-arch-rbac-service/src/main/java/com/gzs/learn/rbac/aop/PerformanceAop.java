@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import com.alibaba.fastjson.JSON;
 import com.google.common.base.Stopwatch;
 import com.gzs.learn.common.util.IpUtil;
 import com.gzs.learn.common.util.JsonUtil;
@@ -59,7 +58,7 @@ public class PerformanceAop {
         } catch (Exception e) {
             // 记录系统调用异常日志
             exception = e;
-            log.error("system error,method:{} args:{}", methodName, JSON.toJSONString(point.getArgs()), e);
+            log.error("system error,method:{} args:{}", methodName, JsonUtil.toJSONString(point.getArgs()), e);
             throw e;
         } finally {
             // 记录方法调用日志

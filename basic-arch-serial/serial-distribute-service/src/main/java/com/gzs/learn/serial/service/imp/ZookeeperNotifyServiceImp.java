@@ -16,8 +16,8 @@ import org.apache.zookeeper.CreateMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
+import com.gzs.learn.common.util.JsonUtil;
 import com.gzs.learn.serial.SerialConsts;
 import com.gzs.learn.serial.conf.SerialProperties;
 import com.gzs.learn.serial.domain.GroupListenerNode;
@@ -85,7 +85,7 @@ public class ZookeeperNotifyServiceImp implements ZookeeperNotifyService {
         public void childEvent(CuratorFramework client, PathChildrenCacheEvent event) throws Exception {
             if (filters.contains(event.getType())) {
                 byte[] data = event.getData().getData();
-                SerialGroupPK pk = JSON.parseObject(new String(data), SerialGroupPK.class);
+                SerialGroupPK pk = JsonUtil.parseObject(new String(data), SerialGroupPK.class);
                 switch (event.getType()) {
                 case CHILD_ADDED:
                     serialUpdateService.addQueue(new GroupListenerNode(pk.getName(), pk.getVersion(), 0L, NodeType.ADD));
