@@ -1,15 +1,15 @@
 package com.gzs.learn.common;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.annotation.JSONField;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gzs.learn.common.util.JsonUtil;
 
 import lombok.Data;
 
-import java.util.List;
-
 public class WorkAccountingUtil {
     public static void calAverageWorkAccounting(String json) {
-        WorkAccountResponse response = JSON.parseObject(json, WorkAccountResponse.class);
+        WorkAccountResponse response = JsonUtil.parseObject(json, WorkAccountResponse.class);
         int effectiveDays = 0;
         int totalMinute = 0;
         for (ReturnValueBo returnValueBo : response.getList()) {
@@ -51,19 +51,19 @@ public class WorkAccountingUtil {
 @Data
 class WorkAccountResponse {
 
-    @JSONField(name = "ReturnValue")
+    @JsonProperty("ReturnValue")
     List<ReturnValueBo> list;
 }
 
 @Data
 class ReturnValueBo {
 
-    @JSONField(name = "AccountingWork")
+    @JsonProperty("AccountingWork")
     private String accountingWork;
 
-    @JSONField(name = "Day")
+    @JsonProperty("Day")
     private String day;
 
-    @JSONField(name = "LeaveTheData")
+    @JsonProperty("LeaveTheData")
     private String leaveTheData;
 }
