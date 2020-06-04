@@ -4,6 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.gzs.learn.common.config.BaseDataSourceProperties;
 
 /**
  * druid 配置属性
@@ -15,7 +16,7 @@ import com.alibaba.druid.pool.DruidDataSource;
 public class DruidProperties extends BaseDataSourceProperties {
 
     public DruidDataSource dataSource(DruidDataSource datasource) {
-        datasource = (DruidDataSource) super.config(datasource);
+        datasource = super.config(datasource);
         return datasource;
     }
 }

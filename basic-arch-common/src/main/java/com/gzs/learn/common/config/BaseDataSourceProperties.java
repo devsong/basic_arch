@@ -45,7 +45,7 @@ public class BaseDataSourceProperties {
 
     protected String filters = "stat";
 
-    protected void config(DruidDataSource dataSource) {
+    protected DruidDataSource config(DruidDataSource dataSource) {
         dataSource.setDriverClassName(driverClassName);
         dataSource.setInitialSize(initialSize); // 定义初始连接数
         dataSource.setMinIdle(minIdle); // 最小空闲
@@ -71,5 +71,6 @@ public class BaseDataSourceProperties {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return dataSource;
     }
 }

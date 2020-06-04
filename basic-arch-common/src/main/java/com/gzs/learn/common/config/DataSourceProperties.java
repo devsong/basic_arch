@@ -26,7 +26,8 @@ public class DataSourceProperties extends BaseDataSourceProperties {
 
     protected String password;
 
-    public void config(DruidDataSource dataSource) {
+    @Override
+    public DruidDataSource config(DruidDataSource dataSource) {
         dataSource.setName(getName());
         if (getUrl().indexOf("?") == -1) {
             dataSource.setUrl(getUrl() + "?" + DEFAULT_MYSQL_CONNECT_PARAMS);
@@ -36,5 +37,6 @@ public class DataSourceProperties extends BaseDataSourceProperties {
         dataSource.setUsername(getUsername());
         dataSource.setPassword(getPassword());
         super.config(dataSource);
+        return dataSource;
     }
 }
