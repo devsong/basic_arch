@@ -14,7 +14,7 @@
     <url>http://www.ruoyi.vip</url>
     <description>若依管理系统</description>
     <packaging>pom</packaging>
-    
+
     <properties>
         <ruoyi.version>4.2.0</ruoyi.version>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -217,7 +217,7 @@
         <module>ruoyi-generator</module>
         <module>ruoyi-common</module>
     </modules>
-   
+
 
 
     <dependencies>
@@ -225,6 +225,7 @@
     </dependencies>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
