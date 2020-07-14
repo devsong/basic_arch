@@ -7,12 +7,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.gzs.learn.common.config.DataSourceProperties;
+import com.gzs.learn.serial.ISerialConst;
 
 import tk.mybatis.spring.annotation.MapperScan;
 
 @Configuration
 @EnableTransactionManagement(order = 2, proxyTargetClass = true)
-@MapperScan(basePackages = { "com.gzs.learn.serial.repository" })
+@MapperScan(basePackages = { ISerialConst.SYSTEM_PACKAGE_PREFIX + ".repository" })
 public class MybatisConfig {
     @Autowired
     DataSourceProperties dataSourceProperties;

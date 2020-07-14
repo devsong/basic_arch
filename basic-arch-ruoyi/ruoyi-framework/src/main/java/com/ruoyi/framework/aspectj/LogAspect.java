@@ -74,7 +74,6 @@ public class LogAspect {
             // 获取当前的用户
             SysUser currentUser = ShiroUtils.getSysUser();
 
-            // *========数据库日志=========*//
             SysOperLog operLog = new SysOperLog();
             operLog.setStatus(BusinessStatus.SUCCESS.ordinal());
             // 请求的地址

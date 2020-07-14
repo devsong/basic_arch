@@ -6,7 +6,7 @@ import org.apache.curator.retry.RetryNTimes;
 import org.apache.zookeeper.CreateMode;
 
 import com.gzs.learn.common.util.JsonUtil;
-import com.gzs.learn.serial.SerialConsts;
+import com.gzs.learn.serial.ISerialConst;
 import com.gzs.learn.serial.inf.pk.SerialGroupPK;
 import com.gzs.learn.serial.service.ZookeeperNotifyService;
 
@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class ZookeeperNotifyServiceImp implements ZookeeperNotifyService {
-    private final static String PATH_FORMAT = SerialConsts.GROUP + "/%s_%d";
+    private final static String PATH_FORMAT = ISerialConst.GROUP + "/%s_%d";
     /**
      * ZooKeeper客户端
      */

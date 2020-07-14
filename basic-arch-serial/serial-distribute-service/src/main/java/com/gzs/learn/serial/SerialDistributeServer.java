@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @EnableApolloConfig
 @EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class })
-@ComponentScan(basePackages = "com.gzs.learn")
+@ComponentScan(basePackages = ISerialConst.SYSTEM_PACKAGE_PREFIX)
 @ImportResource("classpath:/META-INF/applicationContext.xml")
 @SpringBootApplication
 @Slf4j

@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
 import com.gzs.learn.common.util.JsonUtil;
-import com.gzs.learn.serial.SerialConsts;
+import com.gzs.learn.serial.ISerialConst;
 import com.gzs.learn.serial.conf.SerialProperties;
 import com.gzs.learn.serial.domain.GroupListenerNode;
 import com.gzs.learn.serial.inf.pk.SerialGroupPK;
@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class ZookeeperNotifyServiceImp implements ZookeeperNotifyService {
     private final static String PATH = "com.gzs.learn.serial";
-    private final static String PARTITION_FORMAT = SerialConsts.PARTITION + "/%s,%d,%d";
+    private final static String PARTITION_FORMAT = ISerialConst.PARTITION + "/%s,%d,%d";
     private String notifyZk;
     /**
      * ZooKeeper客户端
@@ -59,7 +59,7 @@ public class ZookeeperNotifyServiceImp implements ZookeeperNotifyService {
     @SuppressWarnings("deprecation")
     @PostConstruct
     public void init() throws Exception {
-        this.groupChildrenCache = new PathChildrenCache(client, SerialConsts.GROUP, true);
+        this.groupChildrenCache = new PathChildrenCache(client, ISerialConst.GROUP, true);
         groupChildrenCache.getListenable().addListener(serialGroupListener);
         groupChildrenCache.start(StartMode.NORMAL);
     }

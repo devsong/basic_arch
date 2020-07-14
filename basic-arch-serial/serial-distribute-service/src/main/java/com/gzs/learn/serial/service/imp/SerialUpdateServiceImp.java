@@ -5,7 +5,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.gzs.learn.serial.common.SerialConst;
+import com.gzs.learn.serial.common.SerialGlobal;
 import com.gzs.learn.serial.domain.GroupListenerNode;
 import com.gzs.learn.serial.service.SerialDistributeService;
 import com.gzs.learn.serial.service.SerialManagerService;
@@ -29,7 +29,7 @@ public class SerialUpdateServiceImp implements SerialUpdateService, Runnable {
 
     @PostConstruct
     public void init() {
-        SerialConst.POOLS.submit(this);
+        SerialGlobal.POOLS.submit(this);
         log.info("init listener success");
     }
 
