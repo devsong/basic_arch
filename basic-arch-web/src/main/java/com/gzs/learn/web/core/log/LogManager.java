@@ -3,7 +3,7 @@ package com.gzs.learn.web.core.log;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import com.gzs.learn.web.common.constant.factory.NamedThreadFactory;
+import com.gzs.learn.common.factory.NamedThreadFactory;
 
 /**
  * 日志管理器

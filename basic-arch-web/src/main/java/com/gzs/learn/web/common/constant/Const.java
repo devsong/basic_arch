@@ -3,7 +3,8 @@ package com.gzs.learn.web.common.constant;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import com.gzs.learn.web.common.constant.factory.NamedThreadFactory;
+import com.gzs.learn.common.factory.NamedThreadFactory;
+import com.gzs.learn.inf.GlobalConstant;
 
 /**
  * 系统常量
@@ -78,5 +79,7 @@ public interface Const {
     /**
      * service 横切点
      */
-    String SERVICE_POINTCUT = "com.gzs.learn.web.modular.*.service.*";
+    String SERVICE_POINTCUT = GlobalConstant.SYSTEM_PACKAGE_PREFIX + ".web.modular.*.service.*";
+
+    String EXECUTION_AOP_PREFIX = GlobalConstant.SYSTEM_PACKAGE_PREFIX + ".web";
 }

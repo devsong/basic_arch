@@ -15,6 +15,10 @@ import com.gzs.learn.log.inf.search.UserOperationLogSearchDto;
 import com.gzs.learn.web.common.constant.Const;
 import com.gzs.learn.web.modular.biz.service.ISystemLogService;
 
+/**
+ * 系统日志保存采取异步写入的方式保存
+ * @author guanzhisong
+ */
 @Component
 public class SystemLogServiceImpl implements ISystemLogService {
     @Autowired
@@ -39,7 +43,10 @@ public class SystemLogServiceImpl implements ISystemLogService {
 
     @Override
     public boolean saveLoginLog(UserLoginLogDto loginLog) {
-        return dubboUserLoginLogService.insertUserLoginLog(loginLog);
+        Const.SYSTEM_POOL.execute(() -> {
+            dubboUserLoginLogService.insertUserLoginLog(loginLog);
+        });
+        return true;
     }
 
     @Override
@@ -55,7 +62,10 @@ public class SystemLogServiceImpl implements ISystemLogService {
 
     @Override
     public boolean saveOperationLog(UserOperationLogDto operationLog) {
-        return dubboUserOperationLogService.insertOperationLog(operationLog);
+        Const.SYSTEM_POOL.execute(() -> {
+            dubboUserOperationLogService.insertOperationLog(operationLog);
+        });
+        return true;
     }
 
     @Override

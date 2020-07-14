@@ -9,10 +9,11 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.gzs.learn.web.common.annotion.log.BussinessLog;
+import com.gzs.learn.web.common.constant.Const;
 import com.gzs.learn.web.common.constant.dictmap.base.AbstractDictMap;
 import com.gzs.learn.web.common.constant.dictmap.factory.DictMapFactory;
 import com.gzs.learn.web.common.exception.BussinessException;
@@ -32,8 +33,11 @@ import lombok.extern.slf4j.Slf4j;
 @Aspect
 @Component
 @Slf4j
-public class LogAop implements Ordered {
-    @Pointcut(value = "@annotation(com.gzs.learn.web.common.annotion.log.BussinessLog)")
+@Order(AopOrder.LOG_ORDER)
+public class LogAop {
+    private static final String EXECUTION_AOP = Const.EXECUTION_AOP_PREFIX + ".common.annotion.log.BussinessLog";
+
+    @Pointcut(value = "@annotation(" + EXECUTION_AOP + ")")
     public void cutService() {
     }
 
@@ -101,10 +105,5 @@ public class LogAop implements Ordered {
             msg = Contrast.parseMutiKey(dictMap, key, parameters);
         }
         LogManager.me().executeLog(LogTaskFactory.bussinessLog(user.getId(), bussinessName, className, methodName, msg));
-    }
-
-    @Override
-    public int getOrder() {
-        return AopOrder.LOG_ORDER;
     }
 }

@@ -4,7 +4,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.gzs.learn.web.common.controller.BaseController;
@@ -15,7 +15,8 @@ import com.gzs.learn.web.core.util.HttpSessionHolder;
  */
 @Aspect
 @Component
-public class SessionAop extends BaseController implements Ordered {
+@Order(AopOrder.SESSION_ORDER)
+public class SessionAop extends BaseController {
     @Pointcut("within(@org.springframework.stereotype.Controller *)")
     public void cutService() {
     }
@@ -28,10 +29,5 @@ public class SessionAop extends BaseController implements Ordered {
         } finally {
             HttpSessionHolder.remove();
         }
-    }
-
-    @Override
-    public int getOrder() {
-        return AopOrder.SESSION_ORDER;
     }
 }

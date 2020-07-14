@@ -17,7 +17,9 @@ import com.alibaba.fastjson.JSON;
 import com.google.common.base.Stopwatch;
 import com.gzs.learn.common.util.IpUtil;
 import com.gzs.learn.common.util.JsonUtil;
+import com.gzs.learn.inf.PageResponseDto;
 import com.gzs.learn.log.ILogConstant;
+import com.gzs.learn.log.LogSystemConstant;
 import com.gzs.learn.log.config.LogProperties;
 import com.gzs.learn.log.enums.SysPerfLogDurationEnum;
 import com.gzs.learn.log.inf.SysPerfLogDto;
@@ -30,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class PerformanceAop {
+    private static final String EXECUTION_AOP = LogSystemConstant.LOG_SYSTEM_PREFIX + ".dubbo.*Impl.*(..)";
 
     @Autowired
     private LogProperties logProperties;
@@ -37,7 +40,7 @@ public class PerformanceAop {
     @Autowired
     private IPerfLogService perfLogService;
 
-    @Pointcut("execution(* com.gzs.learn.log.dubbo.*Impl.*(..))")
+    @Pointcut("execution(* " + EXECUTION_AOP + ")")
     public void log4Perf() {
 
     }
@@ -45,7 +48,7 @@ public class PerformanceAop {
     @Around("log4Perf()")
     public Object aroundMethod(ProceedingJoinPoint point) throws Throwable {
         // 访问目标方法的参数：
-        Stopwatch stopwatch = Stopwatch.createStarted();
+
         MethodSignature sig = (MethodSignature) point.getSignature();
         Object target = point.getTarget();
         Method currentMethod = target.getClass().getMethod(sig.getName(), sig.getParameterTypes());
@@ -54,8 +57,12 @@ public class PerformanceAop {
         Object[] args = point.getArgs();
         Object returnValue = null;
         Exception exception = null;
+        long elapsed = 0;
+        Stopwatch stopwatch = Stopwatch.createStarted();
         try {
+
             returnValue = point.proceed(args);
+
         } catch (Exception e) {
             // 记录系统调用异常日志
             exception = e;
@@ -64,7 +71,11 @@ public class PerformanceAop {
         } finally {
             // 记录方法调用日志
             stopwatch.stop();
-            long elapsed = stopwatch.elapsed(TimeUnit.MILLISECONDS);
+            elapsed = stopwatch.elapsed(TimeUnit.MILLISECONDS);
+            if (returnValue instanceof PageResponseDto) {
+                ((PageResponseDto<?>) returnValue).setElapsed(elapsed);
+                ((PageResponseDto<?>) returnValue).setServerIp(IpUtil.getLocalIp());
+            }
             recordPerfLog(clazz, methodName, args, returnValue, exception, elapsed);
         }
         return returnValue;

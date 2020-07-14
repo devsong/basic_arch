@@ -7,7 +7,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.gzs.learn.log.inf.search.PageSearchRequestDto;
@@ -20,7 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 @Aspect
 @Component
 @Slf4j
-public class ParamAop implements Ordered {
+@Order(AopOrder.PARAM_SET_ORDER)
+public class ParamAop {
     @Pointcut("within(@org.springframework.stereotype.Controller *)")
     public void cutService() {
     }
@@ -55,10 +56,5 @@ public class ParamAop implements Ordered {
         }
         result = point.proceed();
         return result;
-    }
-
-    @Override
-    public int getOrder() {
-        return AopOrder.PARAM_SET_ORDER;
     }
 }

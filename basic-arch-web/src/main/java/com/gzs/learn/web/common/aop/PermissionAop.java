@@ -24,10 +24,11 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.gzs.learn.web.common.annotion.Permission;
+import com.gzs.learn.web.common.constant.Const;
 import com.gzs.learn.web.core.shiro.check.PermissionCheckManager;
 
 /**
@@ -35,8 +36,11 @@ import com.gzs.learn.web.core.shiro.check.PermissionCheckManager;
  */
 @Aspect
 @Component
-public class PermissionAop implements Ordered {
-    @Pointcut(value = "@annotation(com.gzs.learn.web.common.annotion.Permission)")
+@Order(AopOrder.PERMISSION_ORDER)
+public class PermissionAop {
+    private static final String EXECUTION_AOP = Const.EXECUTION_AOP_PREFIX + ".common.annotion.Permission";
+
+    @Pointcut(value = "@annotation(" + EXECUTION_AOP + ")")
     private void cutPermission() {
 
     }
@@ -62,10 +66,4 @@ public class PermissionAop implements Ordered {
         }
         throw new NoPermissionException();
     }
-
-    @Override
-    public int getOrder() {
-        return AopOrder.PERMISSION_ORDER;
-    }
-
 }

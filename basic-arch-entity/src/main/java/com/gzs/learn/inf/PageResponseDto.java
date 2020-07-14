@@ -17,24 +17,60 @@ public class PageResponseDto<T> implements Serializable {
      * 
      */
     private static final long serialVersionUID = 1L;
-    // 返回值
+    /**
+     * 返回值
+     */
     @Builder.Default
     protected int code = 0;
-    // 返回描述信息
+    /**
+     *  返回描述信息
+     */
     protected String msg;
-    // 返回对象实体
+    /**
+     *  返回对象实体
+     */
     protected List<T> data;
-    // 分页数据对象
+    /**
+     *  分页数据对象
+     */
     protected PageResponse page;
 
+    /**
+     * 接口耗时
+     */
+    protected long elapsed;
+
+    /**
+     * 后端服务器IP
+     */
+    protected String serverIp;
+
     public static class PageResponseDtoBuilder<T> {
-        // 返回值
+        /**
+         *  返回值
+         */
         protected int code = 0;
-        // 返回描述信息
+        /**
+         *  返回描述信息
+         */
         protected String msg;
-        // 返回对象实体
+
+        /**
+         * 接口耗时
+         */
+        protected long elapsed;
+
+        /**
+         * 后端服务器IP
+         */
+        protected String serverIp;
+        /**
+         *  返回对象实体
+         */
         protected List<T> data;
-        // 分页数据对象
+        /**
+         *  分页数据对象
+         */
         protected PageResponse page;
     }
 

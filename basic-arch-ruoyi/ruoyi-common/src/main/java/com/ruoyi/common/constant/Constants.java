@@ -1,98 +1,108 @@
 package com.ruoyi.common.constant;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import com.ruoyi.common.config.thread.NamedThreadFactory;
+
 /**
  * 通用常量信息
  * 
  * @author guanzhisong
  */
-public class Constants {
+public interface Constants {
     /**
      * 系统名称
      */
-    public static final String SYSTEM_NAME = "若依后台管理系统";
+    String SYSTEM_NAME = "若依后台管理系统";
 
     /**
      * 系统包名前缀
      */
-    public static final String SYSTEM_PREFIX = "com.ruoyi";
+    String SYSTEM_PREFIX = "com.ruoyi";
 
     /**
      * UTF-8 字符集
      */
-    public static final String UTF8 = "UTF-8";
+    String UTF8 = "UTF-8";
 
     /**
      * 通用成功标识
      */
-    public static final String SUCCESS = "0";
+    String SUCCESS = "0";
 
     /**
      * 通用失败标识
      */
-    public static final String FAIL = "1";
+    String FAIL = "1";
 
     /**
      * 登录成功
      */
-    public static final String LOGIN_SUCCESS = "Success";
+    String LOGIN_SUCCESS = "Success";
 
     /**
      * 注销
      */
-    public static final String LOGOUT = "Logout";
+    String LOGOUT = "Logout";
 
     /**
      * 注册
      */
-    public static final String REGISTER = "Register";
+    String REGISTER = "Register";
 
     /**
      * 登录失败
      */
-    public static final String LOGIN_FAIL = "Error";
+    String LOGIN_FAIL = "Error";
 
     /**
      * 当前记录起始索引
      */
-    public static final String PAGE_NUM = "pageNum";
+    String PAGE_NUM = "pageNum";
 
     /**
      * 每页显示记录数
      */
-    public static final String PAGE_SIZE = "pageSize";
+    String PAGE_SIZE = "pageSize";
 
     /**
      * 排序列
      */
-    public static final String ORDER_BY_COLUMN = "orderByColumn";
+    String ORDER_BY_COLUMN = "orderByColumn";
 
     /**
      * 排序的方向 "desc" 或者 "asc".
      */
-    public static final String IS_ASC = "isAsc";
+    String IS_ASC = "isAsc";
 
     /**
      * 参数管理 cache name
      */
-    public static final String SYS_CONFIG_CACHE = "sys-config";
+    String SYS_CONFIG_CACHE = "sys-config";
 
     /**
      * 参数管理 cache key
      */
-    public static final String SYS_CONFIG_KEY = "sys_config:";
+    String SYS_CONFIG_KEY = "sys_config:";
 
     /**
      * 字典管理 cache name
      */
-    public static final String SYS_DICT_CACHE = "sys-dict";
+    String SYS_DICT_CACHE = "sys-dict";
 
     /**
      * 字典管理 cache key
      */
-    public static final String SYS_DICT_KEY = "sys_dict:";
+    String SYS_DICT_KEY = "sys_dict:";
 
     /**
      * 资源映射路径 前缀
      */
-    public static final String RESOURCE_PREFIX = "/profile";
+    String RESOURCE_PREFIX = "/profile";
+
+    /**
+     * 系统公共的线程池,用于执行一些轻量级的异步任务
+     */
+    ExecutorService THREAD_POOL = Executors.newFixedThreadPool(50, new NamedThreadFactory("ruoyi-system"));
 }

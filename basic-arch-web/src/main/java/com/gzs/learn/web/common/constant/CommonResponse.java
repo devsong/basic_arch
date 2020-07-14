@@ -12,6 +12,16 @@ import lombok.EqualsAndHashCode;
 public class CommonResponse<T> extends Tip {
     private T data;
 
+    /**
+     * 接口耗时
+     */
+    private long elapsed;
+
+    /**
+     * 后端服务器IP
+     */
+    private String serverIp;
+
     public static <T> CommonResponse<T> build(Integer code, String msg, T data) {
         return new CommonResponse<>(code, msg, data);
     }

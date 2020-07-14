@@ -9,7 +9,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Sets;
@@ -25,8 +25,9 @@ import com.gzs.learn.web.core.support.HttpKit;
  */
 @Aspect
 @Component
+@Order(AopOrder.SESSION_TIMEOUT_ORDER)
 @ConditionalOnProperty(prefix = "guns", name = "session-open", havingValue = "true")
-public class SessionTimeoutIAop extends BaseController implements Ordered {
+public class SessionTimeoutIAop extends BaseController {
     @Value("${ignorePath:/kaptcha,/login,/global/sessionError}")
     private String ignorePath;
 
@@ -47,10 +48,5 @@ public class SessionTimeoutIAop extends BaseController implements Ordered {
             throw new InvalidSessionException();
         }
         return point.proceed();
-    }
-
-    @Override
-    public int getOrder() {
-        return AopOrder.SESSION_TIMEOUT_ORDER;
     }
 }

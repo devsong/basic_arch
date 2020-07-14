@@ -10,6 +10,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import com.gzs.learn.log.LogSystemConstant;
 import com.gzs.learn.log.inf.search.PageSearchRequestDto;
 
 import lombok.extern.slf4j.Slf4j;
@@ -22,8 +23,9 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class ParamAop {
+    private static final String EXECUTION_AOP = LogSystemConstant.LOG_SYSTEM_PREFIX + ".dubbo.*Impl.*(..)";
 
-    @Pointcut("execution(* com.gzs.learn.log.dubbo.*Impl.*(..))")
+    @Pointcut("execution(* " + EXECUTION_AOP + ")")
     public void cutService() {
     }
 

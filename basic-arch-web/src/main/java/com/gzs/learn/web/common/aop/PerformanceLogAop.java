@@ -15,9 +15,12 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
+import com.gzs.learn.common.util.IpUtil;
 import com.gzs.learn.common.util.JsonUtil;
 import com.gzs.learn.log.enums.SysPerfLogDurationEnum;
 import com.gzs.learn.log.inf.SysPerfLogDto;
+import com.gzs.learn.web.common.constant.CommonResponse;
+import com.gzs.learn.web.common.constant.Const;
 import com.gzs.learn.web.config.properties.GunsProperties;
 import com.gzs.learn.web.modular.biz.service.ISystemLogService;
 
@@ -27,6 +30,8 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class PerformanceLogAop {
+    private static final String EXECUTION_AOP = Const.EXECUTION_AOP_PREFIX + ".common.annotion.PerformanceAnnotation";
+
     @Autowired
     private GunsProperties gunsProperties;
 
@@ -37,41 +42,30 @@ public class PerformanceLogAop {
      * 对所有controller切片 (方法说明描述)
      */
     @Pointcut("@annotation(org.springframework.web.bind.annotation.ResponseBody)")
-    public void log4Controller() {
+    public void log4Performance() {
     }
 
-    @Around("log4Controller()")
+    @Around("log4Performance()")
     public Object aroundController(ProceedingJoinPoint point) throws Throwable {
-        Stopwatch stopwatch = Stopwatch.createStarted();
-        Object[] args = point.getArgs();
-        Object returnValue = null;
-        Exception exception = null;
-        boolean success = true;
-        try {
-            returnValue = point.proceed(args);
-        } catch (Exception e) {
-            exception = e;
-            success = false;
-            throw e;
-        } finally {
-            stopwatch.stop();
-            long cost = stopwatch.elapsed(TimeUnit.MICROSECONDS);
-            postProcess(point, success, returnValue, exception, cost);
-        }
-        return returnValue;
+        return log4Performance(point);
     }
 
-    @Pointcut("@annotation(com.gzs.learn.web.common.annotion.PerformanceAnnotation)")
+    @Pointcut("@annotation(" + EXECUTION_AOP + ")")
     public void log4Perf() {
     }
 
     @Around("log4Perf()")
     public Object aroundMethod(ProceedingJoinPoint point) throws Throwable {
-        Stopwatch stopwatch = Stopwatch.createStarted();
+        return log4Performance(point);
+    }
+
+    private Object log4Performance(ProceedingJoinPoint point) throws Throwable, Exception {
         Object[] args = point.getArgs();
         Object returnValue = null;
         Exception exception = null;
         boolean success = true;
+        long elapsed = 0;
+        Stopwatch stopwatch = Stopwatch.createStarted();
         try {
             returnValue = point.proceed(args);
         } catch (Exception e) {
@@ -80,8 +74,12 @@ public class PerformanceLogAop {
             throw e;
         } finally {
             stopwatch.stop();
-            long cost = stopwatch.elapsed(TimeUnit.MICROSECONDS);
-            postProcess(point, success, returnValue, exception, cost);
+            elapsed = stopwatch.elapsed(TimeUnit.MICROSECONDS);
+            if (returnValue instanceof CommonResponse) {
+                ((CommonResponse<?>) returnValue).setElapsed(elapsed);
+                ((CommonResponse<?>) returnValue).setServerIp(IpUtil.getLocalIp());
+            }
+            postProcess(point, success, returnValue, exception, elapsed);
         }
         return returnValue;
     }
