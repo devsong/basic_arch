@@ -16,31 +16,10 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class IpUtil {
-    private static String serverIp;
-    private static String serverName;
-
-    static {
-        try {
-            serverIp = java.net.InetAddress.getLocalHost().getHostAddress().toString();
-            serverName = java.net.InetAddress.getLocalHost().getHostName().toString();
-        } catch (Throwable e) {
-            serverIp = "";
-            serverName = "";
-        }
-    }
-
-    public static String getServerIp() {
-        return serverIp;
-    }
-
-    public static String getServerName() {
-        return serverName;
-    }
-
     public static String getIpAdrress(HttpServletRequest request) {
         String xForwardIp = request.getHeader("X-Forwarded-For");
         if (StringUtils.isNotEmpty(xForwardIp) && !"unKnown".equalsIgnoreCase(xForwardIp)) {
-            // 多次反向代理后会有多个ip值，第一个ip才是真实ip
+            // Nginx多次反向代理后会有多个ip值，第一个ip才是真实ip
             int index = xForwardIp.indexOf(",");
             if (index != -1) {
                 return xForwardIp.substring(0, index);
@@ -75,7 +54,6 @@ public class IpUtil {
         String ip;
         try {
             List<String> ipList = getHostAddress(null);
-            // default the first
             ip = (!ipList.isEmpty()) ? ipList.get(0) : "";
         } catch (Exception ex) {
             ip = "";
