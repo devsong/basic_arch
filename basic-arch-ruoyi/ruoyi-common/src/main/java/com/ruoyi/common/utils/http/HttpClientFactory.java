@@ -40,7 +40,7 @@ public class HttpClientFactory {
     private static CloseableHttpClient defaultClient;
     private static final int CONN_PER_ROUTE = 256;
     private static final int CONN_MAX_TOTAL = 1024;
-    private static final String DEFAUL_USER_AGENT = "elong-hotel-mis";
+    private static final String DEFAUL_USER_AGENT = "http-client";
     private static final int DEFAULT_RETRY = 3;
     private static final int KEEPALIVE = 30 * 1000;
     private static final Logger log = LoggerFactory.getLogger(HttpClientFactory.class);

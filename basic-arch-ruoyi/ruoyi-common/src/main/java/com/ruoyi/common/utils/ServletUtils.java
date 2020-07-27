@@ -1,12 +1,15 @@
 package com.ruoyi.common.utils;
 
-import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
 import com.ruoyi.common.core.text.Convert;
 
 /**
@@ -77,11 +80,11 @@ public class ServletUtils {
      * @return null
      */
     public static String renderString(HttpServletResponse response, String string) {
-        try {
+        try (PrintWriter writer = response.getWriter()) {
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
-            response.getWriter().print(string);
-        } catch (IOException e) {
+            writer.print(string);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
