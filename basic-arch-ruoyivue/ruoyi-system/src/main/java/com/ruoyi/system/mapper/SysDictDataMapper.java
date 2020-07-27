@@ -9,8 +9,7 @@ import com.ruoyi.common.core.domain.entity.SysDictData;
  * 
  * @author guanzhisong
  */
-public interface SysDictDataMapper
-{
+public interface SysDictDataMapper {
     /**
      * 根据条件分页查询字典数据
      * 

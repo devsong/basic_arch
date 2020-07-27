@@ -6,8 +6,7 @@ package com.ruoyi.common.enums;
  * @author guanzhisong
  *
  */
-public enum BusinessStatus
-{
+public enum BusinessStatus {
     /**
      * 成功
      */

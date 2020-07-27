@@ -5,8 +5,7 @@ package com.ruoyi.common.enums;
  * 
  * @author guanzhisong
  */
-public enum OperatorType
-{
+public enum OperatorType {
     /**
      * 其它
      */

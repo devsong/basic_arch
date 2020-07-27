@@ -5,8 +5,7 @@ package com.ruoyi.common.constant;
  * 
  * @author guanzhisong
  */
-public class UserConstants
-{
+public class UserConstants {
     /**
      * 平台内系统用户的唯一标志
      */

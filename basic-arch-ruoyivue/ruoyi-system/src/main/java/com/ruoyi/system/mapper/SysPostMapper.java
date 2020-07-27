@@ -8,8 +8,7 @@ import com.ruoyi.system.domain.SysPost;
  * 
  * @author guanzhisong
  */
-public interface SysPostMapper
-{
+public interface SysPostMapper {
     /**
      * 查询岗位数据集合
      * 

@@ -9,8 +9,7 @@ import com.ruoyi.common.core.domain.entity.SysDept;
  * 
  * @author guanzhisong
  */
-public interface SysDeptMapper
-{
+public interface SysDeptMapper {
     /**
      * 查询部门管理数据
      * 

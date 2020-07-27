@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,12 +19,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 @Configuration
 @EnableCaching
-public class RedisConfig extends CachingConfigurerSupport
-{
+public class RedisConfig extends CachingConfigurerSupport {
     @Bean
-    @SuppressWarnings(value = { "unchecked", "rawtypes" })
-    public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory connectionFactory)
-    {
+    @SuppressWarnings(value = { "unchecked", "rawtypes", "deprecation" })
+    public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<Object, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
 

@@ -20,8 +20,7 @@ import ${packageName}.service.I${ClassName}Service;
  * @date ${datetime}
  */
 @Service
-public class ${ClassName}ServiceImpl implements I${ClassName}Service 
-{
+public class ${ClassName}ServiceImpl implements I${ClassName}Service {
     @Autowired
     private ${ClassName}Mapper ${className}Mapper;
 
@@ -32,8 +31,7 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service
      * @return ${functionName}
      */
     @Override
-    public ${ClassName} select${ClassName}ById(${pkColumn.javaType} ${pkColumn.javaField})
-    {
+    public ${ClassName} select${ClassName}ById(${pkColumn.javaType} ${pkColumn.javaField}){
         return ${className}Mapper.select${ClassName}ById(${pkColumn.javaField});
     }
 
@@ -44,8 +42,7 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service
      * @return ${functionName}
      */
     @Override
-    public List<${ClassName}> select${ClassName}List(${ClassName} ${className})
-    {
+    public List<${ClassName}> select${ClassName}List(${ClassName} ${className}){
         return ${className}Mapper.select${ClassName}List(${className});
     }
 
@@ -56,8 +53,7 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service
      * @return 结果
      */
     @Override
-    public int insert${ClassName}(${ClassName} ${className})
-    {
+    public int insert${ClassName}(${ClassName} ${className}){
 #foreach ($column in $columns)
 #if($column.javaField == 'createTime')
         ${className}.setCreateTime(DateUtils.getNowDate());
@@ -73,8 +69,7 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service
      * @return 结果
      */
     @Override
-    public int update${ClassName}(${ClassName} ${className})
-    {
+    public int update${ClassName}(${ClassName} ${className}){
 #foreach ($column in $columns)
 #if($column.javaField == 'updateTime')
         ${className}.setUpdateTime(DateUtils.getNowDate());
@@ -90,8 +85,7 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service
      * @return 结果
      */
     @Override
-    public int delete${ClassName}ByIds(${pkColumn.javaType}[] ${pkColumn.javaField}s)
-    {
+    public int delete${ClassName}ByIds(${pkColumn.javaType}[] ${pkColumn.javaField}s){
         return ${className}Mapper.delete${ClassName}ByIds(${pkColumn.javaField}s);
     }
 
@@ -102,8 +96,7 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service
      * @return 结果
      */
     @Override
-    public int delete${ClassName}ById(${pkColumn.javaType} ${pkColumn.javaField})
-    {
+    public int delete${ClassName}ById(${pkColumn.javaType} ${pkColumn.javaField}){
         return ${className}Mapper.delete${ClassName}ById(${pkColumn.javaField});
     }
 }

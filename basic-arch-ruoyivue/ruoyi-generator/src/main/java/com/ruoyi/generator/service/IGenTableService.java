@@ -9,8 +9,7 @@ import com.ruoyi.generator.domain.GenTable;
  * 
  * @author guanzhisong
  */
-public interface IGenTableService
-{
+public interface IGenTableService {
     /**
      * 查询业务列表
      * 

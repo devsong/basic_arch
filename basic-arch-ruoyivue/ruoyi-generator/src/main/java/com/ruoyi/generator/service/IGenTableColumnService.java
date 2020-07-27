@@ -8,8 +8,7 @@ import com.ruoyi.generator.domain.GenTableColumn;
  * 
  * @author guanzhisong
  */
-public interface IGenTableColumnService
-{
+public interface IGenTableColumnService {
     /**
      * 查询业务字段列表
      * 

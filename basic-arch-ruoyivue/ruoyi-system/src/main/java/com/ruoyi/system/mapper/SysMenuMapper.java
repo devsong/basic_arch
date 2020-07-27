@@ -9,8 +9,7 @@ import com.ruoyi.common.core.domain.entity.SysMenu;
  *
  * @author guanzhisong
  */
-public interface SysMenuMapper
-{
+public interface SysMenuMapper {
     /**
      * 查询系统菜单列表
      *

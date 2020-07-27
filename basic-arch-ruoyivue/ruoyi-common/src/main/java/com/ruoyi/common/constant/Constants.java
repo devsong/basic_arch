@@ -5,8 +5,7 @@ package com.ruoyi.common.constant;
  * 
  * @author guanzhisong
  */
-public class Constants
-{
+public class Constants {
     /**
      * UTF-8 字符集
      */

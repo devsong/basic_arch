@@ -8,8 +8,7 @@ import com.ruoyi.quartz.domain.SysJob;
  * 
  * @author guanzhisong
  */
-public interface SysJobMapper
-{
+public interface SysJobMapper {
     /**
      * 查询调度任务日志集合
      * 

@@ -5,8 +5,7 @@ package com.ruoyi.common.constant;
  * 
  * @author guanzhisong
  */
-public class HttpStatus
-{
+public class HttpStatus {
     /**
      * 操作成功
      */

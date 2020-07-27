@@ -8,8 +8,7 @@ import com.ruoyi.system.domain.SysOperLog;
  * 
  * @author guanzhisong
  */
-public interface ISysOperLogService
-{
+public interface ISysOperLogService {
     /**
      * 新增操作日志
      * 

@@ -8,8 +8,7 @@ import com.ruoyi.system.domain.SysConfig;
  * 
  * @author guanzhisong
  */
-public interface ISysConfigService
-{
+public interface ISysConfigService {
     /**
      * 查询参数配置信息
      * 

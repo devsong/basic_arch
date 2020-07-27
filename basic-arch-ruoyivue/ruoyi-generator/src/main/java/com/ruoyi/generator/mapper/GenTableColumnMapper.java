@@ -8,8 +8,7 @@ import com.ruoyi.generator.domain.GenTableColumn;
  * 
  * @author guanzhisong
  */
-public interface GenTableColumnMapper
-{
+public interface GenTableColumnMapper {
     /**
      * 根据表名称查询列信息
      * 
@@ -17,7 +16,7 @@ public interface GenTableColumnMapper
      * @return 列信息
      */
     public List<GenTableColumn> selectDbTableColumnsByName(String tableName);
-    
+
     /**
      * 查询业务字段列表
      * 

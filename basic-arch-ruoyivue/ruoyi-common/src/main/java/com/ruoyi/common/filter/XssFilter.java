@@ -20,8 +20,7 @@ import com.ruoyi.common.utils.StringUtils;
  * 
  * @author guanzhisong
  */
-public class XssFilter implements Filter
-{
+public class XssFilter implements Filter {
     /**
      * 排除链接
      */
@@ -33,32 +32,25 @@ public class XssFilter implements Filter
     public boolean enabled = false;
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException
-    {
+    public void init(FilterConfig filterConfig) throws ServletException {
         String tempExcludes = filterConfig.getInitParameter("excludes");
         String tempEnabled = filterConfig.getInitParameter("enabled");
-        if (StringUtils.isNotEmpty(tempExcludes))
-        {
+        if (StringUtils.isNotEmpty(tempExcludes)) {
             String[] url = tempExcludes.split(",");
-            for (int i = 0; url != null && i < url.length; i++)
-            {
+            for (int i = 0; url != null && i < url.length; i++) {
                 excludes.add(url[i]);
             }
         }
-        if (StringUtils.isNotEmpty(tempEnabled))
-        {
+        if (StringUtils.isNotEmpty(tempEnabled)) {
             enabled = Boolean.valueOf(tempEnabled);
         }
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException
-    {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
-        if (handleExcludeURL(req, resp))
-        {
+        if (handleExcludeURL(req, resp)) {
             chain.doFilter(request, response);
             return;
         }
@@ -66,23 +58,18 @@ public class XssFilter implements Filter
         chain.doFilter(xssRequest, response);
     }
 
-    private boolean handleExcludeURL(HttpServletRequest request, HttpServletResponse response)
-    {
-        if (!enabled)
-        {
+    private boolean handleExcludeURL(HttpServletRequest request, HttpServletResponse response) {
+        if (!enabled) {
             return true;
         }
-        if (excludes == null || excludes.isEmpty())
-        {
+        if (excludes == null || excludes.isEmpty()) {
             return false;
         }
         String url = request.getServletPath();
-        for (String pattern : excludes)
-        {
+        for (String pattern : excludes) {
             Pattern p = Pattern.compile("^" + pattern);
             Matcher m = p.matcher(url);
-            if (m.find())
-            {
+            if (m.find()) {
                 return true;
             }
         }
@@ -90,8 +77,7 @@ public class XssFilter implements Filter
     }
 
     @Override
-    public void destroy()
-    {
+    public void destroy() {
 
     }
 }

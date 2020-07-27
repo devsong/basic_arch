@@ -8,8 +8,7 @@ import com.ruoyi.system.domain.SysNotice;
  * 
  * @author guanzhisong
  */
-public interface ISysNoticeService
-{
+public interface ISysNoticeService {
     /**
      * 查询公告信息
      * 
@@ -49,7 +48,7 @@ public interface ISysNoticeService
      * @return 结果
      */
     public int deleteNoticeById(Long noticeId);
-    
+
     /**
      * 批量删除公告信息
      * 

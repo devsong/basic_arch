@@ -5,8 +5,7 @@ package com.ruoyi.common.enums;
  * 
  * @author guanzhisong
  */
-public enum DataSourceType
-{
+public enum DataSourceType {
     /**
      * 主库
      */

@@ -12,11 +12,9 @@ import java.util.Properties;
  * @author guanzhisong
  */
 @Configuration
-public class ScheduleConfig
-{
+public class ScheduleConfig {
     @Bean
-    public SchedulerFactoryBean schedulerFactoryBean(DataSource dataSource)
-    {
+    public SchedulerFactoryBean schedulerFactoryBean(DataSource dataSource) {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
         factory.setDataSource(dataSource);
 

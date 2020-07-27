@@ -8,8 +8,7 @@ import com.ruoyi.system.domain.SysRoleMenu;
  * 
  * @author guanzhisong
  */
-public interface SysRoleMenuMapper
-{
+public interface SysRoleMenuMapper {
     /**
      * 查询菜单使用数量
      * 

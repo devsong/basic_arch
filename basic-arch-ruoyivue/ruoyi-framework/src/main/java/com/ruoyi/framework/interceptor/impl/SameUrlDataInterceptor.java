@@ -20,8 +20,7 @@ import com.ruoyi.framework.interceptor.RepeatSubmitInterceptor;
  * @author guanzhisong
  */
 @Component
-public class SameUrlDataInterceptor extends RepeatSubmitInterceptor
-{
+public class SameUrlDataInterceptor extends RepeatSubmitInterceptor {
     public final String REPEAT_PARAMS = "repeatParams";
 
     public final String REPEAT_TIME = "repeatTime";
@@ -38,21 +37,18 @@ public class SameUrlDataInterceptor extends RepeatSubmitInterceptor
      */
     private int intervalTime = 10;
 
-    public void setIntervalTime(int intervalTime)
-    {
+    public void setIntervalTime(int intervalTime) {
         this.intervalTime = intervalTime;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean isRepeatSubmit(HttpServletRequest request)
-    {
+    public boolean isRepeatSubmit(HttpServletRequest request) {
         RepeatedlyRequestWrapper repeatedlyRequest = (RepeatedlyRequestWrapper) request;
         String nowParams = HttpHelper.getBodyString(repeatedlyRequest);
 
         // body参数为空，获取Parameter的数据
-        if (StringUtils.isEmpty(nowParams))
-        {
+        if (StringUtils.isEmpty(nowParams)) {
             nowParams = JSONObject.toJSONString(request.getParameterMap());
         }
         Map<String, Object> nowDataMap = new HashMap<String, Object>();
@@ -63,14 +59,11 @@ public class SameUrlDataInterceptor extends RepeatSubmitInterceptor
         String url = request.getRequestURI();
 
         Object sessionObj = redisCache.getCacheObject(CACHE_REPEAT_KEY);
-        if (sessionObj != null)
-        {
+        if (sessionObj != null) {
             Map<String, Object> sessionMap = (Map<String, Object>) sessionObj;
-            if (sessionMap.containsKey(url))
-            {
+            if (sessionMap.containsKey(url)) {
                 Map<String, Object> preDataMap = (Map<String, Object>) sessionMap.get(url);
-                if (compareParams(nowDataMap, preDataMap) && compareTime(nowDataMap, preDataMap))
-                {
+                if (compareParams(nowDataMap, preDataMap) && compareTime(nowDataMap, preDataMap)) {
                     return true;
                 }
             }
@@ -84,8 +77,7 @@ public class SameUrlDataInterceptor extends RepeatSubmitInterceptor
     /**
      * 判断参数是否相同
      */
-    private boolean compareParams(Map<String, Object> nowMap, Map<String, Object> preMap)
-    {
+    private boolean compareParams(Map<String, Object> nowMap, Map<String, Object> preMap) {
         String nowParams = (String) nowMap.get(REPEAT_PARAMS);
         String preParams = (String) preMap.get(REPEAT_PARAMS);
         return nowParams.equals(preParams);
@@ -94,12 +86,10 @@ public class SameUrlDataInterceptor extends RepeatSubmitInterceptor
     /**
      * 判断两次间隔时间
      */
-    private boolean compareTime(Map<String, Object> nowMap, Map<String, Object> preMap)
-    {
+    private boolean compareTime(Map<String, Object> nowMap, Map<String, Object> preMap) {
         long time1 = (Long) nowMap.get(REPEAT_TIME);
         long time2 = (Long) preMap.get(REPEAT_TIME);
-        if ((time1 - time2) < (this.intervalTime * 1000))
-        {
+        if ((time1 - time2) < (this.intervalTime * 1000)) {
             return true;
         }
         return false;
