@@ -2,13 +2,16 @@ package com.ruoyi.web.controller.common;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
 import com.ruoyi.common.config.RuoYiConfig;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -23,6 +26,7 @@ import com.ruoyi.framework.config.ServerConfig;
  * @author guanzhisong
  */
 @RestController
+@RequestMapping("common")
 public class CommonController {
     private static final Logger log = LoggerFactory.getLogger(CommonController.class);
 
@@ -35,7 +39,7 @@ public class CommonController {
      * @param fileName 文件名称
      * @param delete 是否删除
      */
-    @GetMapping("common/download")
+    @GetMapping("download")
     public void fileDownload(String fileName, Boolean delete, HttpServletResponse response, HttpServletRequest request) {
         try {
             if (!FileUtils.isValidFilename(fileName)) {
@@ -59,7 +63,7 @@ public class CommonController {
     /**
      * 通用上传请求
      */
-    @PostMapping("/common/upload")
+    @PostMapping("upload")
     public AjaxResult uploadFile(MultipartFile file) throws Exception {
         try {
             // 上传文件路径
@@ -79,7 +83,7 @@ public class CommonController {
     /**
      * 本地资源通用下载
      */
-    @GetMapping("/common/download/resource")
+    @GetMapping("download/resource")
     public void resourceDownload(String name, HttpServletRequest request, HttpServletResponse response) throws Exception {
         // 本地资源路径
         String localPath = RuoYiConfig.getProfile();

@@ -1,6 +1,7 @@
 package com.ruoyi.framework.aspectj;
 
 import java.util.Objects;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -11,7 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
 import com.ruoyi.common.annotation.DataSource;
+import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.datasource.DynamicDataSourceContextHolder;
 
@@ -26,7 +29,10 @@ import com.ruoyi.framework.datasource.DynamicDataSourceContextHolder;
 public class DataSourceAspect {
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Pointcut("@annotation(com.ruoyi.common.annotation.DataSource)" + "|| @within(com.ruoyi.common.annotation.DataSource)")
+    private static final String DS_POINT_CUT_AN = "@annotation(" + Constants.SYSTEM_PREFIX + ".common.annotation.DataSource)";
+    private static final String WITHIN_POINT_CUT_AN = "@within(" + Constants.SYSTEM_PREFIX + ".common.annotation.DataSource)";
+
+    @Pointcut(DS_POINT_CUT_AN + "||" + WITHIN_POINT_CUT_AN)
     public void dsPointCut() {
 
     }
@@ -34,11 +40,9 @@ public class DataSourceAspect {
     @Around("dsPointCut()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
         DataSource dataSource = getDataSource(point);
-
         if (StringUtils.isNotNull(dataSource)) {
             DynamicDataSourceContextHolder.setDataSourceType(dataSource.value().name());
         }
-
         try {
             return point.proceed();
         } finally {

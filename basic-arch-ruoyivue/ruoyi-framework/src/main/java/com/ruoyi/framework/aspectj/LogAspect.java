@@ -2,8 +2,10 @@ package com.ruoyi.framework.aspectj;
 
 import java.lang.reflect.Method;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -16,8 +18,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.HandlerMapping;
+
 import com.alibaba.fastjson.JSON;
 import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.enums.BusinessStatus;
 import com.ruoyi.common.enums.HttpMethod;
@@ -39,9 +43,10 @@ import com.ruoyi.system.domain.SysOperLog;
 @Component
 public class LogAspect {
     private static final Logger log = LoggerFactory.getLogger(LogAspect.class);
+    private static final String POINT_CUT = "@annotation(" + Constants.SYSTEM_PREFIX + ".common.annotation.Log)";
 
     // 配置织入点
-    @Pointcut("@annotation(com.ruoyi.common.annotation.Log)")
+    @Pointcut(POINT_CUT)
     public void logPointCut() {
     }
 

@@ -1,6 +1,7 @@
 package com.ruoyi.framework.aspectj;
 
 import java.lang.reflect.Method;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Aspect;
@@ -8,7 +9,9 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
+
 import com.ruoyi.common.annotation.DataScope;
+import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.common.core.domain.entity.SysRole;
 import com.ruoyi.common.core.domain.entity.SysUser;
@@ -56,8 +59,10 @@ public class DataScopeAspect {
      */
     public static final String DATA_SCOPE = "dataScope";
 
+    private static final String POINT_DS = "@annotation(" + Constants.SYSTEM_PREFIX + ".common.annotation.DataScope)";
+
     // 配置织入点
-    @Pointcut("@annotation(com.ruoyi.common.annotation.DataScope)")
+    @Pointcut(POINT_DS)
     public void dataScopePointCut() {
     }
 
