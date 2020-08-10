@@ -8,6 +8,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
 import com.gzs.learn.common.util.JsonUtil;
+import com.vdurmont.emoji.EmojiParser;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -43,6 +44,21 @@ public class JsonTest {
         Assert.assertTrue(list.size() == 2);
     }
 
+    @Test
+    public void testEmoji() {
+        String nickName = "地点弄错了，我们是去考试的，地点搞错了🤣能麻烦老板让我们免费取消一下么🤣🤣🤣🤣❤️️❤️";
+        System.out.println(nickName);
+        System.out.println(filterEmoji(nickName));
+    }
+
+    private static String filterEmoji(String nick_name) {
+        // nick_name 所获取的用户昵称
+        if (nick_name == null) {
+            return nick_name;
+        }
+        return EmojiParser.removeAllEmojis(nick_name);
+    }
+
 }
 
 @Data
@@ -52,6 +68,7 @@ class FooJson {
     private int id;
     private String name;
 
+    @Override
     public String toString() {
         return JsonUtil.toJSONString(this);
     }

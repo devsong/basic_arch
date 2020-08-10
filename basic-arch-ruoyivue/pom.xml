@@ -172,7 +172,6 @@
                 <artifactId>ruoyi-common</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
 
