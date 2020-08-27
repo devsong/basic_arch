@@ -1,8 +1,12 @@
 package com.ruoyi.common.utils.ip;
 
 import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.UnknownHostException;
+import java.util.Enumeration;
+
 import javax.servlet.http.HttpServletRequest;
+
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.html.EscapeUtil;
 
@@ -12,6 +16,8 @@ import com.ruoyi.common.utils.html.EscapeUtil;
  * @author guanzhisong
  */
 public class IpUtils {
+    private static String localIp = null;
+
     public static String getIpAddr(HttpServletRequest request) {
         if (request == null) {
             return "unknown";
@@ -147,19 +153,53 @@ public class IpUtils {
         return bytes;
     }
 
-    public static String getHostIp() {
-        try {
-            return InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e) {
-        }
-        return "127.0.0.1";
-    }
-
     public static String getHostName() {
         try {
             return InetAddress.getLocalHost().getHostName();
         } catch (UnknownHostException e) {
         }
         return "未知";
+    }
+
+    /**
+     * 获取本机ip地址
+     *
+     * @return
+     * @throws UnknownHostException
+     */
+    public static String getLocalIp() {
+        if (localIp != null) {
+            return localIp;
+        }
+        try {
+            InetAddress candidateAddress = null;
+            for (Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces(); ifaces.hasMoreElements();) {
+                NetworkInterface iface = ifaces.nextElement();
+                for (Enumeration<InetAddress> inetAddrs = iface.getInetAddresses(); inetAddrs.hasMoreElements();) {
+                    InetAddress inetAddr = inetAddrs.nextElement();
+                    if (inetAddr.isLoopbackAddress()) {
+                        continue;
+                    }
+                    if (inetAddr.isSiteLocalAddress()) {
+                        localIp = inetAddr.getHostAddress();
+                        return localIp;
+                    } else if (candidateAddress == null) {
+                        candidateAddress = inetAddr;
+                    }
+                }
+            }
+            if (candidateAddress != null) {
+                localIp = candidateAddress.getHostAddress();
+                return localIp;
+            }
+            InetAddress jdkSuppliedAddress = InetAddress.getLocalHost();
+            localIp = jdkSuppliedAddress.getHostAddress();
+            return localIp;
+        } catch (Exception e) {
+            UnknownHostException unknownHostException = new UnknownHostException("Failed to determine LAN address: " + e);
+            unknownHostException.initCause(e);
+            e.printStackTrace();
+            return "";
+        }
     }
 }

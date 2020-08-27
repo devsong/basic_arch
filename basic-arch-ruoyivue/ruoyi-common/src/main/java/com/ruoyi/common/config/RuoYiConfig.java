@@ -29,6 +29,11 @@ public class RuoYiConfig {
     /** 获取地址开关 */
     private static boolean addressEnabled;
 
+    /**
+     * 高德地图apikey
+     */
+    private static String amapKey;
+
     public String getName() {
         return name;
     }
@@ -96,5 +101,13 @@ public class RuoYiConfig {
      */
     public static String getUploadPath() {
         return getProfile() + "/upload";
+    }
+
+    public static String getAmapKey() {
+        return amapKey;
+    }
+
+    public void setAmapKey(String amapKey) {
+        RuoYiConfig.amapKey = amapKey;
     }
 }

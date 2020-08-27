@@ -11,9 +11,11 @@ ruoyi:
   # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
   profile: /disk/data/ruoyivue
   # 获取ip地址开关
-  addressEnabled: false
+  addressEnabled: true
   # 验证码类型 math 数组计算 char 字符验证
   captchaType: math
+  # 高德地图api key
+  amapKey: f3c9c561a9ecfa9d032d9187ecea389d
 
 # 开发环境配置
 server:

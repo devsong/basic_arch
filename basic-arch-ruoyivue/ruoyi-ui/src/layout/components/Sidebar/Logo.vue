@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import logoImg from '@/assets/logo/logo.png'
+import logoImg from '@/assets/logo/logo.png';
 
 export default {
   name: 'SidebarLogo',
@@ -28,9 +28,9 @@ export default {
     return {
       title: '若依管理系统',
       logo: logoImg
-    }
+    };
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

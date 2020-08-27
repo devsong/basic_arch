@@ -1,10 +1,10 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from 'vue';
+import Router from 'vue-router';
 
-Vue.use(Router)
+Vue.use(Router);
 
 /* Layout */
-import Layout from '@/layout'
+import Layout from '@/layout';
 
 /**
  * Note: 路由配置项
@@ -118,10 +118,10 @@ export const constantRoutes = [
       }
     ]
   }
-]
+];
 
 export default new Router({
   mode: 'history', // 去掉url中的#
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes
-})
+});

@@ -1,28 +1,31 @@
 package com.ruoyi.common.utils.ip;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cglib.beans.BeanMap;
 
 import com.ruoyi.common.config.RuoYiConfig;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.http.HttpUtil;
 import com.ruoyi.common.utils.http.HttpUtil.Response;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
- * 获取地址类
+ * 地址转换类，使用高德开放API平台提供接口
  * 
  * @author guanzhisong
  */
 public class AddressUtils {
     private static final Logger log = LoggerFactory.getLogger(AddressUtils.class);
 
-    public static final String IP_URL = "http://ip-api.com/json/%s?lang=zh-CN";
+    public static final String IP_URL = "https://restapi.amap.com/v3/ip";
 
     public static String getRealAddressByIP(String ip) {
         String address = "XX XX";
-
         // 内网不查询
         if (IpUtils.internalIp(ip)) {
             return "内网IP";
@@ -30,14 +33,15 @@ public class AddressUtils {
         if (!RuoYiConfig.isAddressEnabled()) {
             return address;
         }
-
+        @SuppressWarnings("unchecked")
+        Map<String, Object> paramMap = BeanMap.create(IpRequest.builder().key(RuoYiConfig.getAmapKey()).ip(ip).build());
+        String url = HttpUtil.buildUrl(IP_URL, HttpUtil.convertMap2Pair(paramMap));
         try {
-            String url = String.format(IP_URL, ip);
             Response<IpResult> resp = HttpUtil.doGet(url, IpResult.class);
-            if (resp.success && StringUtils.equalsIgnoreCase(IpResult.OK, resp.entity.getStatus())) {
+            if (resp.success && resp.entity != null && resp.entity.isSuccess()) {
                 IpResult result = resp.entity;
                 if (result != null) {
-                    address = result.getRegionName() + ' ' + result.getCity();
+                    address = result.getProvince() + "," + result.getCity();
                 }
             }
         } catch (Exception e) {
@@ -48,20 +52,26 @@ public class AddressUtils {
 }
 
 @Data
+@Builder()
+class IpRequest {
+    private String key;
+    private String ip;
+    @Builder.Default()
+    private String output = "JSON";
+}
+
+@Data
 class IpResult {
-    public static String OK = "success";
+    private String INFOCODE_SUCCESS = "10000";
     private String status;
-    private String country;
-    private String countryCode;
-    private String region;
-    private String regionName;
+    private String info;
+    private String infocode;
+    private String province;
     private String city;
-    private String zip;
-    private String lat;
-    private String lon;
-    private String timezone;
-    private String isp;
-    private String org;
-    private String as;
-    private String query;
+    private String adcode;
+    private String rectangle;
+
+    public boolean isSuccess() {
+        return StringUtils.equalsIgnoreCase(getInfocode(), INFOCODE_SUCCESS) && StringUtils.equalsIgnoreCase(status, "1");
+    }
 }

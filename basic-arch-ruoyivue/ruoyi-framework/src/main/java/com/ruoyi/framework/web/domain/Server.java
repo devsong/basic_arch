@@ -4,6 +4,7 @@ import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
+
 import com.ruoyi.common.utils.Arith;
 import com.ruoyi.common.utils.ip.IpUtils;
 import com.ruoyi.framework.web.domain.server.Cpu;
@@ -11,6 +12,7 @@ import com.ruoyi.framework.web.domain.server.Jvm;
 import com.ruoyi.framework.web.domain.server.Mem;
 import com.ruoyi.framework.web.domain.server.Sys;
 import com.ruoyi.framework.web.domain.server.SysFile;
+
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
 import oshi.hardware.CentralProcessor.TickType;
@@ -149,7 +151,7 @@ public class Server {
     private void setSysInfo() {
         Properties props = System.getProperties();
         sys.setComputerName(IpUtils.getHostName());
-        sys.setComputerIp(IpUtils.getHostIp());
+        sys.setComputerIp(IpUtils.getLocalIp());
         sys.setOsName(props.getProperty("os.name"));
         sys.setOsArch(props.getProperty("os.arch"));
         sys.setUserDir(props.getProperty("user.dir"));
