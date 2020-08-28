@@ -3,10 +3,13 @@ package com.ruoyi.framework.interceptor.impl;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import com.alibaba.fastjson.JSONObject;
+
+import com.alibaba.fastjson.JSON;
 import com.ruoyi.common.core.redis.RedisCache;
 import com.ruoyi.common.filter.RepeatedlyRequestWrapper;
 import com.ruoyi.common.utils.StringUtils;
@@ -25,7 +28,7 @@ public class SameUrlDataInterceptor extends RepeatSubmitInterceptor {
 
     public final String REPEAT_TIME = "repeatTime";
 
-    public final String CACHE_REPEAT_KEY = "repeatData";
+    public final String CACHE_REPEAT_KEY = "repeatData-";
 
     @Autowired
     private RedisCache redisCache;
@@ -49,7 +52,7 @@ public class SameUrlDataInterceptor extends RepeatSubmitInterceptor {
 
         // body参数为空，获取Parameter的数据
         if (StringUtils.isEmpty(nowParams)) {
-            nowParams = JSONObject.toJSONString(request.getParameterMap());
+            nowParams = JSON.toJSONString(request.getParameterMap());
         }
         Map<String, Object> nowDataMap = new HashMap<String, Object>();
         nowDataMap.put(REPEAT_PARAMS, nowParams);
@@ -58,7 +61,8 @@ public class SameUrlDataInterceptor extends RepeatSubmitInterceptor {
         // 请求地址（作为存放cache的key值）
         String url = request.getRequestURI();
 
-        Object sessionObj = redisCache.getCacheObject(CACHE_REPEAT_KEY);
+        String cacheKey = CACHE_REPEAT_KEY + url;
+        Object sessionObj = redisCache.getCacheObject(cacheKey);
         if (sessionObj != null) {
             Map<String, Object> sessionMap = (Map<String, Object>) sessionObj;
             if (sessionMap.containsKey(url)) {
@@ -70,7 +74,7 @@ public class SameUrlDataInterceptor extends RepeatSubmitInterceptor {
         }
         Map<String, Object> cacheMap = new HashMap<String, Object>();
         cacheMap.put(url, nowDataMap);
-        redisCache.setCacheObject(CACHE_REPEAT_KEY, cacheMap, intervalTime, TimeUnit.SECONDS);
+        redisCache.setCacheObject(cacheKey, cacheMap, intervalTime, TimeUnit.SECONDS);
         return false;
     }
 
