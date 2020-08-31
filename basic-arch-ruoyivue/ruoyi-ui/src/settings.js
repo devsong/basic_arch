@@ -1,5 +1,5 @@
 module.exports = {
-  title: '若依管理系统',
+  title: '后台管理系统',
 
   /**
    * 是否系统布局配置
@@ -28,4 +28,4 @@ module.exports = {
    * If you want to also use it in dev, you can pass ['production', 'development']
    */
   errorLog: 'production'
-}
+};
