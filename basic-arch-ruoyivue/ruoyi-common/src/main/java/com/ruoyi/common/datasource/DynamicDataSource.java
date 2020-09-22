@@ -1,4 +1,4 @@
-package com.ruoyi.framework.datasource;
+package com.ruoyi.common.datasource;
 
 import java.util.Map;
 import javax.sql.DataSource;

@@ -15,8 +15,8 @@ import org.springframework.stereotype.Component;
 
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.constant.Constants;
+import com.ruoyi.common.datasource.DynamicDataSourceContextHolder;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.framework.datasource.DynamicDataSourceContextHolder;
 
 /**
  * 多数据源处理

@@ -1,10 +1,14 @@
 package com.ruoyi.quartz.config;
 
+import java.util.Properties;
+
+import javax.sql.DataSource;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
-import javax.sql.DataSource;
-import java.util.Properties;
+
+import com.ruoyi.common.utils.spring.SpringUtils;
 
 /**
  * 定时任务配置
@@ -14,8 +18,9 @@ import java.util.Properties;
 @Configuration
 public class ScheduleConfig {
     @Bean
-    public SchedulerFactoryBean schedulerFactoryBean(DataSource dataSource) {
+    public SchedulerFactoryBean schedulerFactoryBean() {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
+        DataSource dataSource = SpringUtils.getBean("qrtzDataSource");
         factory.setDataSource(dataSource);
 
         // quartz参数

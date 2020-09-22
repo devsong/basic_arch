@@ -5,6 +5,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,19 +36,20 @@ public class Threads {
      * 另对在shutdown时线程本身被调用中断做了处理.
      */
     public static void shutdownAndAwaitTermination(ExecutorService pool) {
-        if (pool != null && !pool.isShutdown()) {
-            pool.shutdown();
-            try {
-                if (!pool.awaitTermination(120, TimeUnit.SECONDS)) {
-                    pool.shutdownNow();
-                    if (!pool.awaitTermination(120, TimeUnit.SECONDS)) {
-                        logger.info("Pool did not terminate");
-                    }
-                }
-            } catch (InterruptedException ie) {
+        if (pool == null || pool.isShutdown()) {
+            return;
+        }
+        pool.shutdown();
+        try {
+            if (!pool.awaitTermination(120, TimeUnit.SECONDS)) {
                 pool.shutdownNow();
-                Thread.currentThread().interrupt();
+                if (!pool.awaitTermination(120, TimeUnit.SECONDS)) {
+                    logger.info("Pool did not terminate");
+                }
             }
+        } catch (InterruptedException ie) {
+            pool.shutdownNow();
+            Thread.currentThread().interrupt();
         }
     }
 

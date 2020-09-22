@@ -2,6 +2,7 @@ package com.ruoyi.framework.config.properties;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+
 import com.alibaba.druid.pool.DruidDataSource;
 
 /**
@@ -11,6 +12,18 @@ import com.alibaba.druid.pool.DruidDataSource;
  */
 @Configuration
 public class DruidProperties {
+    protected static final String DEFAULT_DRIVER = "com.mysql.cj.jdbc.Driver";
+    // protected static final String DEFAULT_DRIVER = "com.mysql.jdbc.Driver";
+    protected static final String DEFAULT_MYSQL_CONNECT_PARAMS = "serverTimezone=Asia/Shanghai&characterEncoding=utf8&useUnicode=true&useSSL=false&zeroDateTimeBehavior=convertToNull";
+
+    protected String driverClassName = DEFAULT_DRIVER;
+
+    protected Boolean poolPreparedStatements = true;
+
+    protected Integer maxPoolPreparedStatementPerConnectionSize = 20;
+
+    protected String filters = "stat";
+
     @Value("${spring.datasource.druid.initialSize}")
     private int initialSize;
 
@@ -45,6 +58,14 @@ public class DruidProperties {
     private boolean testOnReturn;
 
     public DruidDataSource dataSource(DruidDataSource datasource) {
+        String[] connectProps = DEFAULT_MYSQL_CONNECT_PARAMS.split("&");
+        for (String connectProp : connectProps) {
+            String[] kv = connectProp.split("=");
+            String propKey = kv[0];
+            String propVal = kv[1];
+            datasource.addConnectionProperty(propKey, propVal);
+        }
+
         /** 配置初始化大小、最小、最大 */
         datasource.setInitialSize(initialSize);
         datasource.setMaxActive(maxActive);

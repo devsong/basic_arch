@@ -14,5 +14,10 @@ public enum DataSourceType {
     /**
      * 从库
      */
-    SLAVE
+    SLAVE,
+
+    /**
+     * 定时任务库
+     */
+    QRTZ
 }
