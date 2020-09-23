@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 import 'normalize.css/normalize.css'; // a modern alternative to CSS resets
 
 import Element from 'element-ui';
-import './assets/styles/element-variables.scss';
+import '@/assets/styles/element-variables.scss';
 
 import '@/assets/styles/index.scss'; // global css
 import '@/assets/styles/ruoyi.scss'; // ruoyi css
