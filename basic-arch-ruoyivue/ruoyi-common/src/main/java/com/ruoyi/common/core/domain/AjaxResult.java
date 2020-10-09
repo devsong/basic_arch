@@ -1,8 +1,10 @@
 package com.ruoyi.common.core.domain;
 
 import java.util.HashMap;
+
 import com.ruoyi.common.constant.HttpStatus;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.ip.IpUtils;
 
 /**
  * 操作消息提醒
@@ -22,6 +24,16 @@ public class AjaxResult extends HashMap<String, Object> {
     public static final String DATA_TAG = "data";
 
     /**
+     * 服务端处理机器IP
+     */
+    public static final String SERVER_IP = "serverIp";
+
+    /**
+     * 耗时
+     */
+    public static final String TICK = "tick";
+
+    /**
      * 初始化一个新创建的 AjaxResult 对象，使其表示一个空消息。
      */
     public AjaxResult() {
@@ -36,6 +48,7 @@ public class AjaxResult extends HashMap<String, Object> {
     public AjaxResult(int code, String msg) {
         super.put(CODE_TAG, code);
         super.put(MSG_TAG, msg);
+        super.put(SERVER_IP, IpUtils.getLocalIp());
     }
 
     /**
@@ -48,6 +61,7 @@ public class AjaxResult extends HashMap<String, Object> {
     public AjaxResult(int code, String msg, Object data) {
         super.put(CODE_TAG, code);
         super.put(MSG_TAG, msg);
+        super.put(SERVER_IP, IpUtils.getLocalIp());
         if (StringUtils.isNotNull(data)) {
             super.put(DATA_TAG, data);
         }
