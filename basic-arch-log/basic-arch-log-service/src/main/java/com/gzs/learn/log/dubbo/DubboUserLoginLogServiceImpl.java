@@ -7,7 +7,6 @@ import com.gzs.learn.inf.PageResponseDto;
 import com.gzs.learn.log.inf.UserLoginLogDto;
 import com.gzs.learn.log.inf.search.UserLoginLogSearchDto;
 import com.gzs.learn.log.service.IUserLoginLogService;
-import com.gzs.learn.log.util.LogSystemUtil;
 
 @Component("dubboUserLoginLogService")
 public class DubboUserLoginLogServiceImpl implements DubboUserLoginLogService {
@@ -21,7 +20,6 @@ public class DubboUserLoginLogServiceImpl implements DubboUserLoginLogService {
 
     @Override
     public PageResponseDto<UserLoginLogDto> searchUserLoginLogs(UserLoginLogSearchDto userLoginLogSearchDto) {
-        LogSystemUtil.setDefaultSearchRange(userLoginLogSearchDto);
         return userLoginLogService.searchUserLoginLogs(userLoginLogSearchDto);
     }
 

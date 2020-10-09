@@ -1,5 +1,7 @@
 package com.gzs.learn.log.dubbo;
 
+import static com.gzs.learn.log.util.LogSystemUtil.dealProxyMethod;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -42,13 +44,5 @@ public class DubboPerfLogServiceImpl implements DubboPerfLogService {
         return null;
     }
 
-    private String dealProxyMethod(String methodName) {
-        String method = methodName;
-        int index = method.indexOf("$");
-        if (index != -1) {
-            // 代理类方法
-            method = method.substring(0, index);
-        }
-        return method;
-    }
+
 }

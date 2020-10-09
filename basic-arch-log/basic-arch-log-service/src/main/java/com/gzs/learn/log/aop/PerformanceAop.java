@@ -10,7 +10,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
@@ -27,7 +26,6 @@ import com.gzs.learn.log.service.IPerfLogService;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Order(1)
 @Aspect
 @Component
 @Slf4j
@@ -40,6 +38,9 @@ public class PerformanceAop {
     @Autowired
     private IPerfLogService perfLogService;
 
+    /**
+     * 定义切入点
+     */
     @Pointcut("execution(* " + EXECUTION_AOP + ")")
     public void log4Perf() {
 
@@ -48,7 +49,6 @@ public class PerformanceAop {
     @Around("log4Perf()")
     public Object aroundMethod(ProceedingJoinPoint point) throws Throwable {
         // 访问目标方法的参数：
-
         MethodSignature sig = (MethodSignature) point.getSignature();
         Object target = point.getTarget();
         Method currentMethod = target.getClass().getMethod(sig.getName(), sig.getParameterTypes());
@@ -60,9 +60,7 @@ public class PerformanceAop {
         long elapsed = 0;
         Stopwatch stopwatch = Stopwatch.createStarted();
         try {
-
             returnValue = point.proceed(args);
-
         } catch (Exception e) {
             // 记录系统调用异常日志
             exception = e;

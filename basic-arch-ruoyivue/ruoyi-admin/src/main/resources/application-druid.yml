@@ -6,7 +6,7 @@ spring:
         druid:
             # 主库数据源
             master:
-                url: jdbc:mysql://127.0.0.1:3306/ruoyi-vue
+                url: jdbc:mysql://localdb.mysql.com:3306/ruoyi-vue
                 username: admin
                 password: 1RNbTI@m$zIE114s
             # 从库数据源
@@ -20,7 +20,7 @@ spring:
             qrtz: 
                 # 从数据源开关/默认关闭
                 enabled: true
-                url: jdbc:mysql://127.0.0.1:3306/ruoyi-qrtz
+                url: jdbc:mysql://localdb.mysql.com:3306/ruoyi-qrtz
                 username: admin
                 password: 1RNbTI@m$zIE114s
             # 初始连接数

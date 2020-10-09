@@ -18,13 +18,36 @@ public class LogSystemUtil {
      * 设置默认查询时间范围,默认最近三个月
      * @param requestDto
      */
-    public static void setDefaultSearchRange(PageSearchRequestDto requestDto) {
+    public static void setDefaultSearchRange(PageSearchRequestDto pageSearchRequestDto) {
+        if (pageSearchRequestDto.getPage() == null) {
+            pageSearchRequestDto.setPage(1);
+        }
+        if (pageSearchRequestDto.getPageSize() == null) {
+            pageSearchRequestDto.setPageSize(10);
+        }
+        if (pageSearchRequestDto.getCreateTimeEnd() == null) {
+            pageSearchRequestDto.setCreateTimeEnd(new Date());
+        }
+        if (pageSearchRequestDto.getCreateTimeStart() == null) {
+            // 默认查询最近一个月的数据
+            pageSearchRequestDto.setCreateTimeStart(DateUtils.addMonths(pageSearchRequestDto.getCreateTimeEnd(), -1));
+        }
         Date now = new Date();
-        if (requestDto.getCreateTimeEnd() == null) {
-            requestDto.setCreateTimeEnd(now);
+        if (pageSearchRequestDto.getCreateTimeEnd() == null) {
+            pageSearchRequestDto.setCreateTimeEnd(now);
         }
-        if (requestDto.getCreateTimeStart() == null) {
-            requestDto.setCreateTimeStart(DateUtils.addMonths(requestDto.getCreateTimeEnd(), DEFAULT_DATA_DURATION));
+        if (pageSearchRequestDto.getCreateTimeStart() == null) {
+            pageSearchRequestDto.setCreateTimeStart(DateUtils.addMonths(pageSearchRequestDto.getCreateTimeEnd(), DEFAULT_DATA_DURATION));
         }
+    }
+
+    public static String dealProxyMethod(String methodName) {
+        String method = methodName;
+        int index = method.indexOf("$");
+        if (index != -1) {
+            // 代理类方法
+            method = method.substring(0, index);
+        }
+        return method;
     }
 }
