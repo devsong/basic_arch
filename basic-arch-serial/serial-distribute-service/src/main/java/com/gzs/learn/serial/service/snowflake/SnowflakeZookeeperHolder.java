@@ -232,7 +232,7 @@ public class SnowflakeZookeeperHolder {
      * 上报数据结构
      */
     @Data
-    static class Endpoint {
+    public static class Endpoint {
         private String ip;
         private String port;
         private long timestamp;

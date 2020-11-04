@@ -12,4 +12,5 @@ public interface DubboSerialDistributeService {
     public long getSerial(String key, int length);
 
     public long getSnowflake();
+
 }

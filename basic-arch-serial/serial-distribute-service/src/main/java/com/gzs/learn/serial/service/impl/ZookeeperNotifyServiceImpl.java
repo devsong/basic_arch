@@ -1,4 +1,4 @@
-package com.gzs.learn.serial.service.imp;
+package com.gzs.learn.serial.service.impl;
 
 import java.util.List;
 
@@ -30,9 +30,10 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class ZookeeperNotifyServiceImp implements ZookeeperNotifyService {
+public class ZookeeperNotifyServiceImpl implements ZookeeperNotifyService {
     private final static String PATH = "com.gzs.learn.serial";
     private final static String PARTITION_FORMAT = ISerialConst.PARTITION + "/%s,%d,%d";
+    private final static String PATH_FORMAT = ISerialConst.GROUP + "/%s_%d";
     private String notifyZk;
     /**
      * ZooKeeper客户端
@@ -43,22 +44,20 @@ public class ZookeeperNotifyServiceImp implements ZookeeperNotifyService {
      */
     private PathChildrenCache groupChildrenCache;
 
+    @Autowired
     private SerialUpdateService serialUpdateService;
 
     @Autowired
-    public ZookeeperNotifyServiceImp(SerialUpdateService serialUpdateService, SerialProperties serialProperties) {
-        super();
-        this.serialUpdateService = serialUpdateService;
+    private SerialProperties serialProperties;
+
+    @SuppressWarnings("deprecation")
+    @PostConstruct
+    public void init() throws Exception {
         this.notifyZk = serialProperties.getNotifyZk();
         this.client = CuratorFrameworkFactory.builder().connectString(notifyZk).namespace(PATH)
                 .retryPolicy(new RetryNTimes(Integer.MAX_VALUE, 1000)).connectionTimeoutMs(10000).build();
         this.client.start();
         log.info("Init ZooKeeper Client Success!");
-    }
-
-    @SuppressWarnings("deprecation")
-    @PostConstruct
-    public void init() throws Exception {
         this.groupChildrenCache = new PathChildrenCache(client, ISerialConst.GROUP, true);
         groupChildrenCache.getListenable().addListener(serialGroupListener);
         groupChildrenCache.start(StartMode.NORMAL);
@@ -99,4 +98,33 @@ public class ZookeeperNotifyServiceImp implements ZookeeperNotifyService {
             }
         }
     };
+
+    @Override
+    public boolean ceateNode(SerialGroupPK primaryKey) {
+        try {
+            String path = String.format(PATH_FORMAT, primaryKey.getName(), primaryKey.getVersion());
+            if (this.client.checkExists().forPath(path) == null) {
+                this.client.create().creatingParentsIfNeeded().withMode(CreateMode.PERSISTENT).forPath(path,
+                        JsonUtil.toJSONString(primaryKey).getBytes());
+            }
+            return true;
+        } catch (Exception e) {
+            log.error("create node error", e);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean deleteNode(SerialGroupPK primaryKey) {
+        try {
+            String path = String.format(PATH_FORMAT, primaryKey.getName(), primaryKey.getVersion());
+            if (this.client.checkExists().forPath(path) != null) {
+                this.client.delete().deletingChildrenIfNeeded().forPath(path);
+            }
+            return true;
+        } catch (Exception e) {
+            log.error("delete node error", e);
+            return false;
+        }
+    }
 }

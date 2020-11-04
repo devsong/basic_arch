@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Component("dubboSerialManagerService")
 @Slf4j
-public class DubboSerialManagerServiceImp implements DubboSerialManagerService {
+public class DubboSerialManagerServiceImpl implements DubboSerialManagerService {
     @Autowired
     private SerialManagerService serialManagerService;
     @Autowired

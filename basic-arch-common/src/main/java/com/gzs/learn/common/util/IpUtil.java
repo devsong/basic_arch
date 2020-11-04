@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class IpUtil {
+    private static volatile String LOCAL_IP = null;
+
     public static String getIpAdrress(HttpServletRequest request) {
         String xForwardIp = request.getHeader("X-Forwarded-For");
         if (StringUtils.isNotEmpty(xForwardIp) && !"unKnown".equalsIgnoreCase(xForwardIp)) {
@@ -51,15 +53,21 @@ public class IpUtil {
     }
 
     public static String getLocalIp() {
-        String ip;
-        try {
-            List<String> ipList = getHostAddress(null);
-            ip = (!ipList.isEmpty()) ? ipList.get(0) : "";
-        } catch (Exception ex) {
-            ip = "";
-            log.warn("Iputil get IP warn", ex);
+        if (LOCAL_IP != null) {
+            return LOCAL_IP;
         }
-        return ip;
+        synchronized (IpUtil.class) {
+            String ip;
+            try {
+                List<String> ipList = getHostAddress(null);
+                ip = (!ipList.isEmpty()) ? ipList.get(0) : "";
+            } catch (Exception ex) {
+                ip = "";
+                log.warn("Iputil get IP warn", ex);
+            }
+            LOCAL_IP = ip;
+        }
+        return LOCAL_IP;
     }
 
     public static String getLocalIp(String interfaceName) {

@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component("dubboSerialDistributeService")
-public class DubboSerialDistributeServiceImp implements DubboSerialDistributeService {
+public class DubboSerialDistributeServiceImpl implements DubboSerialDistributeService {
     @Autowired
     private SerialDistributeService serialDistributeService;
 

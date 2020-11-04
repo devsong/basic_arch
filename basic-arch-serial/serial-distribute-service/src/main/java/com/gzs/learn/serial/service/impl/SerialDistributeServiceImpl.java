@@ -1,4 +1,4 @@
-package com.gzs.learn.serial.service.imp;
+package com.gzs.learn.serial.service.impl;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,8 +11,8 @@ import com.gzs.learn.serial.domain.SerialVersion;
 import com.gzs.learn.serial.service.SerialDistributeService;
 import com.gzs.learn.serial.service.SerialManagerService;
 
-@Component
-public class SerialDistributeServiceImp implements SerialDistributeService {
+@Component()
+public class SerialDistributeServiceImpl implements SerialDistributeService {
     private Map<String, SerialVersion> serialCache = new ConcurrentHashMap<>();
 
     @Autowired

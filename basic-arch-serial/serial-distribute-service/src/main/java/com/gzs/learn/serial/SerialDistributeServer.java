@@ -10,12 +10,13 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
 
 import com.ctrip.framework.apollo.spring.annotation.EnableApolloConfig;
+import com.gzs.learn.inf.GlobalConstant;
 
 import lombok.extern.slf4j.Slf4j;
 
 @EnableApolloConfig
 @EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class })
-@ComponentScan(basePackages = ISerialConst.SYSTEM_PACKAGE_PREFIX)
+@ComponentScan(basePackages = { ISerialConst.SYSTEM_PACKAGE_PREFIX, GlobalConstant.SYSTEM_PACKAGE_PREFIX + ".common" })
 @ImportResource("classpath:/META-INF/applicationContext.xml")
 @SpringBootApplication
 @Slf4j

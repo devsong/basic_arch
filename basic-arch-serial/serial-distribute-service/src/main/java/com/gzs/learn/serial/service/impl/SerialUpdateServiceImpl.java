@@ -1,4 +1,4 @@
-package com.gzs.learn.serial.service.imp;
+package com.gzs.learn.serial.service.impl;
 
 import javax.annotation.PostConstruct;
 
@@ -15,14 +15,14 @@ import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
-public class SerialUpdateServiceImp implements SerialUpdateService, Runnable {
+public class SerialUpdateServiceImpl implements SerialUpdateService, Runnable {
 
     private SerialManagerService serialManagerService;
 
     private SerialDistributeService serialDistributeService;
 
     @Autowired
-    public SerialUpdateServiceImp(SerialManagerService serialManagerService, SerialDistributeService serialDistributeService) {
+    public SerialUpdateServiceImpl(SerialManagerService serialManagerService, SerialDistributeService serialDistributeService) {
         this.serialDistributeService = serialDistributeService;
         this.serialManagerService = serialManagerService;
     }

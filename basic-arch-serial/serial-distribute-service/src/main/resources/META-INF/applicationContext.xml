@@ -8,6 +8,6 @@
         http://www.springframework.org/schema/context/spring-context.xsd 
         http://www.ctrip.com/schema/apollo
         http://www.ctrip.com/schema/apollo.xsd">
-    <apollo:config namespaces="application,elong.dubbo.config" />
+    <apollo:config namespaces="application,rdcenter.common.dubbo.config" />
     <import resource="server-dubbo.xml" />
 </beans>  
