@@ -1,9 +1,12 @@
 package com.ruoyi.framework.config.properties;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 import com.alibaba.druid.pool.DruidDataSource;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * druid 配置属性
@@ -11,7 +14,10 @@ import com.alibaba.druid.pool.DruidDataSource;
  * @author guanzhisong
  */
 @Configuration
-public class DruidProperties {
+@ConfigurationProperties("spring.datasource.druid")
+@Getter
+@Setter
+public class DruidPoolProperties {
     protected static final String DEFAULT_DRIVER = "com.mysql.cj.jdbc.Driver";
     // protected static final String DEFAULT_DRIVER = "com.mysql.jdbc.Driver";
     protected static final String DEFAULT_MYSQL_CONNECT_PARAMS = "serverTimezone=Asia/Shanghai&characterEncoding=utf8&useUnicode=true&useSSL=false&zeroDateTimeBehavior=convertToNull";
@@ -24,40 +30,40 @@ public class DruidProperties {
 
     protected String filters = "stat";
 
-    @Value("${spring.datasource.druid.initialSize}")
-    private int initialSize;
+    // @Value("${spring.datasource.druid.initialSize}")
+    protected int initialSize;
 
-    @Value("${spring.datasource.druid.minIdle}")
-    private int minIdle;
+    // @Value("${spring.datasource.druid.minIdle}")
+    protected int minIdle;
 
-    @Value("${spring.datasource.druid.maxActive}")
-    private int maxActive;
+    // @Value("${spring.datasource.druid.maxActive}")
+    protected int maxActive;
 
-    @Value("${spring.datasource.druid.maxWait}")
-    private int maxWait;
+    // @Value("${spring.datasource.druid.maxWait}")
+    protected int maxWait;
 
-    @Value("${spring.datasource.druid.timeBetweenEvictionRunsMillis}")
-    private int timeBetweenEvictionRunsMillis;
+    // @Value("${spring.datasource.druid.timeBetweenEvictionRunsMillis}")
+    protected int timeBetweenEvictionRunsMillis;
 
-    @Value("${spring.datasource.druid.minEvictableIdleTimeMillis}")
-    private int minEvictableIdleTimeMillis;
+    // @Value("${spring.datasource.druid.minEvictableIdleTimeMillis}")
+    protected int minEvictableIdleTimeMillis;
 
-    @Value("${spring.datasource.druid.maxEvictableIdleTimeMillis}")
-    private int maxEvictableIdleTimeMillis;
+    // @Value("${spring.datasource.druid.maxEvictableIdleTimeMillis}")
+    protected int maxEvictableIdleTimeMillis;
 
-    @Value("${spring.datasource.druid.validationQuery}")
-    private String validationQuery;
+    // @Value("${spring.datasource.druid.validationQuery}")
+    protected String validationQuery;
 
-    @Value("${spring.datasource.druid.testWhileIdle}")
-    private boolean testWhileIdle;
+    // @Value("${spring.datasource.druid.testWhileIdle}")
+    protected boolean testWhileIdle;
 
-    @Value("${spring.datasource.druid.testOnBorrow}")
-    private boolean testOnBorrow;
+    // @Value("${spring.datasource.druid.testOnBorrow}")
+    protected boolean testOnBorrow;
 
-    @Value("${spring.datasource.druid.testOnReturn}")
-    private boolean testOnReturn;
+    // @Value("${spring.datasource.druid.testOnReturn}")
+    protected boolean testOnReturn;
 
-    public DruidDataSource dataSource(DruidDataSource datasource) {
+    public void dataSource(DruidDataSource datasource) {
         String[] connectProps = DEFAULT_MYSQL_CONNECT_PARAMS.split("&");
         for (String connectProp : connectProps) {
             String[] kv = connectProp.split("=");
@@ -91,6 +97,5 @@ public class DruidProperties {
         datasource.setTestOnBorrow(testOnBorrow);
         /** 归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。 */
         datasource.setTestOnReturn(testOnReturn);
-        return datasource;
     }
 }

@@ -3,7 +3,7 @@
     <!-- 日志存放路径 -->
     <property name="log.path" value="/disk/data/ruoyi/logs" />
     <!-- 日志输出格式 -->
-    <property name="log.pattern" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{20} - [%method,%line] - %msg%n" />
+    <property name="log.pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{20} - [%method,%line] - %msg%n" />
 
     <!-- 控制台输出 -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
@@ -76,14 +76,11 @@
     <!-- Spring日志级别控制 -->
     <logger name="org.springframework" level="warn" />
 
-    <root level="info">
-        <appender-ref ref="console" />
-    </root>
-
     <!--系统操作日志 -->
     <root level="info">
         <appender-ref ref="file_info" />
         <appender-ref ref="file_error" />
+        <appender-ref ref="console" />
     </root>
 
     <!--系统用户操作日志 -->

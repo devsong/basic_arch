@@ -19,5 +19,16 @@ public enum DataSourceType {
     /**
      * 定时任务库
      */
-    QRTZ
+    QRTZ,
+
+    QRTZ_SLAVE,
+    /**
+     * log库
+     */
+    LOG,
+
+    /**
+     * log读库
+     */
+    LOG_SLAVE
 }

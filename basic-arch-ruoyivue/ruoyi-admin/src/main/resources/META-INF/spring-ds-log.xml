@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <bean id="logDataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="name" value="logDataSource" />
+        <property name="driverClassName" value="${spring.datasource.driverClassName}" />
+        <property name="url" value="${spring.datasource.druid.log.url}${spring.datasource.defaultParams}" />
+        <property name="username" value="${spring.datasource.druid.log.username}" />
+        <property name="password" value="${spring.datasource.druid.log.password}" />
+
+        <property name="maxWait" value="${spring.datasource.druid.maxWait}" />
+        <!-- 最大并发连接数 -->
+        <property name="maxActive" value="${spring.datasource.druid.maxActive}" />
+        <!-- 初始化连接数量 -->
+        <property name="initialSize" value="${spring.datasource.druid.initialSize}" />
+        <!-- 最小空闲连接数 -->
+        <property name="minIdle" value="${spring.datasource.druid.minIdle}" />
+        <property name="validationQuery" value="${spring.datasource.druid.validationQuery}" />
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="${spring.datasource.druid.timeBetweenEvictionRunsMillis}" />
+        <property name="testWhileIdle" value="${spring.datasource.druid.testWhileIdle}" />
+        <!-- 打开 removeAbandoned 功能 -->
+        <property name="removeAbandoned" value="${spring.datasource.druid.removeAbandoned}" />
+        <!-- 1800 秒，也就是 30 分钟 -->
+        <property name="removeAbandonedTimeout" value="${spring.datasource.druid.removeAbandonedTimeout}" />
+        <!-- 关闭 abanded 连接时输出错误日志 -->
+        <property name="logAbandoned" value="${spring.datasource.druid.logAbandoned}" />
+        <property name="proxyFilters">
+            <list>
+                <ref bean="wall-filter" />
+                <ref bean="stat-filter" />
+                <ref bean="slf4j-filter" />
+            </list>
+        </property>
+    </bean>
+
+    <bean id="logSlaveDataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="name" value="logSlaveDataSource" />
+        <property name="driverClassName" value="${spring.datasource.driverClassName}" />
+        <property name="url" value="${spring.datasource.druid.logSlave.url}${spring.datasource.defaultParams}" />
+        <property name="username" value="${spring.datasource.druid.logSlave.username}" />
+        <property name="password" value="${spring.datasource.druid.logSlave.password}" />
+
+        <property name="maxWait" value="${spring.datasource.druid.maxWait}" />
+        <!-- 最大并发连接数 -->
+        <property name="maxActive" value="${spring.datasource.druid.maxActive}" />
+        <!-- 初始化连接数量 -->
+        <property name="initialSize" value="${spring.datasource.druid.initialSize}" />
+        <!-- 最小空闲连接数 -->
+        <property name="minIdle" value="${spring.datasource.druid.minIdle}" />
+        <property name="validationQuery" value="${spring.datasource.druid.validationQuery}" />
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="${spring.datasource.druid.timeBetweenEvictionRunsMillis}" />
+        <property name="testWhileIdle" value="${spring.datasource.druid.testWhileIdle}" />
+        <!-- 打开 removeAbandoned 功能 -->
+        <property name="removeAbandoned" value="${spring.datasource.druid.removeAbandoned}" />
+        <!-- 1800 秒，也就是 30 分钟 -->
+        <property name="removeAbandonedTimeout" value="${spring.datasource.druid.removeAbandonedTimeout}" />
+        <!-- 关闭 abanded 连接时输出错误日志 -->
+        <property name="logAbandoned" value="${spring.datasource.druid.logAbandoned}" />
+        <property name="proxyFilters">
+            <list>
+                <ref bean="wall-filter" />
+                <ref bean="stat-filter" />
+                <ref bean="slf4j-filter" />
+            </list>
+        </property>
+    </bean>
+</beans>

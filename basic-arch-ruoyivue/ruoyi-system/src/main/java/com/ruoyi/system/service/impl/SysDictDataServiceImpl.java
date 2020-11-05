@@ -14,8 +14,7 @@ import com.ruoyi.system.service.ISysDictDataService;
  * @author guanzhisong
  */
 @Service
-public class SysDictDataServiceImpl implements ISysDictDataService
-{
+public class SysDictDataServiceImpl implements ISysDictDataService {
     @Autowired
     private SysDictDataMapper dictDataMapper;
 
@@ -26,8 +25,7 @@ public class SysDictDataServiceImpl implements ISysDictDataService
      * @return 字典数据集合信息
      */
     @Override
-    public List<SysDictData> selectDictDataList(SysDictData dictData)
-    {
+    public List<SysDictData> selectDictDataList(SysDictData dictData) {
         return dictDataMapper.selectDictDataList(dictData);
     }
 
@@ -39,8 +37,7 @@ public class SysDictDataServiceImpl implements ISysDictDataService
      * @return 字典标签
      */
     @Override
-    public String selectDictLabel(String dictType, String dictValue)
-    {
+    public String selectDictLabel(String dictType, String dictValue) {
         return dictDataMapper.selectDictLabel(dictType, dictValue);
     }
 
@@ -51,8 +48,7 @@ public class SysDictDataServiceImpl implements ISysDictDataService
      * @return 字典数据
      */
     @Override
-    public SysDictData selectDictDataById(Long dictCode)
-    {
+    public SysDictData selectDictDataById(Long dictCode) {
         return dictDataMapper.selectDictDataById(dictCode);
     }
 
@@ -63,11 +59,9 @@ public class SysDictDataServiceImpl implements ISysDictDataService
      * @return 结果
      */
     @Override
-    public int deleteDictDataByIds(Long[] dictCodes)
-    {
+    public int deleteDictDataByIds(Long[] dictCodes) {
         int row = dictDataMapper.deleteDictDataByIds(dictCodes);
-        if (row > 0)
-        {
+        if (row > 0) {
             DictUtils.clearDictCache();
         }
         return row;
@@ -80,11 +74,9 @@ public class SysDictDataServiceImpl implements ISysDictDataService
      * @return 结果
      */
     @Override
-    public int insertDictData(SysDictData dictData)
-    {
+    public int insertDictData(SysDictData dictData) {
         int row = dictDataMapper.insertDictData(dictData);
-        if (row > 0)
-        {
+        if (row > 0) {
             DictUtils.clearDictCache();
         }
         return row;
@@ -97,11 +89,9 @@ public class SysDictDataServiceImpl implements ISysDictDataService
      * @return 结果
      */
     @Override
-    public int updateDictData(SysDictData dictData)
-    {
+    public int updateDictData(SysDictData dictData) {
         int row = dictDataMapper.updateDictData(dictData);
-        if (row > 0)
-        {
+        if (row > 0) {
             DictUtils.clearDictCache();
         }
         return row;
