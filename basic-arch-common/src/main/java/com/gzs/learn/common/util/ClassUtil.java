@@ -217,4 +217,19 @@ public class ClassUtil {
         }
         return classList;
     }
+
+    /**
+     * 处理代理方法中的美元符
+     * @param methodName
+     * @return
+     */
+    public static String dealProxyMethod(String methodName) {
+        String method = methodName;
+        int index = method.indexOf("$");
+        if (index != -1) {
+            // 代理类方法
+            method = method.substring(0, index);
+        }
+        return method;
+    }
 }

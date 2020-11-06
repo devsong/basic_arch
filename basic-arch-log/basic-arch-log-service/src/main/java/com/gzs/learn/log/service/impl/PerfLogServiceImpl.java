@@ -1,5 +1,6 @@
 package com.gzs.learn.log.service.impl;
 
+import static com.gzs.learn.common.util.ClassUtil.dealProxyMethod;
 import static com.gzs.learn.log.LogSystemConstant.CODE_SUCCESS;
 import static com.gzs.learn.log.enums.SysPerfLogDurationEnum.BY_DATE;
 
@@ -11,7 +12,6 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import com.github.pagehelper.PageHelper;
@@ -32,7 +32,6 @@ import com.gzs.learn.log.po.SysPerfLogPo;
 import com.gzs.learn.log.service.IPerfLogService;
 
 @Component
-@Transactional
 public class PerfLogServiceImpl implements IPerfLogService {
 
     @Autowired
@@ -47,8 +46,8 @@ public class PerfLogServiceImpl implements IPerfLogService {
     @Override
     public boolean insertPerfLogMeta(SysPerfLogMetaPo po) {
         try {
-            po.setClazz(handleProxy(po.getClazz()));
-            po.setMethod(handleProxy(po.getMethod()));
+            po.setClazz(dealProxyMethod(po.getClazz()));
+            po.setMethod(dealProxyMethod(po.getMethod()));
             sysPerfLogMetaMapper.insertSelective(po);
         } catch (DuplicateKeyException e) {
             // ignore
@@ -58,8 +57,8 @@ public class PerfLogServiceImpl implements IPerfLogService {
 
     @Override
     public boolean insertPerfLog(SysPerfLogDto sysLogDto) {
-        sysLogDto.setClazz(handleProxy(sysLogDto.getClazz()));
-        sysLogDto.setMethod(handleProxy(sysLogDto.getMethod()));
+        sysLogDto.setClazz(dealProxyMethod(sysLogDto.getClazz()));
+        sysLogDto.setMethod(dealProxyMethod(sysLogDto.getMethod()));
         SysPerfLogMetaPo metaPo = new SysPerfLogMetaPo();
         BeanUtil.copyProperties(sysLogDto, metaPo);
         long metaId = 0;
@@ -88,7 +87,7 @@ public class PerfLogServiceImpl implements IPerfLogService {
         countPo.setMetaId(metaId);
         countPo.setCountDate(DateFormatUtils.format(sysLogDto.getCreateTime(), BY_DATE.getPattern()));
         countPo.setCountDuration(DateFormatUtils.format(sysLogDto.getCreateTime(), sysLogDto.getDurationEnum().getPattern()));
-        List<SysPerfLogCountPo> exists = sysPerfLogCountMapper.select(countPo);
+        List<SysPerfLogCountPo> exists = sysPerfLogCountMapper.exist(countPo);
         countPo.setCreateTime(sysLogDto.getCreateTime());
 
         long totalExecute = 0, exceptionExecute = 0, sysExceptionExecute = 0, bizExceptionExecute = 0, totalTime = 0, maxTime = 0,
@@ -179,18 +178,10 @@ public class PerfLogServiceImpl implements IPerfLogService {
         SysPerfLogMetaPo query = SysPerfLogMetaPo.builder().product(sysLogDto.getProduct()).groupName(sysLogDto.getGroupName())
                 .app(sysLogDto.getApp()).clazz(sysLogDto.getClazz()).method(sysLogDto.getMethod()).operatorIp(sysLogDto.getOperatorIp())
                 .build();
-        List<SysPerfLogMetaPo> exists = sysPerfLogMetaMapper.select(query);
+        List<SysPerfLogMetaPo> exists = sysPerfLogMetaMapper.exist(query);
         if (!CollectionUtils.isEmpty(exists)) {
             return exists.get(0);
         }
         return null;
-    }
-
-    private static final String handleProxy(String proxy) {
-        int index = proxy.indexOf('$');
-        if (index == -1) {
-            return proxy;
-        }
-        return proxy.substring(0, index);
     }
 }

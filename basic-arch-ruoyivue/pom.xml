@@ -172,6 +172,18 @@
                 <artifactId>ruoyi-common</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
+            
+            <dependency>
+                <groupId>com.gzs.learn</groupId>
+                <artifactId>basic-arch-entity</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>com.gzs.learn</groupId>
+                <artifactId>basic-arch-common</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -183,12 +195,6 @@
         <module>ruoyi-admin</module>
         <module>ruoyi-quartz</module>
     </modules>
-
-
-
-    <dependencies>
-
-    </dependencies>
 
     <build>
         <plugins>

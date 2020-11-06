@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ruoyi.common.annotation.DataSource;
+import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.quartz.domain.SysJobLog;
 import com.ruoyi.quartz.mapper.SysJobLogMapper;
 import com.ruoyi.quartz.service.ISysJobLogService;
@@ -15,6 +17,7 @@ import com.ruoyi.quartz.service.ISysJobLogService;
  * @author guanzhisong
  */
 @Service
+@DataSource(DataSourceType.LOG)
 public class SysJobLogServiceImpl implements ISysJobLogService {
     @Autowired
     private SysJobLogMapper jobLogMapper;
@@ -25,6 +28,7 @@ public class SysJobLogServiceImpl implements ISysJobLogService {
      * @param jobLog 调度日志信息
      * @return 调度任务日志集合
      */
+    @DataSource(DataSourceType.LOG_SLAVE)
     @Override
     public List<SysJobLog> selectJobLogList(SysJobLog jobLog) {
         return jobLogMapper.selectJobLogList(jobLog);
@@ -36,6 +40,7 @@ public class SysJobLogServiceImpl implements ISysJobLogService {
      * @param jobLogId 调度任务日志ID
      * @return 调度任务日志对象信息
      */
+    @DataSource(DataSourceType.LOG_SLAVE)
     @Override
     public SysJobLog selectJobLogById(Long jobLogId) {
         return jobLogMapper.selectJobLogById(jobLogId);

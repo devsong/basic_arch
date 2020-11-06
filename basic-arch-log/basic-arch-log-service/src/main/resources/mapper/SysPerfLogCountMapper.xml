@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzs.learn.log.dao.SysPerfLogCountMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gzs.learn.log.po.SysPerfLogCountPo">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="meta_id" jdbcType="BIGINT" property="metaId" />
+        <result column="count_date" jdbcType="VARCHAR" property="countDate" />
+        <result column="count_duration" jdbcType="VARCHAR" property="countDuration" />
+        <result column="execute_total" jdbcType="BIGINT" property="executeTotal" />
+        <result column="execute_exception" jdbcType="BIGINT" property="executeException" />
+        <result column="execute_sys_exception" jdbcType="BIGINT" property="executeSysException" />
+        <result column="execute_biz_exception" jdbcType="BIGINT" property="executeBizException" />
+        <result column="execute_time_total" jdbcType="BIGINT" property="executeTimeTotal" />
+        <result column="execute_time_avg" jdbcType="DOUBLE" property="executeTimeAvg" />
+        <result column="execute_time_max" jdbcType="INTEGER" property="executeTimeMax" />
+        <result column="execute_time_min" jdbcType="INTEGER" property="executeTimeMin" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="timestamp" jdbcType="TIMESTAMP" property="timestamp" />
+    </resultMap>
+    
+    <sql id="Base_Column_List">
+        id, meta_id, count_date, count_duration, execute_total, execute_exception, execute_sys_exception,
+        execute_biz_exception, execute_time_total, execute_time_avg, execute_time_max, execute_time_min,
+        create_time, timestamp
+    </sql>
+
+    <select id="searchPerfCountLogs" resultMap="BaseResultMap" parameterType="com.gzs.learn.log.inf.search.SysPerfLogCountSearchDto">
+        select
+            <include refid="Base_Column_List" />
+        FROM
+            sys_perf_log_count plc join sys_perf_log_meta m on plc.meta_id = m.id
+        <where>
+            <if test="createTimeStart != null  and createTimeEnd != null">
+                plc.create_time between #{createTimeStart} and #{createTimeEnd}
+            </if>
+            <if test="product != null and product!=''">
+                and m.product=#{product}
+            </if>
+            <if test="groupName != null and groupName''">
+                and m.group_name=#{groupName}
+            </if>
+            <if test="app != null and app!=''">
+                and m.app=#{app}
+            </if>
+            <if test="clazz != null and clazz!=''">
+                and m.clazz=#{clazz}
+            </if>
+            <if test="method != null and method!=''">
+                and m.method=#{method}
+            </if>
+            <if test="operatorIps != null">
+                and m.operator_ip in(
+                <foreach collection="operatorIps" item="item" separator=",">
+                    #{item}
+                </foreach>
+                )
+            </if>
+        </where>
+        order by
+            id desc
+    </select>
+    
+    <insert id="saveCountPo" parameterType="com.gzs.learn.log.po.SysPerfLogCountPo">
+        insert into sys_perf_log_count
+        (
+            meta_id, count_date, count_duration, 
+            execute_total, execute_exception, execute_sys_exception,execute_biz_exception, 
+            execute_time_total, execute_time_avg, execute_time_max, execute_time_min,
+            create_time, timestamp
+        )
+        values
+        (
+            #{metaId},#{countDate},#{countDuration},
+            #{executeTotal},#{executeException},#{executeSysException},#{executeBizException},
+            #{executeTimeTotal},#{executeTimeAvg},#{executeTimeMax},#{executeTimeMin},now(),now()
+        )
+        on duplicate key 
+        update 
+            execute_total=#{executeTotal}, execute_exception=#{executeException}, execute_sys_exception=#{executeSysException},execute_biz_exception=#{executeBizException},
+            execute_time_total=#{executeTimeTotal}, execute_time_avg=#{executeTimeAvg}, execute_time_max=#{executeTimeMax},execute_time_min=#{executeTimeMin}
+    </insert>
+    
+   
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from sys_perf_log_count
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from sys_perf_log_count
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.gzs.learn.log.entity.SysPerfLogCountPo">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into sys_perf_log_count (meta_id, count_date, count_duration,
+        execute_total, execute_exception, execute_sys_exception,
+        execute_biz_exception, execute_time_total, execute_time_avg,
+        execute_time_max, execute_time_min, create_time,
+        timestamp)
+        values (#{metaId,jdbcType=BIGINT}, #{countDate,jdbcType=VARCHAR}, #{countDuration,jdbcType=VARCHAR},
+        #{executeTotal,jdbcType=BIGINT}, #{executeException,jdbcType=BIGINT}, #{executeSysException,jdbcType=BIGINT},
+        #{executeBizException,jdbcType=BIGINT}, #{executeTimeTotal,jdbcType=BIGINT}, #{executeTimeAvg,jdbcType=DOUBLE},
+        #{executeTimeMax,jdbcType=INTEGER}, #{executeTimeMin,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
+        #{timestamp,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.gzs.learn.log.entity.SysPerfLogCountPo">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into sys_perf_log_count
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="metaId != null">
+                meta_id,
+            </if>
+            <if test="countDate != null">
+                count_date,
+            </if>
+            <if test="countDuration != null">
+                count_duration,
+            </if>
+            <if test="executeTotal != null">
+                execute_total,
+            </if>
+            <if test="executeException != null">
+                execute_exception,
+            </if>
+            <if test="executeSysException != null">
+                execute_sys_exception,
+            </if>
+            <if test="executeBizException != null">
+                execute_biz_exception,
+            </if>
+            <if test="executeTimeTotal != null">
+                execute_time_total,
+            </if>
+            <if test="executeTimeAvg != null">
+                execute_time_avg,
+            </if>
+            <if test="executeTimeMax != null">
+                execute_time_max,
+            </if>
+            <if test="executeTimeMin != null">
+                execute_time_min,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="timestamp != null">
+                timestamp,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="metaId != null">
+                #{metaId,jdbcType=BIGINT},
+            </if>
+            <if test="countDate != null">
+                #{countDate,jdbcType=VARCHAR},
+            </if>
+            <if test="countDuration != null">
+                #{countDuration,jdbcType=VARCHAR},
+            </if>
+            <if test="executeTotal != null">
+                #{executeTotal,jdbcType=BIGINT},
+            </if>
+            <if test="executeException != null">
+                #{executeException,jdbcType=BIGINT},
+            </if>
+            <if test="executeSysException != null">
+                #{executeSysException,jdbcType=BIGINT},
+            </if>
+            <if test="executeBizException != null">
+                #{executeBizException,jdbcType=BIGINT},
+            </if>
+            <if test="executeTimeTotal != null">
+                #{executeTimeTotal,jdbcType=BIGINT},
+            </if>
+            <if test="executeTimeAvg != null">
+                #{executeTimeAvg,jdbcType=DOUBLE},
+            </if>
+            <if test="executeTimeMax != null">
+                #{executeTimeMax,jdbcType=INTEGER},
+            </if>
+            <if test="executeTimeMin != null">
+                #{executeTimeMin,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="timestamp != null">
+                #{timestamp,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.gzs.learn.log.entity.SysPerfLogCountPo">
+        update sys_perf_log_count
+        <set>
+            <if test="metaId != null">
+                meta_id = #{metaId,jdbcType=BIGINT},
+            </if>
+            <if test="countDate != null">
+                count_date = #{countDate,jdbcType=VARCHAR},
+            </if>
+            <if test="countDuration != null">
+                count_duration = #{countDuration,jdbcType=VARCHAR},
+            </if>
+            <if test="executeTotal != null">
+                execute_total = #{executeTotal,jdbcType=BIGINT},
+            </if>
+            <if test="executeException != null">
+                execute_exception = #{executeException,jdbcType=BIGINT},
+            </if>
+            <if test="executeSysException != null">
+                execute_sys_exception = #{executeSysException,jdbcType=BIGINT},
+            </if>
+            <if test="executeBizException != null">
+                execute_biz_exception = #{executeBizException,jdbcType=BIGINT},
+            </if>
+            <if test="executeTimeTotal != null">
+                execute_time_total = #{executeTimeTotal,jdbcType=BIGINT},
+            </if>
+            <if test="executeTimeAvg != null">
+                execute_time_avg = #{executeTimeAvg,jdbcType=DOUBLE},
+            </if>
+            <if test="executeTimeMax != null">
+                execute_time_max = #{executeTimeMax,jdbcType=INTEGER},
+            </if>
+            <if test="executeTimeMin != null">
+                execute_time_min = #{executeTimeMin,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="timestamp != null">
+                timestamp = #{timestamp,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.gzs.learn.log.entity.SysPerfLogCountPo">
+        update sys_perf_log_count
+        set meta_id = #{metaId,jdbcType=BIGINT},
+        count_date = #{countDate,jdbcType=VARCHAR},
+        count_duration = #{countDuration,jdbcType=VARCHAR},
+        execute_total = #{executeTotal,jdbcType=BIGINT},
+        execute_exception = #{executeException,jdbcType=BIGINT},
+        execute_sys_exception = #{executeSysException,jdbcType=BIGINT},
+        execute_biz_exception = #{executeBizException,jdbcType=BIGINT},
+        execute_time_total = #{executeTimeTotal,jdbcType=BIGINT},
+        execute_time_avg = #{executeTimeAvg,jdbcType=DOUBLE},
+        execute_time_max = #{executeTimeMax,jdbcType=INTEGER},
+        execute_time_min = #{executeTimeMin,jdbcType=INTEGER},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        timestamp = #{timestamp,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    
+</mapper>

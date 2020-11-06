@@ -38,6 +38,7 @@ public class SysOperLogServiceImpl implements ISysOperLogService {
      * @return 操作日志集合
      */
     @Override
+    @DataSource(DataSourceType.LOG_SLAVE)
     public List<SysOperLog> selectOperLogList(SysOperLog operLog) {
         return operLogMapper.selectOperLogList(operLog);
     }
@@ -60,6 +61,7 @@ public class SysOperLogServiceImpl implements ISysOperLogService {
      * @return 操作日志对象
      */
     @Override
+    @DataSource(DataSourceType.LOG_SLAVE)
     public SysOperLog selectOperLogById(Long operId) {
         return operLogMapper.selectOperLogById(operId);
     }

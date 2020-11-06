@@ -5,10 +5,21 @@ import java.util.List;
 import com.gzs.learn.log.inf.search.SysPerfLogSearchDto;
 import com.gzs.learn.log.po.SysPerfLogPo;
 
-import tk.mybatis.mapper.common.Mapper;
-
-public interface SysPerfLogMapper extends Mapper<SysPerfLogPo> {
+public interface SysPerfLogMapper {
 
     List<SysPerfLogPo> searchPerfLogs(SysPerfLogSearchDto searchDto);
 
+    int deleteByPrimaryKey(Long id);
+
+    int insert(SysPerfLogPo record);
+
+    int insertSelective(SysPerfLogPo record);
+
+    SysPerfLogPo selectByPrimaryKey(Long id);
+
+    int updateByPrimaryKeySelective(SysPerfLogPo record);
+
+    int updateByPrimaryKeyWithBLOBs(SysPerfLogPo record);
+
+    int updateByPrimaryKey(SysPerfLogPo record);
 }
