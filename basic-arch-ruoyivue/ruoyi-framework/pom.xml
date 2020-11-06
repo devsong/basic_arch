@@ -67,8 +67,27 @@
         <dependency>
             <groupId>${ruoyi.groupId}</groupId>
             <artifactId>ruoyi-system</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <!-- log模块 -->
+        <dependency>
+            <groupId>${ruoyi.groupId}</groupId>
+            <artifactId>ruoyi-log</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>basic-arch-entity</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>basic-arch-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

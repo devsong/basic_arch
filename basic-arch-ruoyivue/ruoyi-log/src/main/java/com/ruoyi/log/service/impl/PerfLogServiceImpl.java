@@ -1,8 +1,7 @@
-package com.gzs.learn.log.service.impl;
+package com.ruoyi.log.service.impl;
 
 import static com.gzs.learn.common.util.ClassUtil.dealProxyMethod;
-import static com.gzs.learn.log.LogSystemConstant.CODE_SUCCESS;
-import static com.gzs.learn.log.enums.SysPerfLogDurationEnum.BY_DATE;
+import static com.ruoyi.log.LogSystemConstant.CODE_SUCCESS;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -17,24 +16,25 @@ import org.springframework.util.CollectionUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
-import com.gzs.learn.common.annotation.DataSource;
 import com.gzs.learn.common.util.BeanUtil;
 import com.gzs.learn.inf.PageResponseDto;
 import com.gzs.learn.inf.PageResponseDto.PageResponse;
 import com.gzs.learn.inf.PageResponseDto.PageResponseDtoBuilder;
-import com.gzs.learn.log.LogDsConstant;
-import com.gzs.learn.log.dao.SysPerfLogCountMapper;
-import com.gzs.learn.log.dao.SysPerfLogMapper;
-import com.gzs.learn.log.dao.SysPerfLogMetaMapper;
-import com.gzs.learn.log.inf.SysPerfLogDto;
-import com.gzs.learn.log.inf.search.SysPerfLogSearchDto;
-import com.gzs.learn.log.po.SysPerfLogCountPo;
-import com.gzs.learn.log.po.SysPerfLogMetaPo;
-import com.gzs.learn.log.po.SysPerfLogPo;
-import com.gzs.learn.log.service.IPerfLogService;
+import com.ruoyi.common.annotation.DataSource;
+import com.ruoyi.common.enums.DataSourceType;
+import com.ruoyi.log.domain.SysPerfLogCountPo;
+import com.ruoyi.log.domain.SysPerfLogMetaPo;
+import com.ruoyi.log.domain.SysPerfLogPo;
+import com.ruoyi.log.dto.SysPerfLogDto;
+import com.ruoyi.log.dto.SysPerfLogSearchDto;
+import com.ruoyi.log.enums.SysPerfLogDurationEnum;
+import com.ruoyi.log.mapper.SysPerfLogCountMapper;
+import com.ruoyi.log.mapper.SysPerfLogMapper;
+import com.ruoyi.log.mapper.SysPerfLogMetaMapper;
+import com.ruoyi.log.service.IPerfLogService;
 
 @Component
-@DataSource(value = LogDsConstant.DS_LOG_MASTER_NAME)
+@DataSource(value = DataSourceType.LOG)
 public class PerfLogServiceImpl implements IPerfLogService {
 
     @Autowired
@@ -88,7 +88,7 @@ public class PerfLogServiceImpl implements IPerfLogService {
     private void createCountLog(SysPerfLogDto sysLogDto, long metaId) {
         SysPerfLogCountPo countPo = new SysPerfLogCountPo();
         countPo.setMetaId(metaId);
-        countPo.setCountDate(DateFormatUtils.format(sysLogDto.getCreateTime(), BY_DATE.getPattern()));
+        countPo.setCountDate(DateFormatUtils.format(sysLogDto.getCreateTime(), SysPerfLogDurationEnum.BY_DATE.getPattern()));
         countPo.setCountDuration(DateFormatUtils.format(sysLogDto.getCreateTime(), sysLogDto.getDurationEnum().getPattern()));
 
         List<SysPerfLogCountPo> exists = sysPerfLogCountMapper.exist(countPo);
@@ -97,6 +97,7 @@ public class PerfLogServiceImpl implements IPerfLogService {
         long totalExecute = 0, exceptionExecute = 0, sysExceptionExecute = 0, bizExceptionExecute = 0;
         // 时间
         long totalTime = 0, maxTime = 0, minTime = 0;
+        // 平均执行时间
         double avgTime = 0;
         if (CollectionUtils.isEmpty(exists)) {
             // 执行时间
@@ -149,7 +150,7 @@ public class PerfLogServiceImpl implements IPerfLogService {
         sysPerfLogCountMapper.saveCountPo(countPo);
     }
 
-    @DataSource(value = LogDsConstant.DS_SLAVE_MASTER_NAME)
+    @DataSource(value = DataSourceType.LOG_SLAVE)
     @Override
     public PageResponseDto<SysPerfLogDto> searchPerfLogs(SysPerfLogSearchDto searchDto) {
         PageInfo<SysPerfLogPo> pageInfo = PageHelper.startPage(searchDto.getPage(), searchDto.getPageSize(), true)
@@ -164,10 +165,12 @@ public class PerfLogServiceImpl implements IPerfLogService {
         }
 
         long metaId = pageInfo.getList().get(0).getMetaId();
-
+        List<SysPerfLogPo> poList = pageInfo.getList();
         SysPerfLogMetaPo metaPo = sysPerfLogMetaMapper.selectByPrimaryKey(metaId);
-        List<SysPerfLogDto> targetDtos = BeanUtil.copyList(pageInfo.getList(), SysPerfLogDto.class);
-        for (SysPerfLogDto dto : targetDtos) {
+        List<SysPerfLogDto> dtos = Lists.newArrayListWithCapacity(poList.size());
+        dtos = BeanUtil.copyList(poList, SysPerfLogDto.class);
+
+        for (SysPerfLogDto dto : dtos) {
             dto.setProduct(metaPo.getProduct());
             dto.setGroupName(metaPo.getGroupName());
             dto.setApp(metaPo.getApp());
@@ -175,8 +178,8 @@ public class PerfLogServiceImpl implements IPerfLogService {
             dto.setMethod(metaPo.getMethod());
             dto.setOperatorIp(metaPo.getOperatorIp());
         }
-        PageResponseDto<SysPerfLogDto> result = builder.code(0).msg("success").page(page).data(targetDtos).build();
-        result.setData(targetDtos);
+        PageResponseDto<SysPerfLogDto> result = builder.code(0).msg("success").page(page).data(dtos).build();
+        result.setData(dtos);
         return result;
     }
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gzs.learn.log.dao.SysPerfLogCountMapper">
+<mapper namespace="com.ruoyi.log.mapper.SysPerfLogCountMapper">
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.gzs.learn.log.po.SysPerfLogCountPo">
+    <resultMap id="BaseResultMap" type="com.ruoyi.log.domain.SysPerfLogCountPo">
         <id column="id" jdbcType="BIGINT" property="id" />
         <result column="meta_id" jdbcType="BIGINT" property="metaId" />
         <result column="count_date" jdbcType="VARCHAR" property="countDate" />
@@ -25,7 +25,7 @@
         create_time, timestamp
     </sql>
 
-    <select id="searchPerfCountLogs" resultMap="BaseResultMap" parameterType="com.gzs.learn.log.inf.search.SysPerfLogCountSearchDto">
+    <select id="searchPerfCountLogs" resultMap="BaseResultMap" parameterType="com.ruoyi.log.dto.SysPerfLogCountSearchDto">
         select
             <include refid="Base_Column_List" />
         FROM
@@ -61,7 +61,7 @@
             id desc
     </select>
     
-    <insert id="saveCountPo" parameterType="com.gzs.learn.log.po.SysPerfLogCountPo">
+    <insert id="saveCountPo" parameterType="com.ruoyi.log.domain.SysPerfLogCountPo">
         insert into sys_perf_log_count
         (
             meta_id, count_date, count_duration, 
@@ -94,23 +94,29 @@
         where id = #{id,jdbcType=BIGINT}
     </delete>
     
-    <insert id="insert" parameterType="com.gzs.learn.log.entity.SysPerfLogCountPo">
+    <insert id="insert" parameterType="com.ruoyi.log.domain.SysPerfLogCountPo">
         <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
             SELECT LAST_INSERT_ID()
         </selectKey>
-        insert into sys_perf_log_count (meta_id, count_date, count_duration,
-        execute_total, execute_exception, execute_sys_exception,
-        execute_biz_exception, execute_time_total, execute_time_avg,
-        execute_time_max, execute_time_min, create_time,
-        timestamp)
-        values (#{metaId,jdbcType=BIGINT}, #{countDate,jdbcType=VARCHAR}, #{countDuration,jdbcType=VARCHAR},
-        #{executeTotal,jdbcType=BIGINT}, #{executeException,jdbcType=BIGINT}, #{executeSysException,jdbcType=BIGINT},
-        #{executeBizException,jdbcType=BIGINT}, #{executeTimeTotal,jdbcType=BIGINT}, #{executeTimeAvg,jdbcType=DOUBLE},
-        #{executeTimeMax,jdbcType=INTEGER}, #{executeTimeMin,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
-        #{timestamp,jdbcType=TIMESTAMP})
+        insert into sys_perf_log_count 
+        (
+            meta_id, count_date, count_duration,
+            execute_total, execute_exception, execute_sys_exception,
+            execute_biz_exception, execute_time_total, execute_time_avg,
+            execute_time_max, execute_time_min, create_time,
+            timestamp
+        )
+        values 
+        (
+            #{metaId,jdbcType=BIGINT}, #{countDate,jdbcType=VARCHAR}, #{countDuration,jdbcType=VARCHAR},
+            #{executeTotal,jdbcType=BIGINT}, #{executeException,jdbcType=BIGINT}, #{executeSysException,jdbcType=BIGINT},
+            #{executeBizException,jdbcType=BIGINT}, #{executeTimeTotal,jdbcType=BIGINT}, #{executeTimeAvg,jdbcType=DOUBLE},
+            #{executeTimeMax,jdbcType=INTEGER}, #{executeTimeMin,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
+            #{timestamp,jdbcType=TIMESTAMP}
+        )
     </insert>
     
-    <insert id="insertSelective" parameterType="com.gzs.learn.log.entity.SysPerfLogCountPo">
+    <insert id="insertSelective" parameterType="com.ruoyi.log.domain.SysPerfLogCountPo">
         <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -199,7 +205,7 @@
         </trim>
     </insert>
     
-    <update id="updateByPrimaryKeySelective" parameterType="com.gzs.learn.log.entity.SysPerfLogCountPo">
+    <update id="updateByPrimaryKeySelective" parameterType="com.ruoyi.log.domain.SysPerfLogCountPo">
         update sys_perf_log_count
         <set>
             <if test="metaId != null">
@@ -245,7 +251,7 @@
         where id = #{id,jdbcType=BIGINT}
     </update>
     
-    <update id="updateByPrimaryKey" parameterType="com.gzs.learn.log.entity.SysPerfLogCountPo">
+    <update id="updateByPrimaryKey" parameterType="com.ruoyi.log.domain.SysPerfLogCountPo">
         update sys_perf_log_count
         set meta_id = #{metaId,jdbcType=BIGINT},
         count_date = #{countDate,jdbcType=VARCHAR},
@@ -262,5 +268,23 @@
         timestamp = #{timestamp,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=BIGINT}
     </update>
+    
+    <select id="exist" parameterType="com.ruoyi.log.domain.SysPerfLogCountPo" resultMap="BaseResultMap">
+        select
+            <include refid="Base_Column_List" />
+        from 
+            sys_perf_log_count
+        <where>
+            <if test="metaId != null">
+                meta_id = #{metaId}
+            </if>
+            <if test="countDate != null">
+                count_date = #{countDate}
+            </if>
+            <if test="countDuration != null">
+                count_duration = #{countDuration}
+            </if>
+        </where>
+    </select>
     
 </mapper>

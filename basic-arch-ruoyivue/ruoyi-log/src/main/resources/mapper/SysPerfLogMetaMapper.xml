@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.log.mapper.SysPerfLogMetaMapper">
+   <resultMap id="BaseResultMap" type="com.ruoyi.log.domain.SysPerfLogMetaPo">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="product" jdbcType="VARCHAR" property="product" />
+        <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+        <result column="app" jdbcType="VARCHAR" property="app" />
+        <result column="clazz" jdbcType="VARCHAR" property="clazz" />
+        <result column="method" jdbcType="VARCHAR" property="method" />
+        <result column="operator_ip" jdbcType="VARCHAR" property="operatorIp" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="timestamp" jdbcType="TIMESTAMP" property="timestamp" />
+    </resultMap>
+    
+    
+    <sql id="Base_Column_List">
+        id, product, group_name, app, clazz, method, operator_ip, create_time, timestamp
+    </sql>
+    
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from sys_perf_log_meta
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from sys_perf_log_meta
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    
+    <insert id="insert" parameterType="com.ruoyi.log.domain.SysPerfLogMetaPo">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into sys_perf_log_meta 
+        (
+            product, group_name, app,
+            clazz, method, operator_ip,
+            create_time, timestamp
+        )
+        values 
+        (
+            #{product,jdbcType=VARCHAR}, #{groupName,jdbcType=VARCHAR}, #{app,jdbcType=VARCHAR},
+            #{clazz,jdbcType=VARCHAR}, #{method,jdbcType=VARCHAR}, #{operatorIp,jdbcType=VARCHAR},
+            #{createTime,jdbcType=TIMESTAMP}, #{timestamp,jdbcType=TIMESTAMP}
+        )
+    </insert>
+    
+    <insert id="insertSelective" parameterType="com.ruoyi.log.domain.SysPerfLogMetaPo">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into sys_perf_log_meta
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="product != null">
+                product,
+            </if>
+            <if test="groupName != null">
+                group_name,
+            </if>
+            <if test="app != null">
+                app,
+            </if>
+            <if test="clazz != null">
+                clazz,
+            </if>
+            <if test="method != null">
+                method,
+            </if>
+            <if test="operatorIp != null">
+                operator_ip,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="timestamp != null">
+                timestamp,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="product != null">
+                #{product,jdbcType=VARCHAR},
+            </if>
+            <if test="groupName != null">
+                #{groupName,jdbcType=VARCHAR},
+            </if>
+            <if test="app != null">
+                #{app,jdbcType=VARCHAR},
+            </if>
+            <if test="clazz != null">
+                #{clazz,jdbcType=VARCHAR},
+            </if>
+            <if test="method != null">
+                #{method,jdbcType=VARCHAR},
+            </if>
+            <if test="operatorIp != null">
+                #{operatorIp,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="timestamp != null">
+                #{timestamp,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    
+    <update id="updateByPrimaryKeySelective" parameterType="com.ruoyi.log.domain.SysPerfLogMetaPo">
+        update sys_perf_log_meta
+        <set>
+            <if test="product != null">
+                product = #{product,jdbcType=VARCHAR},
+            </if>
+            <if test="groupName != null">
+                group_name = #{groupName,jdbcType=VARCHAR},
+            </if>
+            <if test="app != null">
+                app = #{app,jdbcType=VARCHAR},
+            </if>
+            <if test="clazz != null">
+                clazz = #{clazz,jdbcType=VARCHAR},
+            </if>
+            <if test="method != null">
+                method = #{method,jdbcType=VARCHAR},
+            </if>
+            <if test="operatorIp != null">
+                operator_ip = #{operatorIp,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="timestamp != null">
+                timestamp = #{timestamp,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    
+    <update id="updateByPrimaryKey" parameterType="com.ruoyi.log.domain.SysPerfLogMetaPo">
+        update sys_perf_log_meta
+        set product = #{product,jdbcType=VARCHAR},
+        group_name = #{groupName,jdbcType=VARCHAR},
+        app = #{app,jdbcType=VARCHAR},
+        clazz = #{clazz,jdbcType=VARCHAR},
+        method = #{method,jdbcType=VARCHAR},
+        operator_ip = #{operatorIp,jdbcType=VARCHAR},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        timestamp = #{timestamp,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    
+    <select id="exist" parameterType="com.ruoyi.log.domain.SysPerfLogMetaPo" resultMap="BaseResultMap">
+        select
+            <include refid="Base_Column_List" />
+        from 
+            sys_perf_log_meta
+        <where>
+            <if test="product != null">
+                product = #{product}
+            </if>
+            <if test="group != null">
+                group = #{group}
+            </if>
+            <if test="app != null">
+                app = #{app}
+            </if>
+            <if test="clazz != null">
+                clazz = #{clazz}
+            </if>
+            <if test="method != null">
+                method = #{method}
+            </if>
+        </where>
+    </select>
+
+</mapper>

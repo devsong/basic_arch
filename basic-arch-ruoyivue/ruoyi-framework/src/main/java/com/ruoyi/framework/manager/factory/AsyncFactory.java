@@ -9,6 +9,8 @@ import com.ruoyi.common.utils.ServletUtils;
 import com.ruoyi.common.utils.ip.AddressUtils;
 import com.ruoyi.common.utils.ip.IpUtils;
 import com.ruoyi.common.utils.spring.SpringUtils;
+import com.ruoyi.log.dto.SysPerfLogDto;
+import com.ruoyi.log.service.IPerfLogService;
 import com.ruoyi.system.domain.SysLogininfor;
 import com.ruoyi.system.domain.SysOperLog;
 import com.ruoyi.system.service.ISysLogininforService;
@@ -84,6 +86,20 @@ public class AsyncFactory {
                 // 远程查询操作地点
                 operLog.setOperLocation(AddressUtils.getRealAddressByIP(operLog.getOperIp()));
                 SpringUtils.getBean(ISysOperLogService.class).insertOperlog(operLog);
+            }
+        };
+    }
+
+    /**
+     * 保存接口性能日志
+     * @param sysPerfLogDto
+     * @return
+     */
+    public static TimerTask recordPerfLog(SysPerfLogDto sysPerfLogDto) {
+        return new TimerTask() {
+            @Override
+            public void run() {
+                SpringUtils.getBean(IPerfLogService.class).insertPerfLog(sysPerfLogDto);
             }
         };
     }

@@ -34,6 +34,12 @@ public class RuoYiConfig {
      */
     private static String amapKey;
 
+    private String product;
+
+    private String group;
+
+    private String app;
+
     public String getName() {
         return name;
     }
@@ -109,5 +115,29 @@ public class RuoYiConfig {
 
     public void setAmapKey(String amapKey) {
         RuoYiConfig.amapKey = amapKey;
+    }
+
+    public String getProduct() {
+        return product;
+    }
+
+    public void setProduct(String product) {
+        this.product = product;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
+    public String getApp() {
+        return app;
+    }
+
+    public void setApp(String app) {
+        this.app = app;
     }
 }
