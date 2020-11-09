@@ -2,21 +2,24 @@ package com.ruoyi.framework.aspectj;
 
 import java.lang.reflect.Method;
 import java.util.Date;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Stopwatch;
 import com.gzs.learn.common.util.IpUtil;
 import com.gzs.learn.common.util.JsonUtil;
-import com.gzs.learn.inf.PageResponseDto;
+import com.ruoyi.common.annotation.PerfLog;
 import com.ruoyi.common.config.RuoYiConfig;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.framework.manager.AsyncManager;
@@ -25,21 +28,23 @@ import com.ruoyi.log.dto.SysPerfLogDto;
 import com.ruoyi.log.enums.SysPerfLogDurationEnum;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 记录接口请求中的参数,类似于nginx/httpd中的access log功能
+ * 
+ * @author guanzhisong
+ */
 @Aspect
 @Component
 @Slf4j
 public class PerformanceAop {
     private static final String EXECUTION_AOP = "within(" + Constants.SYSTEM_PREFIX + ".web.controller..*)";
+    private static final String ANNOTATION_PERLOG = "@annotation(" + Constants.SYSTEM_PREFIX + ".common.annotation.PerfLog)";
 
     @Autowired
     private RuoYiConfig ruoYiConfig;
 
-    /**
-     * 定义切入点
-     */
-    @Pointcut("execution(* " + EXECUTION_AOP + ")")
+    @Pointcut(EXECUTION_AOP + "||" + ANNOTATION_PERLOG)
     public void log4Perf() {
-
     }
 
     @Around("log4Perf()")
@@ -49,7 +54,12 @@ public class PerformanceAop {
         Object target = point.getTarget();
         Method currentMethod = target.getClass().getMethod(sig.getName(), sig.getParameterTypes());
         String clazz = sig.getDeclaringTypeName();
-        String methodName = sig.getName();
+        String methodName = currentMethod.getName();
+        PerfLog perfLog = getPerfLog(point);
+        if (perfLog != null) {
+            clazz = StringUtils.isNotBlank(perfLog.clazz()) ? perfLog.clazz() : clazz;
+            methodName = StringUtils.isNotBlank(perfLog.method()) ? perfLog.method() : methodName;
+        }
         Object[] args = point.getArgs();
         Object returnValue = null;
         Exception exception = null;
@@ -60,16 +70,12 @@ public class PerformanceAop {
         } catch (Exception e) {
             // 记录系统调用异常日志
             exception = e;
-            log.error("system error,method:{} args:{}", currentMethod.getName(), JSON.toJSONString(point.getArgs()), e);
+            log.error("system error,method:{} args:{}", methodName, JsonUtil.toJSONString(point.getArgs()), e);
             throw e;
         } finally {
             // 记录方法调用日志
             stopwatch.stop();
             elapsed = stopwatch.elapsed(TimeUnit.MILLISECONDS);
-            if (returnValue instanceof PageResponseDto) {
-                ((PageResponseDto<?>) returnValue).setElapsed(elapsed);
-                ((PageResponseDto<?>) returnValue).setServerIp(IpUtil.getLocalIp());
-            }
             recordPerfLog(clazz, methodName, args, returnValue, exception, elapsed);
         }
         return returnValue;
@@ -91,13 +97,23 @@ public class PerformanceAop {
             }
         }
 
-        String argsJson = (args == null || args.length == 0) ? "" : JsonUtil.toJSONString(args);
+        String argsJson = (args == null || args.length == 0) ? "" : JSON.toJSONString(args);
         String retJson = (returnValue == null ? "" : JsonUtil.toJSONString(returnValue));
         SysPerfLogDto sysPerfLogDto = SysPerfLogDto.builder().product(ruoYiConfig.getProduct()).groupName(ruoYiConfig.getGroup())
-                .app(ruoYiConfig.getApp()).clazz(clazz).method(methodName).paramsIn(argsJson).paramsOut(retJson).code(code).errMsg(errorMsg)
+                .app(ruoYiConfig.getApp()).clazz(clazz).method(methodName).paramsIn(argsJson).paramsOut(retJson).code(code).errmsg(errorMsg)
                 .operatorIp(IpUtil.getLocalIp()).durationEnum(SysPerfLogDurationEnum.BY_MINUTE).executeTimespan((int) elapsed)
                 .createTime(new Date()).build();
 
         AsyncManager.me().execute(AsyncFactory.recordPerfLog(sysPerfLogDto));
+    }
+
+    private PerfLog getPerfLog(ProceedingJoinPoint point) {
+        MethodSignature signature = (MethodSignature) point.getSignature();
+        PerfLog dataSource = AnnotationUtils.findAnnotation(signature.getMethod(), PerfLog.class);
+        if (Objects.nonNull(dataSource)) {
+            return dataSource;
+        }
+
+        return AnnotationUtils.findAnnotation(signature.getDeclaringType(), PerfLog.class);
     }
 }

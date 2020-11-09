@@ -46,6 +46,14 @@
             #{clazz,jdbcType=VARCHAR}, #{method,jdbcType=VARCHAR}, #{operatorIp,jdbcType=VARCHAR},
             #{createTime,jdbcType=TIMESTAMP}, #{timestamp,jdbcType=TIMESTAMP}
         )
+        on duplicate key 
+        update 
+            product = #{product,jdbcType=VARCHAR},
+            group_name = #{groupName,jdbcType=VARCHAR},
+            app = #{app,jdbcType=VARCHAR},
+            clazz = #{clazz,jdbcType=VARCHAR},
+            method = #{method,jdbcType=VARCHAR},
+            operator_ip = #{operatorIp,jdbcType=VARCHAR}
     </insert>
     
     <insert id="insertSelective" parameterType="com.ruoyi.log.domain.SysPerfLogMetaPo">
@@ -160,17 +168,17 @@
             <if test="product != null">
                 product = #{product}
             </if>
-            <if test="group != null">
-                group = #{group}
+            <if test="groupName != null">
+                and group_name = #{groupName}
             </if>
             <if test="app != null">
-                app = #{app}
+                 and app = #{app}
             </if>
             <if test="clazz != null">
-                clazz = #{clazz}
+                 and clazz = #{clazz}
             </if>
             <if test="method != null">
-                method = #{method}
+                 and method = #{method}
             </if>
         </where>
     </select>

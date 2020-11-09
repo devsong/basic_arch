@@ -25,10 +25,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cglib.beans.BeanMap;
 import org.springframework.util.CollectionUtils;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import com.gzs.learn.common.util.JsonUtil;
 import com.ruoyi.common.utils.StringUtils;
 
 /**
@@ -470,7 +470,7 @@ public class HttpUtil {
                 if (cls.getName().equals("java.lang.String")) {
                     obj = (T) resp;
                 } else {
-                    obj = JSON.parseObject(resp, cls);
+                    obj = JsonUtil.parseObject(resp, cls);
                 }
             } else {
                 errMsg = resp;
@@ -501,7 +501,7 @@ public class HttpUtil {
             String resp = entity == null ? "" : EntityUtils.toString(entity, StandardCharsets.UTF_8);
             if (code / 100 == 2) {
                 success = true;
-                list = JSON.parseObject(resp, reference);
+                list = JsonUtil.parseObject(resp, reference);
             } else {
                 errMsg = resp;
             }

@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-import com.alibaba.fastjson.JSONObject;
+import com.gzs.learn.common.util.JsonUtil;
 import com.ruoyi.common.annotation.RepeatSubmit;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.ServletUtils;
@@ -27,7 +27,7 @@ public abstract class RepeatSubmitInterceptor extends HandlerInterceptorAdapter 
             if (annotation != null) {
                 if (this.isRepeatSubmit(request)) {
                     AjaxResult ajaxResult = AjaxResult.error("不允许重复提交，请稍后再试");
-                    ServletUtils.renderString(response, JSONObject.toJSONString(ajaxResult));
+                    ServletUtils.renderString(response, JsonUtil.toJSONString(ajaxResult));
                     return false;
                 }
             }

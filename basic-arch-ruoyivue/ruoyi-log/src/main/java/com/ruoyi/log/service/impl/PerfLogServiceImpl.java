@@ -22,6 +22,7 @@ import com.gzs.learn.inf.PageResponseDto.PageResponse;
 import com.gzs.learn.inf.PageResponseDto.PageResponseDtoBuilder;
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.enums.DataSourceType;
+import com.ruoyi.common.utils.uuid.UUID;
 import com.ruoyi.log.domain.SysPerfLogCountPo;
 import com.ruoyi.log.domain.SysPerfLogMetaPo;
 import com.ruoyi.log.domain.SysPerfLogPo;
@@ -51,7 +52,7 @@ public class PerfLogServiceImpl implements IPerfLogService {
         try {
             po.setClazz(dealProxyMethod(po.getClazz()));
             po.setMethod(dealProxyMethod(po.getMethod()));
-            sysPerfLogMetaMapper.insertSelective(po);
+            sysPerfLogMetaMapper.insert(po);
         } catch (DuplicateKeyException e) {
             // ignore
         }
@@ -76,6 +77,7 @@ public class PerfLogServiceImpl implements IPerfLogService {
         // 写入性能日志
         SysPerfLogPo po = new SysPerfLogPo();
         BeanUtil.copyProperties(sysLogDto, po);
+        po.setTraceId(UUID.fastUUID().toString());
         po.setMetaId(metaId);
         po.setId(null);
         int row = sysPerfLogMapper.insertSelective(po);

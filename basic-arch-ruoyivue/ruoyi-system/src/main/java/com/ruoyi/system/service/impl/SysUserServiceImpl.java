@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.ruoyi.common.annotation.DataScope;
+import com.ruoyi.common.annotation.PerfLog;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.domain.entity.SysRole;
 import com.ruoyi.common.core.domain.entity.SysUser;
@@ -71,6 +72,7 @@ public class SysUserServiceImpl implements ISysUserService {
      * @return 用户对象信息
      */
     @Override
+    @PerfLog
     public SysUser selectUserByUserName(String userName) {
         return userMapper.selectUserByUserName(userName);
     }

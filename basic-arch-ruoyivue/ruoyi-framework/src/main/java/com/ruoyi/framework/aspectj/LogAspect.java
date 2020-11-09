@@ -13,13 +13,11 @@ import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.HandlerMapping;
 
-import com.alibaba.fastjson.JSON;
+import com.gzs.learn.common.util.JsonUtil;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.core.domain.model.LoginUser;
@@ -34,6 +32,8 @@ import com.ruoyi.framework.manager.factory.AsyncFactory;
 import com.ruoyi.framework.web.service.TokenService;
 import com.ruoyi.system.domain.SysOperLog;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 操作日志记录处理
  * 
@@ -41,8 +41,8 @@ import com.ruoyi.system.domain.SysOperLog;
  */
 @Aspect
 @Component
+@Slf4j
 public class LogAspect {
-    private static final Logger log = LoggerFactory.getLogger(LogAspect.class);
     private static final String POINT_CUT = "@annotation(" + Constants.SYSTEM_PREFIX + ".common.annotation.Log)";
 
     // 配置织入点
@@ -89,7 +89,7 @@ public class LogAspect {
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             operLog.setOperIp(ip);
             // 返回参数
-            operLog.setJsonResult(JSON.toJSONString(jsonResult));
+            operLog.setJsonResult(JsonUtil.toJSONString(jsonResult));
 
             operLog.setOperUrl(ServletUtils.getRequest().getRequestURI());
             if (loginUser != null) {
@@ -176,8 +176,7 @@ public class LogAspect {
         if (paramsArray != null && paramsArray.length > 0) {
             for (int i = 0; i < paramsArray.length; i++) {
                 if (!isFilterObject(paramsArray[i])) {
-                    Object jsonObj = JSON.toJSON(paramsArray[i]);
-                    params += jsonObj.toString() + " ";
+                    params += JsonUtil.toJSONString(paramsArray[i]) + " ";
                 }
             }
         }

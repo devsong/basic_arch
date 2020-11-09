@@ -24,6 +24,10 @@ public class SysPerfLogPo implements Serializable {
     private static final long serialVersionUID = 1L;
     private Long id;
     /**
+     * 唯一ID
+     */
+    private String traceId;
+    /**
      * 元数据id
      */
     private Long metaId;
@@ -46,7 +50,7 @@ public class SysPerfLogPo implements Serializable {
     /**
      * 系统异常堆栈信息
      */
-    private String errMsg;
+    private String errmsg;
     /**
      * 调用时间
      */

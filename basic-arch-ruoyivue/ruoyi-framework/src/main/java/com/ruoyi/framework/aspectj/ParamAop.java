@@ -10,14 +10,11 @@ import com.ruoyi.common.constant.Constants;
 import com.ruoyi.framework.DefaultParamUtil;
 import com.ruoyi.log.dto.PageSearchRequestDto;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
- * 日志记录
+ * 设置默认的查询参数
  */
 @Aspect
 @Component
-@Slf4j
 public class ParamAop {
 
     private static final String EXECUTION_AOP = "within(" + Constants.SYSTEM_PREFIX + ".web.controller..*)";
@@ -25,26 +22,18 @@ public class ParamAop {
     /**
      * 定义切入点
      */
-    @Pointcut("execution(* " + EXECUTION_AOP + ")")
-    public void cutService() {
+    @Pointcut(EXECUTION_AOP)
+    public void setParamAop() {
     }
 
-    @Around("cutService()")
+    @Around("setParamAop()")
     public Object setDefaultParam(ProceedingJoinPoint point) throws Throwable {
-        // 先执行业务
-        Object result = null;
         Object[] args = point.getArgs();
-        try {
-            if (args.length > 1 && args[0] instanceof PageSearchRequestDto) {
-                PageSearchRequestDto pageSearchRequestDto = (PageSearchRequestDto) args[0];
-                DefaultParamUtil.setDefaultSearchRange(pageSearchRequestDto);
-            }
-            result = point.proceed();
-        } catch (Exception e) {
-            log.error("设置默认参数出错!", e);
-            throw e;
+        if (args.length > 1 && args[0] instanceof PageSearchRequestDto) {
+            PageSearchRequestDto pageSearchRequestDto = (PageSearchRequestDto) args[0];
+            DefaultParamUtil.setDefaultSearchRange(pageSearchRequestDto);
         }
-
+        Object result = point.proceed();
         return result;
     }
 }

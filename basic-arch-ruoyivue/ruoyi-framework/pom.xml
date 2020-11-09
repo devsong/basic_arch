@@ -76,18 +76,6 @@
             <artifactId>ruoyi-log</artifactId>
             <version>${project.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>basic-arch-entity</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>basic-arch-common</artifactId>
-            <version>${project.version}</version>
-        </dependency>
     </dependencies>
 
 </project>

@@ -75,7 +75,7 @@ public class SysPerfLogDto implements Serializable {
     /**
      * 系统异常堆栈信息
      */
-    private String errMsg;
+    private String errmsg;
     /**
      * 统计日志记录维度
      */

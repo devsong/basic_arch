@@ -31,7 +31,7 @@ public class AjaxResult extends HashMap<String, Object> {
     /**
      * 耗时
      */
-    public static final String TICK = "tick";
+    public static final String ELAPSED = "elapsed";
 
     /**
      * 初始化一个新创建的 AjaxResult 对象，使其表示一个空消息。

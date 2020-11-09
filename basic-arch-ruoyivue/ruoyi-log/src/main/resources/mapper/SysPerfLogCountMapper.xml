@@ -77,8 +77,14 @@
         )
         on duplicate key 
         update 
-            execute_total=#{executeTotal}, execute_exception=#{executeException}, execute_sys_exception=#{executeSysException},execute_biz_exception=#{executeBizException},
-            execute_time_total=#{executeTimeTotal}, execute_time_avg=#{executeTimeAvg}, execute_time_max=#{executeTimeMax},execute_time_min=#{executeTimeMin}
+            execute_total=#{executeTotal},
+            execute_exception=#{executeException},
+            execute_sys_exception=#{executeSysException},
+            execute_biz_exception=#{executeBizException},
+            execute_time_total=#{executeTimeTotal}, 
+            execute_time_avg=#{executeTimeAvg}, 
+            execute_time_max=#{executeTimeMax},
+            execute_time_min=#{executeTimeMin}
     </insert>
     
    
@@ -279,10 +285,10 @@
                 meta_id = #{metaId}
             </if>
             <if test="countDate != null">
-                count_date = #{countDate}
+                and count_date = #{countDate}
             </if>
             <if test="countDuration != null">
-                count_duration = #{countDuration}
+                and count_duration = #{countDuration}
             </if>
         </where>
     </select>
