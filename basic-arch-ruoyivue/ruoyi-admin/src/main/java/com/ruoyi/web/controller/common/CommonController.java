@@ -3,8 +3,6 @@ package com.ruoyi.web.controller.common;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +18,8 @@ import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.common.utils.file.FileUtils;
 import com.ruoyi.framework.config.ServerConfig;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 通用请求处理
  * 
@@ -27,9 +27,8 @@ import com.ruoyi.framework.config.ServerConfig;
  */
 @RestController
 @RequestMapping("common")
+@Slf4j
 public class CommonController {
-    private static final Logger log = LoggerFactory.getLogger(CommonController.class);
-
     @Autowired
     private ServerConfig serverConfig;
 

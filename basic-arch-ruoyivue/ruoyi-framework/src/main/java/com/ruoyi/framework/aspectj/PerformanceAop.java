@@ -98,7 +98,7 @@ public class PerformanceAop {
         }
 
         String argsJson = (args == null || args.length == 0) ? "" : JSON.toJSONString(args);
-        String retJson = (returnValue == null ? "" : JsonUtil.toJSONString(returnValue));
+        String retJson = (returnValue == null ? "" : JSON.toJSONString(returnValue));
         SysPerfLogDto sysPerfLogDto = SysPerfLogDto.builder().product(ruoYiConfig.getProduct()).groupName(ruoYiConfig.getGroup())
                 .app(ruoYiConfig.getApp()).clazz(clazz).method(methodName).paramsIn(argsJson).paramsOut(retJson).code(code).errmsg(errorMsg)
                 .operatorIp(IpUtil.getLocalIp()).durationEnum(SysPerfLogDurationEnum.BY_MINUTE).executeTimespan((int) elapsed)
