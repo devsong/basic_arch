@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -64,6 +66,25 @@ public class SerialManagerServiceImpl implements SerialManagerService {
 
     @Autowired
     private ZookeeperNotifyService zookeeperNotifyService;
+
+    @PostConstruct
+    public void init() {
+        Example enableExample = new Example(SerialGroupPo.class);
+        enableExample.createCriteria().andEqualTo("stat", DataStatus.ENABLE.calculate());
+        List<SerialGroupPo> groups = serialGroupMapper.selectByExample(enableExample);
+        if (CollectionUtils.isEmpty(groups)) {
+            return;
+        }
+        List<SerialGroupPK> primaryKeys = groups.stream().map(e -> new SerialGroupPK(e.getName(), e.getVersion()))
+                .collect(Collectors.toList());
+        for (SerialGroupPK pk : primaryKeys) {
+            if (this.zookeeperNotifyService.ceateNode(pk)) {
+                log.info("create node [{}_{}] success!", pk.getName(), pk.getVersion());
+            } else {
+                log.info("create node [{}_{}] failed!", pk.getName(), pk.getVersion());
+            }
+        }
+    }
 
     @Override
     @Transactional
@@ -297,19 +318,5 @@ public class SerialManagerServiceImpl implements SerialManagerService {
         return maxVersion;
     }
 
-    @Override
-    public void init() {
-        Example enableExample = new Example(SerialGroupPo.class);
-        enableExample.createCriteria().andEqualTo("stat", DataStatus.ENABLE.calculate());
-        List<SerialGroupPo> groups = serialGroupMapper.selectByExample(enableExample);
-        List<SerialGroupPK> primaryKeys = groups.stream().map(e -> new SerialGroupPK(e.getName(), e.getVersion()))
-                .collect(Collectors.toList());
-        for (SerialGroupPK pk : primaryKeys) {
-            if (this.zookeeperNotifyService.ceateNode(pk)) {
-                log.info("create node [{}_{}] success!", pk.getName(), pk.getVersion());
-            } else {
-                log.info("create node [{}_{}] failed!", pk.getName(), pk.getVersion());
-            }
-        }
-    }
+
 }

@@ -1,12 +1,13 @@
 package com.sankuai.inf.leaf.segment;
 
-import com.sankuai.inf.leaf.IDGen;
-import com.sankuai.inf.leaf.common.Result;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.ruoyi.leaf.IDGen;
+import com.ruoyi.leaf.common.Result;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" }) // 加载配置文件

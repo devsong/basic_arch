@@ -29,9 +29,4 @@ public interface SerialManagerService {
      * @throws SerialException
      */
     SerialGroupPK createSerialGroup(SerialGroup group) throws SerialException;
-
-    /**
-     * 初始化操作
-     */
-    void init();
 }

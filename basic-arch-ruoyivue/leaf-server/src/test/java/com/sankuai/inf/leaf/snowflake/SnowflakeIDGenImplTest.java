@@ -1,9 +1,11 @@
 package com.sankuai.inf.leaf.snowflake;
 
-import com.sankuai.inf.leaf.IDGen;
-import com.sankuai.inf.leaf.common.PropertyFactory;
-import com.sankuai.inf.leaf.common.Result;
 import org.junit.Test;
+
+import com.ruoyi.leaf.IDGen;
+import com.ruoyi.leaf.common.PropertyFactory;
+import com.ruoyi.leaf.common.Result;
+import com.ruoyi.leaf.snowflake.SnowflakeIDGenImpl;
 
 import java.util.Properties;
 

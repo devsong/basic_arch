@@ -137,7 +137,7 @@ public class SerialNode {
      * @return
      */
     public boolean checkRemainder() {
-        return this.limit - this.position <= 0 || this.specialSwitch;
+        return (this.limit - this.position <= 0) || this.specialSwitch;
     }
 
     /**

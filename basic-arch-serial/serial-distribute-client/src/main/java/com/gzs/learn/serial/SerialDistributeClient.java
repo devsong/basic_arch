@@ -9,6 +9,7 @@ import com.gzs.learn.serial.inf.DataStatus;
 import com.gzs.learn.serial.inf.SerialGroup;
 
 public class SerialDistributeClient {
+    String groupName = "order";
 
     @Test
     public void testCreateKey() {
@@ -17,7 +18,7 @@ public class SerialDistributeClient {
         context.start();
         DubboSerialManagerService service = context.getBean(DubboSerialManagerService.class);
         SerialGroup group = new SerialGroup();
-        group.setName("order2");
+        group.setName(groupName);
         group.setStat(DataStatus.ENABLE);
         group.setVersion(1);
         group.setStep(10000);
@@ -39,10 +40,10 @@ public class SerialDistributeClient {
         context.start();
         DubboSerialDistributeService distributeService = context.getBean(DubboSerialDistributeService.class);
         for (int i = 0; i < 10; i++) {
-            System.out.println(distributeService.getSerial("order2", 1));
+            System.out.println(distributeService.getSerial(groupName, 10000));
         }
+        System.out.println(distributeService.getSerial(groupName, 1));
         context.close();
-        System.out.println(distributeService.getSerial("order2", 1));
     }
 
     @Test
