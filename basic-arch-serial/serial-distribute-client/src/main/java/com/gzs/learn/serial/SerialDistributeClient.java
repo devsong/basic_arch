@@ -7,6 +7,7 @@ import com.gzs.learn.serial.dubbo.DubboSerialDistributeService;
 import com.gzs.learn.serial.dubbo.DubboSerialManagerService;
 import com.gzs.learn.serial.inf.DataStatus;
 import com.gzs.learn.serial.inf.SerialGroup;
+import com.gzs.learn.serial.inf.SerialSnowflakeInfo;
 
 public class SerialDistributeClient {
     String groupName = "order";
@@ -52,8 +53,11 @@ public class SerialDistributeClient {
                 new String[] { "/META-INF/SerialDistributeClient.xml" });
         context.start();
         DubboSerialDistributeService distributeService = context.getBean(DubboSerialDistributeService.class);
+        DubboSerialManagerService managerService = context.getBean(DubboSerialManagerService.class);
+
         long id = distributeService.getSnowflake();
-        System.out.println(((id<<44)>>44)>>17);
+        SerialSnowflakeInfo decodeSnowflake = managerService.decodeSnowflake(id);
+        System.out.println(decodeSnowflake);
         context.close();
     }
 }

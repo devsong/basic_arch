@@ -7,6 +7,10 @@ public interface DubboSerialDistributeService {
      */
     long getSerial(String key, int length);
 
+    /**
+     * snowflake算法
+     * @return
+     */
     long getSnowflake();
 
 }

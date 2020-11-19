@@ -15,6 +15,8 @@ public interface SnowflakeConst {
     final long SEQUENCE_BITS = 12L;
     // 序列号掩码
     final long SEQUENCE_MASK = ~(-1L << SEQUENCE_BITS);
+    // 序号
+    final long SEQUENCE_SHIFT = 0L;
     // 机器
     final long WORKER_ID_SHIFT = SEQUENCE_BITS;
     // 数据中心

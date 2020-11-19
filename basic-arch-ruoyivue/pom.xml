@@ -194,8 +194,7 @@
         <module>ruoyi-generator</module>
         <module>ruoyi-admin</module>
         <module>ruoyi-quartz</module>
-        <module>ruoyi-log</module> 
-        <module>leaf-server</module>
+        <module>ruoyi-log</module>
     </modules>
 
     <build>
