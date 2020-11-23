@@ -69,6 +69,7 @@ public class SerialGroupPo implements Serializable {
      */
     @Column(name = "uptime")
     private Long uptime;
+
     /**
      * 创建时间
      */
