@@ -1,5 +1,6 @@
 package com.gzs.learn.serial.domain;
 
+import java.io.Serializable;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
@@ -7,10 +8,17 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import com.gzs.learn.serial.type.NodeType;
 
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class SerialNode {
+@ToString
+public class SerialNode implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     /**
      * 当前节点主键
      */

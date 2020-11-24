@@ -100,7 +100,7 @@ public class ZookeeperNotifyServiceImpl implements ZookeeperNotifyService {
     };
 
     @Override
-    public boolean ceateNode(SerialGroupPK primaryKey) {
+    public boolean createNode(SerialGroupPK primaryKey) {
         try {
             String path = String.format(PATH_FORMAT, primaryKey.getName(), primaryKey.getVersion());
             if (this.client.checkExists().forPath(path) == null) {

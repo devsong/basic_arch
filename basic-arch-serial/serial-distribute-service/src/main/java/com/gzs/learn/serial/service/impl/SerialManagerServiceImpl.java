@@ -78,7 +78,7 @@ public class SerialManagerServiceImpl implements SerialManagerService {
         List<SerialGroupPK> primaryKeys = groups.stream().map(e -> new SerialGroupPK(e.getName(), e.getVersion()))
                 .collect(Collectors.toList());
         for (SerialGroupPK pk : primaryKeys) {
-            if (this.zookeeperNotifyService.ceateNode(pk)) {
+            if (this.zookeeperNotifyService.createNode(pk)) {
                 log.info("create node [{}_{}] success!", pk.getName(), pk.getVersion());
             } else {
                 log.info("create node [{}_{}] failed!", pk.getName(), pk.getVersion());
@@ -104,7 +104,9 @@ public class SerialManagerServiceImpl implements SerialManagerService {
             return;
         }
 
-        IndexNode index = new IndexNode((int) (group.getPart() * Math.random()), group.getPart());
+        int minIndex = serialPartitionMapper.getMinIndex(name, version, DataStatus.ENABLE.calculate());
+
+        IndexNode index = new IndexNode(minIndex, group.getPart());
         String key = String.format(NODE_KEY_FORMAT, group.getName(), group.getVersion());
         this.indexMap.put(key, index);
         this.groupMap.put(key, group);
@@ -242,8 +244,15 @@ public class SerialManagerServiceImpl implements SerialManagerService {
         Example serialpartitionExample = new Example(SerialPartitionPo.class);
         serialpartitionExample.createCriteria().andEqualTo("name", name).andEqualTo("version", version).andEqualTo("part", partIndex)
                 .andEqualTo("used", lastUsed);
-        SerialPartitionPo serialPartitionPo = new SerialPartitionPo();
+        List<SerialPartitionPo> serialParts = serialPartitionMapper.selectByExample(serialpartitionExample);
+        if (CollectionUtils.isEmpty(serialParts)) {
+            return false;
+        }
+        SerialPartitionPo serialPartitionPo = serialParts.get(0);
         serialPartitionPo.setUsed(used);
+        if (used >= serialPartitionPo.getMax()) {
+            serialPartitionPo.setStat(DataStatus.DISABLE.calculate());
+        }
         int row = serialPartitionMapper.updateByExampleSelective(serialPartitionPo, serialpartitionExample);
         if (row >= 1) {
             return true;

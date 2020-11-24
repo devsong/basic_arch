@@ -12,4 +12,9 @@ public interface SerialPartitionMapper extends Mapper<SerialPartitionPo> {
 
     @Select(GET_SERIAL_PARTITION_LOCK)
     SerialPartitionPo getSerialPartition(@Param("name") String name, @Param("ver") int ver, @Param("part") int partition);
+
+    String GET_SERIAL_MIN_PART = "SELECT min(part) FROM serialpart AS P WHERE P.name = #{name} AND P.ver = #{ver} AND P.stat = #{stat}";
+
+    @Select(GET_SERIAL_MIN_PART)
+    int getMinIndex(@Param("name") String name, @Param("ver") int version, @Param("stat") int stat);
 }

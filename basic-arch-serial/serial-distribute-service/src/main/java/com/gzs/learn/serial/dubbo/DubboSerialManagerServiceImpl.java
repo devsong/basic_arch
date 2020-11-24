@@ -38,7 +38,7 @@ public class DubboSerialManagerServiceImpl implements DubboSerialManagerService 
     @Override
     public void createSerialGroup(SerialGroup group) throws SerialException {
         SerialGroupPK pk = this.serialManagerService.createSerialGroup(group);
-        if (!this.zookeeperNotifyService.ceateNode(pk)) {
+        if (!this.zookeeperNotifyService.createNode(pk)) {
             log.error("send primary key to zk error {}", pk);
             throw new SerialException(SerialCode.SERIAL_CREATE_ERROR);
         }

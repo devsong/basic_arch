@@ -3,8 +3,10 @@ package com.gzs.learn.serial.domain;
 import com.gzs.learn.serial.type.NodeType;
 
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class GroupListenerNode {
 
     /**

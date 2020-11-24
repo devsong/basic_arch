@@ -19,7 +19,7 @@ public interface ZookeeperNotifyService {
      * @param serialPk
      * @return
      */
-    public boolean ceateNode(SerialGroupPK serialPk);
+    public boolean createNode(SerialGroupPK serialPk);
 
     /**
      * 删除节点

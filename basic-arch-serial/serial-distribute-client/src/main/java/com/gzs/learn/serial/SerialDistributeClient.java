@@ -23,8 +23,8 @@ public class SerialDistributeClient {
         group.setStat(DataStatus.ENABLE);
         group.setVersion(1);
         group.setStep(10000);
-        group.setMin(102010211022L);
-        group.setMax(102099999999L);
+        group.setMin(1020100L);
+        group.setMax(1920100L);
         group.setPart(8);
         group.setTsup(System.currentTimeMillis());
         group.setUpid(1);

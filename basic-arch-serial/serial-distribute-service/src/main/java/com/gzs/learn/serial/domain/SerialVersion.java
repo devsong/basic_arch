@@ -3,9 +3,11 @@ package com.gzs.learn.serial.domain;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@ToString
 public class SerialVersion {
     private String key;
 
@@ -46,8 +48,8 @@ public class SerialVersion {
             System.arraycopy(this.nodes, 0, newNodes, 0, this.nodes.length);
             newNodes[this.nodes.length] = node;
             this.nodes = newNodes;
-            log.info(String.format("Regist serial success,name=[%s], version=[%d], tsup=[%d].",
-                    node.getKey(), node.getVersion(), node.getTsup()));
+            log.info(String.format("Regist serial success,name=[%s], version=[%d], tsup=[%d].", node.getKey(), node.getVersion(),
+                    node.getTsup()));
         } finally {
             this.lock.unlock();
         }
@@ -71,8 +73,7 @@ public class SerialVersion {
                 if (node.equal(key, version, tsup)) {
                     if (index + 1 <= length) {
                         System.arraycopy(newNodes, index + 1, newNodes, index, length - index - 1);
-                        log.info("unregist serial success,name=[{}], version=[{}], tsup=[{}].", key,
-                                version, node.getTsup());
+                        log.info("unregist serial success,name=[{}], version=[{}], tsup=[{}].", key, version, node.getTsup());
                     }
                     length--;
                 } else {
@@ -109,8 +110,7 @@ public class SerialVersion {
                 if (node.equal(key, version)) {
                     if (index + 1 <= length) {
                         System.arraycopy(newNodes, index + 1, newNodes, index, length - index - 1);
-                        log.info("unregist serial success,name=[{}], version=[{}], tsup=[{}].", key,
-                                version, node.getTsup());
+                        log.info("unregist serial success,name=[{}], version=[{}], tsup=[{}].", key, version, node.getTsup());
                     }
                     length--;
                 } else {
