@@ -22,4 +22,5 @@
     <import resource="spring-ds-master.xml" />
     <import resource="spring-ds-qrtz.xml" />
     <import resource="spring-ds-log.xml" />
+    <import resource="spring-dubbo.xml" />
 </beans>

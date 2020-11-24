@@ -123,3 +123,5 @@ xss:
   excludes: /system/notice/*
   # 匹配链接
   urlPatterns: /system/*,/monitor/*,/tool/*
+zk:
+  server: 127.0.0.1:2181

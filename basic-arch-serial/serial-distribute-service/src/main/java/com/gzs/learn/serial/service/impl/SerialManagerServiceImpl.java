@@ -146,7 +146,7 @@ public class SerialManagerServiceImpl implements SerialManagerService {
             throw new IllegalArgumentException("Serial partition is null");
         }
         if (partition.getUsed() >= partition.getMax()) {
-            throw new IllegalArgumentException("Serial partition is full.");
+            throw new IllegalArgumentException("Serial partition is full");
         }
 
         // 已使用位置小于分区位置，表示分区还未使用
@@ -305,18 +305,18 @@ public class SerialManagerServiceImpl implements SerialManagerService {
         for (SerialGroupPo version : groups) {
             // 相同版本号
             if (version.getVersion() == group.getVersion()) {
-                throw new SerialException(SerialCode.SERIAL_ALREADY_EXISTS,
-                        String.format(" name=[%s],version=[%d].", version.getName(), version.getVersion()));
+                String msg = String.format(" name=[%s],version=[%d].", version.getName(), version.getVersion());
+                throw new SerialException(SerialCode.SERIAL_ALREADY_EXISTS, msg);
             }
             // 与已有版本存在区间冲突
             if (!(group.getMax() < version.getMin() || group.getMin() > version.getMax())) {
-                throw new SerialException(SerialCode.SERIAL_RANGE_ERROR, String.format(" name=[%s],version=[%d],Range=[%d~%d].",
-                        version.getName(), version.getVersion(), version.getMin(), version.getMax()));
+                String msg = String.format(" name=[%s],version=[%d],Range=[%d~%d].", version.getName(), version.getVersion(),
+                        version.getMin(), version.getMax());
+                throw new SerialException(SerialCode.SERIAL_RANGE_ERROR, msg);
             }
             maxVersion = maxVersion > version.getVersion() ? maxVersion : version.getVersion();
         }
         return maxVersion;
     }
-
 
 }

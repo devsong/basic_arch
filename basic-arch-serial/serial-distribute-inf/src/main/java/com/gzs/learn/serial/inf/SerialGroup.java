@@ -56,6 +56,7 @@ public class SerialGroup implements Serializable {
      * 变更时间戳
      */
     private long tsup;
+
     /**
      * 创建时间
      */

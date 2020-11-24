@@ -72,6 +72,12 @@
             <groupId>${ruoyi.groupId}</groupId>
             <artifactId>ruoyi-generator</artifactId>
         </dependency>
+        
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>serial-distribute-inf</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
