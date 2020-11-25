@@ -69,11 +69,18 @@
             <artifactId>ruoyi-system</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <!-- log模块 -->
         <dependency>
             <groupId>${ruoyi.groupId}</groupId>
             <artifactId>ruoyi-log</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- 序列号模块 -->
+        <dependency>
+            <groupId>${ruoyi.groupId}</groupId>
+            <artifactId>ruoyi-serial</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

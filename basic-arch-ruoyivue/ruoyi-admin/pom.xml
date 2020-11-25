@@ -73,11 +73,11 @@
             <artifactId>ruoyi-generator</artifactId>
         </dependency>
         
-        <dependency>
+        <!-- <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>serial-distribute-inf</artifactId>
             <version>${project.version}</version>
-        </dependency>
+        </dependency> -->
     </dependencies>
 
     <build>

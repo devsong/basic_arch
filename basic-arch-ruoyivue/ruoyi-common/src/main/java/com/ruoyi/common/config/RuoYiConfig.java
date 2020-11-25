@@ -40,6 +40,12 @@ public class RuoYiConfig {
 
     private String app;
 
+    private Integer dataCenterId;
+
+    private Integer serverPort;
+
+    private String zk;
+
     public String getName() {
         return name;
     }
@@ -139,5 +145,29 @@ public class RuoYiConfig {
 
     public void setApp(String app) {
         this.app = app;
+    }
+
+    public Integer getDataCenterId() {
+        return dataCenterId;
+    }
+
+    public void setDataCenterId(Integer dataCenterId) {
+        this.dataCenterId = dataCenterId;
+    }
+
+    public Integer getServerPort() {
+        return serverPort;
+    }
+
+    public void setServerPort(Integer serverPort) {
+        this.serverPort = serverPort;
+    }
+
+    public String getZk() {
+        return zk;
+    }
+
+    public void setZk(String zk) {
+        this.zk = zk;
     }
 }
