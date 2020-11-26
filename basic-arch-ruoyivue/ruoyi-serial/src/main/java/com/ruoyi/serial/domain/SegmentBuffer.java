@@ -1,4 +1,4 @@
-package com.ruoyi.serial.model;
+package com.ruoyi.serial.domain;
 
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;

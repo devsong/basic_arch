@@ -7,7 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ruoyi.serial.common.Result;
 import com.ruoyi.serial.common.Status;
-import com.ruoyi.serial.exception.LeafServerException;
+import com.ruoyi.serial.domain.SerialSnowflakeInfo;
+import com.ruoyi.serial.exception.SerialException;
 import com.ruoyi.serial.exception.NoKeyException;
 import com.ruoyi.serial.segment.SegmentIDGenImpl;
 import com.ruoyi.serial.snowflake.SnowflakeIDGenImpl;
@@ -33,6 +34,11 @@ public class SerialController {
         return get(key, snowflakeService.get(key));
     }
 
+    @RequestMapping("/snowflake/decode/{id}")
+    public SerialSnowflakeInfo decode(@PathVariable Long id) {
+        return snowflakeService.decodeSnowflake(id);
+    }
+
     private String get(@PathVariable("key") String key, Result id) {
         Result result;
         if (key == null || key.isEmpty()) {
@@ -40,7 +46,7 @@ public class SerialController {
         }
         result = id;
         if (result.getStatus().equals(Status.EXCEPTION)) {
-            throw new LeafServerException(result.toString());
+            throw new SerialException(result.toString());
         }
         return String.valueOf(result.getId());
     }

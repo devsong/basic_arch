@@ -1,26 +1,36 @@
 package com.ruoyi.serial.segment;
 
-import com.ruoyi.serial.segment.dao.IDAllocDao;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
-import lombok.extern.slf4j.Slf4j;
-
-import com.ruoyi.serial.IDGen;
-import com.ruoyi.serial.common.Result;
-import com.ruoyi.serial.common.Status;
-import com.ruoyi.serial.model.LeafAlloc;
-import com.ruoyi.serial.model.Segment;
-import com.ruoyi.serial.model.SegmentBuffer;
+import javax.annotation.PostConstruct;
 
 import org.perf4j.StopWatch;
 import org.perf4j.slf4j.Slf4JStopWatch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicLong;
+import com.gzs.learn.common.factory.NamedThreadFactory;
+import com.ruoyi.serial.IDGen;
+import com.ruoyi.serial.common.Result;
+import com.ruoyi.serial.common.Status;
+import com.ruoyi.serial.domain.Segment;
+import com.ruoyi.serial.domain.SegmentBuffer;
+import com.ruoyi.serial.domain.SerialAlloc;
 
-import javax.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
@@ -46,26 +56,12 @@ public class SegmentIDGenImpl implements IDGen {
      */
     private static final long SEGMENT_DURATION = 15 * 60 * 1000L;
     private ExecutorService service = new ThreadPoolExecutor(5, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(),
-            new UpdateThreadFactory());
+            new NamedThreadFactory("thread-segment-update"));
     private volatile boolean initOK = false;
     private Map<String, SegmentBuffer> cache = new ConcurrentHashMap<String, SegmentBuffer>();
 
     @Autowired
-    private IDAllocDao dao;
-
-    public static class UpdateThreadFactory implements ThreadFactory {
-
-        private static int threadInitNumber = 0;
-
-        private static synchronized int nextThreadNum() {
-            return threadInitNumber++;
-        }
-
-        @Override
-        public Thread newThread(Runnable r) {
-            return new Thread(r, "Thread-Segment-Update-" + nextThreadNum());
-        }
-    }
+    private IDAllocService idAllocService;
 
     @Override
     @PostConstruct
@@ -83,7 +79,7 @@ public class SegmentIDGenImpl implements IDGen {
             @Override
             public Thread newThread(Runnable r) {
                 Thread t = new Thread(r);
-                t.setName("check-idCache-thread");
+                t.setName("check-idcache-thread");
                 t.setDaemon(true);
                 return t;
             }
@@ -100,7 +96,7 @@ public class SegmentIDGenImpl implements IDGen {
         log.info("update cache from db");
         StopWatch sw = new Slf4JStopWatch();
         try {
-            List<String> dbTags = dao.getAllTags();
+            List<String> dbTags = idAllocService.getAllTags();
             if (dbTags == null || dbTags.isEmpty()) {
                 return;
             }
@@ -170,13 +166,13 @@ public class SegmentIDGenImpl implements IDGen {
     public void updateSegmentFromDb(String key, Segment segment) {
         StopWatch sw = new Slf4JStopWatch();
         SegmentBuffer buffer = segment.getBuffer();
-        LeafAlloc leafAlloc;
+        SerialAlloc leafAlloc;
         if (!buffer.isInitOk()) {
-            leafAlloc = dao.updateMaxIdAndGetLeafAlloc(key);
+            leafAlloc = idAllocService.updateMaxIdAndGetLeafAlloc(key);
             buffer.setStep(leafAlloc.getStep());
             buffer.setMinStep(leafAlloc.getStep());// leafAlloc中的step为DB中的step
         } else if (buffer.getUpdateTimestamp() == 0) {
-            leafAlloc = dao.updateMaxIdAndGetLeafAlloc(key);
+            leafAlloc = idAllocService.updateMaxIdAndGetLeafAlloc(key);
             buffer.setUpdateTimestamp(System.currentTimeMillis());
             buffer.setStep(leafAlloc.getStep());
             buffer.setMinStep(leafAlloc.getStep());// leafAlloc中的step为DB中的step
@@ -196,10 +192,10 @@ public class SegmentIDGenImpl implements IDGen {
             }
             log.info("leafKey[{}], step[{}], duration[{}mins], nextStep[{}]", key, buffer.getStep(),
                     String.format("%.2f", ((double) duration / (1000 * 60))), nextStep);
-            LeafAlloc temp = new LeafAlloc();
+            SerialAlloc temp = new SerialAlloc();
             temp.setKey(key);
             temp.setStep(nextStep);
-            leafAlloc = dao.updateMaxIdByCustomStepAndGetLeafAlloc(temp);
+            leafAlloc = idAllocService.updateMaxIdByCustomStepAndGetLeafAlloc(temp);
             buffer.setUpdateTimestamp(System.currentTimeMillis());
             buffer.setStep(nextStep);
             buffer.setMinStep(leafAlloc.getStep());// leafAlloc的step为DB中的step
@@ -287,19 +283,19 @@ public class SegmentIDGenImpl implements IDGen {
         }
     }
 
-    public List<LeafAlloc> getAllLeafAllocs() {
-        return dao.getAllLeafAllocs();
+    public List<SerialAlloc> getAllLeafAllocs() {
+        return idAllocService.getAllLeafAllocs();
     }
 
     public Map<String, SegmentBuffer> getCache() {
         return cache;
     }
 
-    public IDAllocDao getDao() {
-        return dao;
+    public IDAllocService getDao() {
+        return idAllocService;
     }
 
-    public void setDao(IDAllocDao dao) {
-        this.dao = dao;
+    public void setDao(IDAllocService dao) {
+        this.idAllocService = dao;
     }
 }

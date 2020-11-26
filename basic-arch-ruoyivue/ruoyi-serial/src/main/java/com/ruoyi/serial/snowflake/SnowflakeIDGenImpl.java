@@ -17,11 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.google.common.base.Preconditions;
-import com.ruoyi.common.config.RuoYiConfig;
 import com.ruoyi.serial.IDGen;
 import com.ruoyi.serial.common.Result;
 import com.ruoyi.serial.common.Status;
-import com.ruoyi.serial.model.SerialSnowflakeInfo;
+import com.ruoyi.serial.config.SerialConfig;
+import com.ruoyi.serial.domain.SerialSnowflakeInfo;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,8 +43,8 @@ public class SnowflakeIDGenImpl implements IDGen {
     private SnowflakeZookeeperHolder snowflakeZookeeperHolder;
 
     @Autowired
-    public SnowflakeIDGenImpl(RuoYiConfig ruoYiConfig, SnowflakeZookeeperHolder snowflakeZookeeperHolder) {
-        this.dataCenterId = ruoYiConfig.getDataCenterId();
+    public SnowflakeIDGenImpl(SerialConfig serialConfig, SnowflakeZookeeperHolder snowflakeZookeeperHolder) {
+        this.dataCenterId = serialConfig.getDataCenterId();
         this.snowflakeZookeeperHolder = snowflakeZookeeperHolder;
     }
 

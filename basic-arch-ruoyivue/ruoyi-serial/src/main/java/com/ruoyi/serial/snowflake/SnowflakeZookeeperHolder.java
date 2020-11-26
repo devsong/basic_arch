@@ -24,7 +24,7 @@ import com.google.common.base.Charsets;
 import com.google.common.collect.Maps;
 import com.gzs.learn.common.util.IpUtil;
 import com.gzs.learn.common.util.JsonUtil;
-import com.ruoyi.common.config.RuoYiConfig;
+import com.ruoyi.serial.config.SerialConfig;
 import com.ruoyi.serial.exception.CheckLastTimeException;
 
 import lombok.Data;
@@ -47,18 +47,18 @@ public class SnowflakeZookeeperHolder {
     private long lastUpdateTime;
 
     @Autowired
-    public SnowflakeZookeeperHolder(RuoYiConfig ruoYiConfig) {
-        this.dataCenterID = ruoYiConfig.getDataCenterId();
+    public SnowflakeZookeeperHolder(SerialConfig serialConfig) {
+        this.dataCenterID = serialConfig.getDataCenterId();
         if (dataCenterID > SnowflakeConst.MAX_DATA_CENTER_ID) {
             throw new Error("dataCenterId must no more than:" + SnowflakeConst.MAX_DATA_CENTER_ID);
         }
-        this.appPort = ruoYiConfig.getServerPort();
+        this.appPort = serialConfig.getServerPort();
         this.appIp = IpUtil.getLocalIp();
         this.appID = appIp + ":" + appPort;
-        this.notifyZk = ruoYiConfig.getZk();
-        this.prefixZkPath = "/snowflake/" + ruoYiConfig.getName();
+        this.notifyZk = serialConfig.getZk();
+        this.prefixZkPath = "/snowflake/" + serialConfig.getName();
         this.pathForever = prefixZkPath + "/forever";
-        this.propPath = System.getProperty("java.io.tmpdir") + File.separator + ruoYiConfig.getName()
+        this.propPath = System.getProperty("java.io.tmpdir") + File.separator + serialConfig.getName()
                 + "/serialconf/{port}/workerID.properties";
     }
 
