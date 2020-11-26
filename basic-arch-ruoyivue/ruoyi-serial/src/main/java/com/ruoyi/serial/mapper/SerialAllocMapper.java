@@ -22,4 +22,6 @@ public interface SerialAllocMapper {
     List<SerialAlloc> search(SegmentSearchDto segmentSearchDto);
 
     int saveSerial(SerialAlloc serialAlloc);
+
+    int updateSerialAllocStatus(@Param("tag") String key, @Param("status") Integer status);
 }

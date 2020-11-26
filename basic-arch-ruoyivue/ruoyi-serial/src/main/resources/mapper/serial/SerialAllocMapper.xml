@@ -8,12 +8,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result column="max_id" property="maxId" jdbcType="BIGINT"/>
         <result column="step" property="step" jdbcType="INTEGER"/>
         <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     
     <sql id="Base_Column_List">
-        biz_tag, max_id, step,description,create_time,update_time
+        biz_tag, max_id, step,description,status,create_time,update_time
     </sql>
     
     <select id="getAllSerialAllocs" resultMap="BaseResultMap">
@@ -21,6 +22,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <include refid="Base_Column_List"/>
         FROM 
             serial_alloc
+        WHERE
+            status = 0
     </select>
     
     <select id="getSerialAlloc" resultMap="BaseResultMap" parameterType="java.lang.String">
@@ -30,10 +33,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             serial_alloc 
         WHERE 
             biz_tag = #{tag}
+            and status=0
     </select>
 
     <update id="updateMaxId" parameterType="java.lang.String">
         UPDATE serial_alloc SET max_id = max_id + step WHERE biz_tag = #{tag}
+    </update>
+    
+    <update id="updateSerialAllocStatus" parameterType="java.util.Map">
+        UPDATE serial_alloc SET status=#{status} WHERE biz_tag = #{tag}
     </update>
     
     <update id="updateMaxIdByCustomStep" parameterType="java.util.Map">
@@ -41,7 +49,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
     
     <select id="getAllTags" resultType="java.lang.String">
-        SELECT biz_tag FROM serial_alloc
+        SELECT 
+            biz_tag 
+        FROM 
+            serial_alloc
+        WHERE
+            status = 0
     </select>
     
     <select id="search" parameterType="com.ruoyi.serial.dto.SegmentSearchDto" resultMap="BaseResultMap">
@@ -56,12 +69,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="saveSerial" parameterType="com.ruoyi.serial.domain.SerialAlloc">
         insert into serial_alloc
         (
-            biz_tag, max_id, step,
+            biz_tag, max_id, step,status,
             description,create_time
         )
         values
         (
-            #{key,jdbcType=VARCHAR},#{maxId,jdbcType=BIGINT},#{step,jdbcType=INTEGER},
+            #{key,jdbcType=VARCHAR},#{maxId,jdbcType=BIGINT},#{step,jdbcType=INTEGER},#{status,jdbcType=INTEGER},
             #{description,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP}
         )
     </insert>

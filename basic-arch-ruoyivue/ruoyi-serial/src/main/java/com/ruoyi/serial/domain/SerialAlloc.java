@@ -23,6 +23,10 @@ public class SerialAlloc {
      */
     private String description;
     /**
+     * 状态
+     */
+    private Integer status;
+    /**
      * 创建时间
      */
     private Date createTime;

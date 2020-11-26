@@ -17,4 +17,6 @@ public interface SerialAllocService {
     List<SerialAlloc> search(SegmentSearchDto segmentSearchDto);
 
     int saveSerialAlloc(SerialAlloc serialAlloc);
+
+    int updateStatus(String key, Integer status);
 }

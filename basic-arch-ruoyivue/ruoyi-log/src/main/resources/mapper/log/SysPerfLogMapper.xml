@@ -71,34 +71,28 @@
     </delete>
     
     <insert id="insert" parameterType="com.ruoyi.log.domain.SysPerfLogPo">
-        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
         insert into sys_perf_log 
         (
-            meta_id, trace_id, execute_timespan,
-            code, create_time, timestamp,
-            params_in, params_out, errmsg
+            id,meta_id,execute_timespan,
+            code,create_time,timestamp,
+            params_in,params_out,errmsg
         )
         values 
         (
-            #{metaId,jdbcType=BIGINT}, #{traceId,jdbcType=VARCHAR}, #{executeTimespan,jdbcType=INTEGER},
+            #{id,jdbcType=BIGINT},#{metaId,jdbcType=BIGINT},#{executeTimespan,jdbcType=INTEGER},
             #{code,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{timestamp,jdbcType=TIMESTAMP},
             #{paramsIn,jdbcType=LONGVARCHAR}, #{paramsOut,jdbcType=LONGVARCHAR}, #{errmsg,jdbcType=LONGVARCHAR}
         )
     </insert>
     
     <insert id="insertSelective" parameterType="com.ruoyi.log.domain.SysPerfLogPo">
-        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
         insert into sys_perf_log
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
             <if test="metaId != null">
                 meta_id,
-            </if>
-            <if test="traceId != null">
-                trace_id,
             </if>
             <if test="executeTimespan != null">
                 execute_timespan,
@@ -123,11 +117,11 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+             <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
             <if test="metaId != null">
                 #{metaId,jdbcType=BIGINT},
-            </if>
-            <if test="traceId != null">
-                #{traceId,jdbcType=VARCHAR},
             </if>
             <if test="executeTimespan != null">
                 #{executeTimespan,jdbcType=INTEGER},
@@ -159,9 +153,6 @@
             <if test="metaId != null">
                 meta_id = #{metaId,jdbcType=BIGINT},
             </if>
-            <if test="traceId != null">
-                trace_id = #{traceId,jdbcType=VARCHAR},
-            </if>
             <if test="executeTimespan != null">
                 execute_timespan = #{executeTimespan,jdbcType=INTEGER},
             </if>
@@ -190,7 +181,6 @@
     <update id="updateByPrimaryKey" parameterType="com.ruoyi.log.domain.SysPerfLogPo">
         update sys_perf_log
         set meta_id = #{metaId,jdbcType=BIGINT},
-        trace_id = #{traceId,jdbcType=VARCHAR},
         execute_timespan = #{executeTimespan,jdbcType=INTEGER},
         code = #{code,jdbcType=INTEGER},
         create_time = #{createTime,jdbcType=TIMESTAMP},

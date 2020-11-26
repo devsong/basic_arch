@@ -59,4 +59,10 @@ public class SerialAllocServiceImpl implements SerialAllocService {
         int row = idAllocMapper.saveSerial(serialAlloc);
         return row;
     }
+
+    @Override
+    public int updateStatus(String key, Integer status) {
+        int row = idAllocMapper.updateSerialAllocStatus(key, status);
+        return row;
+    }
 }

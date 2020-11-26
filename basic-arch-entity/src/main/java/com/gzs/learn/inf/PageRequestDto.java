@@ -16,7 +16,7 @@ public class PageRequestDto implements Serializable {
      * 
      */
     private static final long serialVersionUID = 1L;
-    protected Integer page;
+    protected Integer pageNum;
     protected Integer pageSize;
     // 兼容已有分页逻辑
     protected Integer limit;
@@ -26,6 +26,6 @@ public class PageRequestDto implements Serializable {
     }
 
     public Integer getOffset() {
-        return page <= 1 ? 0 : (page - 1) * getPageSize();
+        return pageNum <= 1 ? 0 : (pageNum - 1) * getPageSize();
     }
 }

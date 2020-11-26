@@ -1,4 +1,4 @@
-package com.ruoyi.serial.segment;
+package com.ruoyi.serial.segment.impl;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -6,12 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -20,11 +17,11 @@ import javax.annotation.PostConstruct;
 import org.perf4j.StopWatch;
 import org.perf4j.slf4j.Slf4JStopWatch;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.gzs.learn.common.factory.NamedThreadFactory;
 import com.gzs.learn.inf.PageResponseDto;
 import com.gzs.learn.inf.PageResponseDto.PageResponse;
 import com.ruoyi.serial.IDGen;
@@ -34,12 +31,14 @@ import com.ruoyi.serial.domain.Segment;
 import com.ruoyi.serial.domain.SegmentBuffer;
 import com.ruoyi.serial.domain.SerialAlloc;
 import com.ruoyi.serial.dto.SegmentSearchDto;
+import com.ruoyi.serial.segment.SegmentIdGenService;
+import com.ruoyi.serial.segment.SerialAllocService;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class SegmentIDGenImpl implements IDGen {
+public class SegmentIDGenImpl implements IDGen, SegmentIdGenService {
     /**
      * IDCache未初始化成功时的异常码
      */
@@ -60,13 +59,20 @@ public class SegmentIDGenImpl implements IDGen {
      * 一个Segment维持时间为15分钟
      */
     private static final long SEGMENT_DURATION = 15 * 60 * 1000L;
-    private ExecutorService service = new ThreadPoolExecutor(5, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(),
-            new NamedThreadFactory("thread-segment-update"));
+
+    // private ExecutorService service = new ThreadPoolExecutor(5, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS, new
+    // SynchronousQueue<Runnable>(),
+    // new NamedThreadFactory("thread-segment-update"));
+
     private volatile boolean initOK = false;
+
     private Map<String, SegmentBuffer> cache = new ConcurrentHashMap<String, SegmentBuffer>();
 
     @Autowired
     private SerialAllocService serialAllocService;
+
+    @Autowired
+    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     @Override
     @PostConstruct
@@ -220,7 +226,7 @@ public class SegmentIDGenImpl implements IDGen {
                 final Segment segment = buffer.getCurrent();
                 if (!buffer.isNextReady() && (segment.getIdle() < 0.9 * segment.getStep())
                         && buffer.getThreadRunning().compareAndSet(false, true)) {
-                    service.execute(new Runnable() {
+                    threadPoolTaskExecutor.execute(new Runnable() {
                         @Override
                         public void run() {
                             Segment next = buffer.getSegments()[buffer.nextPos()];
@@ -288,25 +294,30 @@ public class SegmentIDGenImpl implements IDGen {
         }
     }
 
-    public List<SerialAlloc> getAllLeafAllocs() {
-        return serialAllocService.getAllSerialAllocs();
-    }
-
-    public Map<String, SegmentBuffer> getCache() {
-        return cache;
-    }
-
+    @Override
     public PageResponseDto<SerialAlloc> searchBizKeys(SegmentSearchDto segmentSearchDto) {
-        PageInfo<SerialAlloc> pageInfo = PageHelper.startPage(segmentSearchDto.getPage(), segmentSearchDto.getPageSize(), true)
+        PageInfo<SerialAlloc> pageInfo = PageHelper.startPage(segmentSearchDto.getPageNum(), segmentSearchDto.getPageSize(), true)
                 .doSelectPageInfo(() -> {
                     serialAllocService.search(segmentSearchDto);
                 });
-        PageResponse pageResponse = PageResponse.builder().page(segmentSearchDto.getPage()).pageSize(segmentSearchDto.getPageSize())
+        PageResponse pageResponse = PageResponse.builder().page(segmentSearchDto.getPageNum()).pageSize(segmentSearchDto.getPageSize())
                 .total((int) pageInfo.getTotal()).build();
         PageResponseDto<SerialAlloc> pageResponseDto = new PageResponseDto<SerialAlloc>();
         pageResponseDto.setCode(0);
         pageResponseDto.setPage(pageResponse);
         pageResponseDto.setData(pageInfo.getList());
         return pageResponseDto;
+    }
+
+    @Override
+    public boolean add(SerialAlloc serialAlloc) {
+        int row = serialAllocService.saveSerialAlloc(serialAlloc);
+        return row == 1;
+    }
+
+    @Override
+    public boolean updateStatus(String key, Integer status) {
+        int row = serialAllocService.updateStatus(key, status);
+        return row >= 1;
     }
 }
