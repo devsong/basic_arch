@@ -19,7 +19,7 @@ import com.ruoyi.serial.segment.SegmentIDGenImpl;
 import com.ruoyi.serial.snowflake.SnowflakeIDGenImpl;
 
 @RestController
-@RequestMapping("api/serial")
+@RequestMapping("/api/serial")
 public class SerialController {
     @Autowired
     private SegmentIDGenImpl segmentService;
@@ -32,7 +32,7 @@ public class SerialController {
         return AjaxResult.success(get(key, segmentService.get(key)));
     }
 
-    @RequestMapping(value = "segment/list")
+    @RequestMapping(value = "/segment/list")
     public PageResponseDto<SerialAlloc> getSegment(@RequestBody SegmentSearchDto segmentSearchDto) {
         PageResponseDto<SerialAlloc> pageResponseDto = segmentService.searchBizKeys(segmentSearchDto);
         return pageResponseDto;
