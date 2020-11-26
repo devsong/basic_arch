@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
  * @author guanzhisong
  */
 public class HttpHelper {
-    private static final Logger LOGGER = LoggerFactory.getLogger(HttpHelper.class);
+    private static final Logger log = LoggerFactory.getLogger(HttpHelper.class);
 
     public static String getBodyString(ServletRequest request) {
         StringBuilder sb = new StringBuilder();
@@ -28,13 +28,13 @@ public class HttpHelper {
                 sb.append(line);
             }
         } catch (IOException e) {
-            LOGGER.warn("getBodyString出现问题！");
+            log.warn("getBodyString出现问题！");
         } finally {
             if (reader != null) {
                 try {
                     reader.close();
                 } catch (IOException e) {
-                    LOGGER.error(ExceptionUtils.getMessage(e));
+                    log.error(ExceptionUtils.getMessage(e));
                 }
             }
         }

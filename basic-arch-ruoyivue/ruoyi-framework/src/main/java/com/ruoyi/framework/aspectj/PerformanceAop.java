@@ -37,13 +37,15 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class PerformanceAop {
-    private static final String EXECUTION_AOP = "within(" + Constants.SYSTEM_PREFIX + ".web.controller..*)";
+    private static final String WEB_AOP = "within(" + Constants.SYSTEM_PREFIX + ".web.controller..*)";
+    private static final String SERIAL_AOP = "within(" + Constants.SYSTEM_PREFIX + ".serial.controller..*)";
+    private static final String GENERATOR_AOP = "within(" + Constants.SYSTEM_PREFIX + ".generator.controller..*)";
     private static final String ANNOTATION_PERLOG = "@annotation(" + Constants.SYSTEM_PREFIX + ".common.annotation.PerfLog)";
 
     @Autowired
     private RuoYiConfig ruoYiConfig;
 
-    @Pointcut(EXECUTION_AOP + "||" + ANNOTATION_PERLOG)
+    @Pointcut(WEB_AOP + "||" + SERIAL_AOP + "||" + GENERATOR_AOP + "||" + ANNOTATION_PERLOG)
     public void log4Perf() {
     }
 

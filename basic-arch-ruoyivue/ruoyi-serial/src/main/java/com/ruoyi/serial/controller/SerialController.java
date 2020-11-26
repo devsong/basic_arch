@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.serial.common.Result;
 import com.ruoyi.serial.common.Status;
 import com.ruoyi.serial.domain.SerialSnowflakeInfo;
@@ -25,18 +26,19 @@ public class SerialController {
     private SnowflakeIDGenImpl snowflakeService;
 
     @RequestMapping(value = "/segment/get/{key}")
-    public String getSegmentId(@PathVariable("key") String key) {
-        return get(key, segmentService.get(key));
+    public AjaxResult getSegmentId(@PathVariable("key") String key) {
+        return AjaxResult.success(get(key, segmentService.get(key)));
     }
 
     @RequestMapping(value = "/snowflake/get/{key}")
-    public String getSnowflakeId(@PathVariable("key") String key) {
-        return get(key, snowflakeService.get(key));
+    public AjaxResult getSnowflakeId(@PathVariable("key") String key) {
+        return AjaxResult.success(get(key, snowflakeService.get(key)));
     }
 
     @RequestMapping("/snowflake/decode/{id}")
-    public SerialSnowflakeInfo decode(@PathVariable Long id) {
-        return snowflakeService.decodeSnowflake(id);
+    public AjaxResult decode(@PathVariable Long id) {
+        SerialSnowflakeInfo decodeSnowflake = snowflakeService.decodeSnowflake(id);
+        return AjaxResult.success(decodeSnowflake);
     }
 
     private String get(@PathVariable("key") String key, Result id) {

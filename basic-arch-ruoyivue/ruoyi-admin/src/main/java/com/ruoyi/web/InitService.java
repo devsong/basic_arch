@@ -26,7 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class InitService {
-    private static final String BASE_PACKAGE = Constants.SYSTEM_PREFIX + ".web.controller";
+    private static final String[] BASE_PACKAGE = new String[] { Constants.SYSTEM_PREFIX + ".web.controller",
+            Constants.SYSTEM_PREFIX + ".serial.controller", Constants.SYSTEM_PREFIX + ".generator.controller" };
 
     @Autowired
     private RuoYiConfig ruoYiConfig;
@@ -45,19 +46,21 @@ public class InitService {
 
     private void registerPerfMetaData() {
         String operatorIp = IpUtil.getLocalIp();
-        List<Class<?>> classes = ClassUtil.getClass(BASE_PACKAGE, true);
-        for (Class<?> clazz : classes) {
-            if (clazz.isInterface()) {
-                continue;
-            }
-            String className = clazz.getName();
-            for (Method m : clazz.getDeclaredMethods()) {
-                String methodName = m.getName();
-                SysPerfLogMetaPo metaDto = SysPerfLogMetaPo.builder().product(ruoYiConfig.getProduct()).groupName(ruoYiConfig.getGroup())
-                        .app(ruoYiConfig.getApp()).clazz(className).method(methodName).operatorIp(operatorIp).createTime(new Date())
-                        .build();
-                // 异步执行
-                threadPoolTaskExecutor.submit(() -> perfLogService.insertPerfLogMeta(metaDto));
+        for (String pack : BASE_PACKAGE) {
+            List<Class<?>> classes = ClassUtil.getClass(pack, true);
+            for (Class<?> clazz : classes) {
+                if (clazz.isInterface()) {
+                    continue;
+                }
+                String className = clazz.getName();
+                for (Method m : clazz.getDeclaredMethods()) {
+                    String methodName = m.getName();
+                    SysPerfLogMetaPo metaDto = SysPerfLogMetaPo.builder().product(ruoYiConfig.getProduct())
+                            .groupName(ruoYiConfig.getGroup()).app(ruoYiConfig.getApp()).clazz(className).method(methodName)
+                            .operatorIp(operatorIp).createTime(new Date()).build();
+                    // 异步执行
+                    threadPoolTaskExecutor.submit(() -> perfLogService.insertPerfLogMeta(metaDto));
+                }
             }
         }
     }

@@ -6,7 +6,6 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
-    
 
     <bean id="masterDataSource" class="com.alibaba.druid.pool.DruidDataSource">
         <property name="name" value="master-ds" />
@@ -44,7 +43,7 @@
     <bean id="slaveDataSource" class="com.alibaba.druid.pool.DruidDataSource">
         <property name="name" value="slaveDataSource" />
         <property name="driverClassName" value="${spring.datasource.driverClassName}" />
-        <property name="url" value="${spring.datasource.druid.slave.url}${${spring.datasource.defaultParams}" />
+        <property name="url" value="${spring.datasource.druid.slave.url}${spring.datasource.defaultParams}" />
         <property name="username" value="${spring.datasource.druid.slave.username}" />
         <property name="password" value="${spring.datasource.druid.slave.password}" />
 

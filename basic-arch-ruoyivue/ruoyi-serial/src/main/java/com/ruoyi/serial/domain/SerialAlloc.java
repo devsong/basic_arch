@@ -17,6 +17,10 @@ public class SerialAlloc {
      */
     private int step;
     /**
+     * 描述
+     */
+    private String description;
+    /**
      * 更新时间
      */
     private String updateTime;

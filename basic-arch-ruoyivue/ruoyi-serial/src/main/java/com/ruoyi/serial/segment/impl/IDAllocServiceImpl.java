@@ -13,7 +13,6 @@ import com.ruoyi.serial.mapper.IDAllocMapper;
 import com.ruoyi.serial.segment.IDAllocService;
 
 @Service
-@DataSource(DataSourceType.MASTER)
 public class IDAllocServiceImpl implements IDAllocService {
     @Autowired
     private IDAllocMapper idAllocMapper;
@@ -25,6 +24,7 @@ public class IDAllocServiceImpl implements IDAllocService {
     }
 
     @Override
+    @DataSource(DataSourceType.MASTER)
     @Transactional
     public SerialAlloc updateMaxIdAndGetLeafAlloc(String tag) {
         idAllocMapper.updateMaxId(tag);
@@ -33,6 +33,7 @@ public class IDAllocServiceImpl implements IDAllocService {
     }
 
     @Override
+    @DataSource(DataSourceType.MASTER)
     @Transactional
     public SerialAlloc updateMaxIdByCustomStepAndGetLeafAlloc(SerialAlloc leafAlloc) {
         idAllocMapper.updateMaxIdByCustomStep(leafAlloc);
