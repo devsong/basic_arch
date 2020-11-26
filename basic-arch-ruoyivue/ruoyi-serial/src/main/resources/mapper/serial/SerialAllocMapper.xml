@@ -8,11 +8,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result column="max_id" property="maxId" jdbcType="BIGINT"/>
         <result column="step" property="step" jdbcType="INTEGER"/>
         <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     
     <sql id="Base_Column_List">
-        biz_tag, max_id, step,description, update_time
+        biz_tag, max_id, step,description,create_time,update_time
     </sql>
     
     <select id="getAllSerialAllocs" resultMap="BaseResultMap">

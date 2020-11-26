@@ -1,5 +1,7 @@
 package com.ruoyi.serial.domain;
 
+import java.util.Date;
+
 import lombok.Data;
 
 @Data
@@ -21,8 +23,12 @@ public class SerialAlloc {
      */
     private String description;
     /**
+     * 创建时间
+     */
+    private Date createTime;
+    /**
      * 更新时间
      */
-    private String updateTime;
+    private Date updateTime;
 
 }
