@@ -6,13 +6,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gzs.learn.inf.PageRequestDto;
 import com.gzs.learn.inf.PageResponseDto;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.serial.common.Result;
 import com.ruoyi.serial.common.Status;
 import com.ruoyi.serial.domain.SerialAlloc;
 import com.ruoyi.serial.domain.SerialSnowflakeInfo;
+import com.ruoyi.serial.dto.SegmentSearchDto;
 import com.ruoyi.serial.exception.SerialException;
 import com.ruoyi.serial.exception.NoKeyException;
 import com.ruoyi.serial.segment.SegmentIDGenImpl;
@@ -33,8 +33,9 @@ public class SerialController {
     }
 
     @RequestMapping(value = "segment/list")
-    public PageResponseDto<SerialAlloc> getSegment(@RequestBody PageRequestDto pageRequestDto) {
-
+    public PageResponseDto<SerialAlloc> getSegment(@RequestBody SegmentSearchDto segmentSearchDto) {
+        PageResponseDto<SerialAlloc> pageResponseDto = segmentService.searchBizKeys(segmentSearchDto);
+        return pageResponseDto;
     }
 
     @RequestMapping(value = "/snowflake")

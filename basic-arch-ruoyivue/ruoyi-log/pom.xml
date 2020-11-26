@@ -16,6 +16,13 @@
             <groupId>${ruoyi.groupId}</groupId>
             <artifactId>ruoyi-common</artifactId>
         </dependency>
+        
+         <!-- 序列号模块 -->
+        <dependency>
+            <groupId>${ruoyi.groupId}</groupId>
+            <artifactId>ruoyi-serial</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.gzs.learn</groupId>

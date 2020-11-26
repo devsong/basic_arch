@@ -22,7 +22,6 @@ import com.gzs.learn.inf.PageResponseDto.PageResponse;
 import com.gzs.learn.inf.PageResponseDto.PageResponseDtoBuilder;
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.enums.DataSourceType;
-import com.ruoyi.common.utils.uuid.UUID;
 import com.ruoyi.log.domain.SysPerfLogCountPo;
 import com.ruoyi.log.domain.SysPerfLogMetaPo;
 import com.ruoyi.log.domain.SysPerfLogPo;
@@ -33,6 +32,7 @@ import com.ruoyi.log.mapper.SysPerfLogCountMapper;
 import com.ruoyi.log.mapper.SysPerfLogMapper;
 import com.ruoyi.log.mapper.SysPerfLogMetaMapper;
 import com.ruoyi.log.service.IPerfLogService;
+import com.ruoyi.serial.snowflake.SnowflakeIDGenImpl;
 
 @Component
 @DataSource(value = DataSourceType.LOG)
@@ -46,6 +46,9 @@ public class PerfLogServiceImpl implements IPerfLogService {
 
     @Autowired
     private SysPerfLogMapper sysPerfLogMapper;
+
+    @Autowired
+    private SnowflakeIDGenImpl snowflakeIDGenImpl;
 
     @Override
     public boolean insertPerfLogMeta(SysPerfLogMetaPo po) {
@@ -77,9 +80,10 @@ public class PerfLogServiceImpl implements IPerfLogService {
         // 写入性能日志
         SysPerfLogPo po = new SysPerfLogPo();
         BeanUtil.copyProperties(sysLogDto, po);
-        po.setTraceId(UUID.fastUUID().toString());
+        // po.setTraceId(UUID.fastUUID().toString());
+        // po.setTraceId(snowflakeIDGenImpl.get(null).getId() + "");
         po.setMetaId(metaId);
-        po.setId(null);
+        po.setId(snowflakeIDGenImpl.get(null).getId());
         int row = sysPerfLogMapper.insertSelective(po);
         // 写入统计日志
         createCountLog(sysLogDto, metaId);

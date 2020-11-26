@@ -22,13 +22,18 @@ import org.perf4j.slf4j.Slf4JStopWatch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.gzs.learn.common.factory.NamedThreadFactory;
+import com.gzs.learn.inf.PageResponseDto;
+import com.gzs.learn.inf.PageResponseDto.PageResponse;
 import com.ruoyi.serial.IDGen;
 import com.ruoyi.serial.common.Result;
 import com.ruoyi.serial.common.Status;
 import com.ruoyi.serial.domain.Segment;
 import com.ruoyi.serial.domain.SegmentBuffer;
 import com.ruoyi.serial.domain.SerialAlloc;
+import com.ruoyi.serial.dto.SegmentSearchDto;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -61,7 +66,7 @@ public class SegmentIDGenImpl implements IDGen {
     private Map<String, SegmentBuffer> cache = new ConcurrentHashMap<String, SegmentBuffer>();
 
     @Autowired
-    private IDAllocService idAllocService;
+    private SerialAllocService serialAllocService;
 
     @Override
     @PostConstruct
@@ -96,7 +101,7 @@ public class SegmentIDGenImpl implements IDGen {
         log.info("update cache from db");
         StopWatch sw = new Slf4JStopWatch();
         try {
-            List<String> dbTags = idAllocService.getAllTags();
+            List<String> dbTags = serialAllocService.getAllTags();
             if (dbTags == null || dbTags.isEmpty()) {
                 return;
             }
@@ -166,16 +171,16 @@ public class SegmentIDGenImpl implements IDGen {
     public void updateSegmentFromDb(String key, Segment segment) {
         StopWatch sw = new Slf4JStopWatch();
         SegmentBuffer buffer = segment.getBuffer();
-        SerialAlloc leafAlloc;
+        SerialAlloc serialAlloc;
         if (!buffer.isInitOk()) {
-            leafAlloc = idAllocService.updateMaxIdAndGetLeafAlloc(key);
-            buffer.setStep(leafAlloc.getStep());
-            buffer.setMinStep(leafAlloc.getStep());// leafAlloc中的step为DB中的step
+            serialAlloc = serialAllocService.updateMaxIdAndGetSerialAlloc(key);
+            buffer.setStep(serialAlloc.getStep());
+            buffer.setMinStep(serialAlloc.getStep());
         } else if (buffer.getUpdateTimestamp() == 0) {
-            leafAlloc = idAllocService.updateMaxIdAndGetLeafAlloc(key);
+            serialAlloc = serialAllocService.updateMaxIdAndGetSerialAlloc(key);
             buffer.setUpdateTimestamp(System.currentTimeMillis());
-            buffer.setStep(leafAlloc.getStep());
-            buffer.setMinStep(leafAlloc.getStep());// leafAlloc中的step为DB中的step
+            buffer.setStep(serialAlloc.getStep());
+            buffer.setMinStep(serialAlloc.getStep());// leafAlloc中的step为DB中的step
         } else {
             long duration = System.currentTimeMillis() - buffer.getUpdateTimestamp();
             int nextStep = buffer.getStep();
@@ -195,15 +200,15 @@ public class SegmentIDGenImpl implements IDGen {
             SerialAlloc temp = new SerialAlloc();
             temp.setKey(key);
             temp.setStep(nextStep);
-            leafAlloc = idAllocService.updateMaxIdByCustomStepAndGetLeafAlloc(temp);
+            serialAlloc = serialAllocService.updateMaxIdByCustomStepAndGetLeafAlloc(temp);
             buffer.setUpdateTimestamp(System.currentTimeMillis());
             buffer.setStep(nextStep);
-            buffer.setMinStep(leafAlloc.getStep());// leafAlloc的step为DB中的step
+            buffer.setMinStep(serialAlloc.getStep());// leafAlloc的step为DB中的step
         }
         // must set value before set max
-        long value = leafAlloc.getMaxId() - buffer.getStep();
+        long value = serialAlloc.getMaxId() - buffer.getStep();
         segment.getValue().set(value);
-        segment.setMax(leafAlloc.getMaxId());
+        segment.setMax(serialAlloc.getMaxId());
         segment.setStep(buffer.getStep());
         sw.stop("updateSegmentFromDb", key + " " + segment);
     }
@@ -284,18 +289,24 @@ public class SegmentIDGenImpl implements IDGen {
     }
 
     public List<SerialAlloc> getAllLeafAllocs() {
-        return idAllocService.getAllLeafAllocs();
+        return serialAllocService.getAllSerialAllocs();
     }
 
     public Map<String, SegmentBuffer> getCache() {
         return cache;
     }
 
-    public IDAllocService getDao() {
-        return idAllocService;
-    }
-
-    public void setDao(IDAllocService dao) {
-        this.idAllocService = dao;
+    public PageResponseDto<SerialAlloc> searchBizKeys(SegmentSearchDto segmentSearchDto) {
+        PageInfo<SerialAlloc> pageInfo = PageHelper.startPage(segmentSearchDto.getPage(), segmentSearchDto.getPageSize(), true)
+                .doSelectPageInfo(() -> {
+                    serialAllocService.search(segmentSearchDto);
+                });
+        PageResponse pageResponse = PageResponse.builder().page(segmentSearchDto.getPage()).pageSize(segmentSearchDto.getPageSize())
+                .total((int) pageInfo.getTotal()).build();
+        PageResponseDto<SerialAlloc> pageResponseDto = new PageResponseDto<SerialAlloc>();
+        pageResponseDto.setCode(0);
+        pageResponseDto.setPage(pageResponse);
+        pageResponseDto.setData(pageInfo.getList());
+        return pageResponseDto;
     }
 }

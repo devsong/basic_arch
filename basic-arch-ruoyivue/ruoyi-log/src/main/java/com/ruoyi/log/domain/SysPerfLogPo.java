@@ -26,7 +26,7 @@ public class SysPerfLogPo implements Serializable {
     /**
      * 唯一ID
      */
-    private String traceId;
+    // private String traceId;
     /**
      * 元数据id
      */

@@ -24,4 +24,8 @@ public class PageRequestDto implements Serializable {
     public Integer getPageSize() {
         return pageSize == null ? limit : pageSize;
     }
+
+    public Integer getOffset() {
+        return page <= 1 ? 0 : (page - 1) * getPageSize();
+    }
 }

@@ -36,4 +36,8 @@ public class SysPerfLogSearchDto extends PageSearchRequestDto {
      * 方法名
      */
     private String method;
+    /**
+     * 日志ID
+     */
+    private Long id;
 }

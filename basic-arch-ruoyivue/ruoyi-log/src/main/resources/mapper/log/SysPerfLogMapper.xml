@@ -4,7 +4,6 @@
     <resultMap id="BaseResultMap" type="com.ruoyi.log.domain.SysPerfLogPo">
         <id column="id" jdbcType="BIGINT" property="id" />
         <result column="meta_id" jdbcType="BIGINT" property="metaId" />
-        <result column="trace_id" jdbcType="VARCHAR" property="traceId" />
         <result column="execute_timespan" jdbcType="INTEGER" property="executeTimespan" />
         <result column="code" jdbcType="INTEGER" property="code" />
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -15,7 +14,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        pl.id, pl.meta_id,pl.trace_id, pl.execute_timespan, pl.params_in, pl.params_out,pl.code, pl.errmsg,pl.create_time,pl.timestamp
+        pl.id, pl.meta_id,pl.execute_timespan, pl.params_in, pl.params_out,pl.code, pl.errmsg,pl.create_time,pl.timestamp
     </sql>
 
     <select id="searchPerfLogs" resultMap="BaseResultMap" parameterType="com.ruoyi.log.dto.SysPerfLogSearchDto">
@@ -24,8 +23,11 @@
         FROM
             sys_perf_log pl join sys_perf_log_meta m on pl.meta_id = m.id
         <where>
+            <if test="id != null">
+                pl.id = #{id}
+            </if>
             <if test="createTimeStart != null  and createTimeEnd != null">
-                pl.create_time between #{createTimeStart} and #{createTimeEnd}
+                and pl.create_time between #{createTimeStart} and #{createTimeEnd}
             </if>
             <if test="product != null and product!=''">
                 and m.product=#{product}

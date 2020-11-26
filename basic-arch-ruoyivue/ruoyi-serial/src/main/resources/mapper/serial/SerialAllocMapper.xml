@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.serial.mapper.IDAllocMapper">
+<mapper namespace="com.ruoyi.serial.mapper.SerialAllocMapper">
     <resultMap id="BaseResultMap" type="com.ruoyi.serial.domain.SerialAlloc" >
         <id column="biz_tag" property="key" jdbcType="VARCHAR"/>
         <result column="max_id" property="maxId" jdbcType="BIGINT"/>
@@ -43,4 +43,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="getAllTags" resultType="java.lang.String">
         SELECT biz_tag FROM serial_alloc
     </select>
+    
+    <select id="search" parameterType="com.ruoyi.serial.dto.SegmentSearchDto" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List"/>
+        FROM 
+            serial_alloc 
+        WHERE 
+            biz_tag like concat('%', #{tag},'%')
+    </select>
+    
+    <insert id="saveSerial" parameterType="com.ruoyi.serial.domain.SerialAlloc">
+        insert into serial_alloc
+        (
+            biz_tag, max_id, step,
+            description,create_time
+        )
+        values
+        (
+            #{key,jdbcType=VARCHAR},#{maxId,jdbcType=BIGINT},#{step,jdbcType=INTEGER},
+            #{description,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
 </mapper> 

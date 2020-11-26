@@ -9,31 +9,31 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.serial.domain.SerialAlloc;
-import com.ruoyi.serial.mapper.IDAllocMapper;
-import com.ruoyi.serial.segment.IDAllocService;
+import com.ruoyi.serial.dto.SegmentSearchDto;
+import com.ruoyi.serial.mapper.SerialAllocMapper;
+import com.ruoyi.serial.segment.SerialAllocService;
 
 @Service
-public class IDAllocServiceImpl implements IDAllocService {
+@DataSource(DataSourceType.MASTER)
+public class SerialAllocServiceImpl implements SerialAllocService {
     @Autowired
-    private IDAllocMapper idAllocMapper;
+    private SerialAllocMapper idAllocMapper;
 
     @Override
     @DataSource(DataSourceType.SLAVE)
-    public List<SerialAlloc> getAllLeafAllocs() {
+    public List<SerialAlloc> getAllSerialAllocs() {
         return idAllocMapper.getAllSerialAllocs();
     }
 
     @Override
-    @DataSource(DataSourceType.MASTER)
     @Transactional
-    public SerialAlloc updateMaxIdAndGetLeafAlloc(String tag) {
+    public SerialAlloc updateMaxIdAndGetSerialAlloc(String tag) {
         idAllocMapper.updateMaxId(tag);
         SerialAlloc result = idAllocMapper.getSerialAlloc(tag);
         return result;
     }
 
     @Override
-    @DataSource(DataSourceType.MASTER)
     @Transactional
     public SerialAlloc updateMaxIdByCustomStepAndGetLeafAlloc(SerialAlloc leafAlloc) {
         idAllocMapper.updateMaxIdByCustomStep(leafAlloc);
@@ -45,5 +45,18 @@ public class IDAllocServiceImpl implements IDAllocService {
     @DataSource(DataSourceType.SLAVE)
     public List<String> getAllTags() {
         return idAllocMapper.getAllTags();
+    }
+
+    @Override
+    @DataSource(DataSourceType.SLAVE)
+    public List<SerialAlloc> search(SegmentSearchDto segmentSearchDto) {
+        List<SerialAlloc> list = idAllocMapper.search(segmentSearchDto);
+        return list;
+    }
+
+    @Override
+    public int saveSerialAlloc(SerialAlloc serialAlloc) {
+        int row = idAllocMapper.saveSerial(serialAlloc);
+        return row;
     }
 }
