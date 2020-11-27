@@ -17,15 +17,12 @@ import com.ruoyi.log.dto.PageSearchRequestDto;
 @Aspect
 @Component
 public class ParamAop {
-
-    private static final String WEB_AOP = "within(" + Constants.SYSTEM_PREFIX + ".web.controller..*)";
-    private static final String SERIAL_AOP = "within(" + Constants.SYSTEM_PREFIX + ".serial.controller..*)";
-    private static final String GENERATOR_AOP = "within(" + Constants.SYSTEM_PREFIX + ".generator.controller..*)";
+    private static final String WEB_AOP = "within(" + Constants.SYSTEM_PREFIX + ".*.controller..*)";
 
     /**
      * 定义切入点
      */
-    @Pointcut(WEB_AOP + "||" + SERIAL_AOP + "||" + GENERATOR_AOP)
+    @Pointcut(WEB_AOP)
     public void setParamAop() {
     }
 

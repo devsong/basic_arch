@@ -24,7 +24,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 // @Slf4j
 public class ServerTickAspect {
 
-    private static final String WITHIN_TICKS = "within(" + Constants.SYSTEM_PREFIX + ".web.controller..*)";
+    private static final String WITHIN_TICKS = "within(" + Constants.SYSTEM_PREFIX + ".*.controller..*)";
 
     @Pointcut(WITHIN_TICKS)
     public void tickPointCut() {
