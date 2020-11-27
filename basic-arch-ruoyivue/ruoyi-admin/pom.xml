@@ -9,7 +9,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
-    <groupId>${ruoyi.groupId}</groupId>
+    
     <artifactId>ruoyi-admin</artifactId>
 
     <description>
@@ -57,19 +57,19 @@
 
         <!-- 核心模块 -->
         <dependency>
-            <groupId>${ruoyi.groupId}</groupId>
+            <groupId>com.gzs.learn</groupId>
             <artifactId>ruoyi-framework</artifactId>
         </dependency>
 
         <!-- 定时任务 -->
         <dependency>
-            <groupId>${ruoyi.groupId}</groupId>
+            <groupId>com.gzs.learn</groupId>
             <artifactId>ruoyi-quartz</artifactId>
         </dependency>
 
         <!-- 代码生成 -->
         <dependency>
-            <groupId>${ruoyi.groupId}</groupId>
+            <groupId>com.gzs.learn</groupId>
             <artifactId>ruoyi-generator</artifactId>
         </dependency>
         

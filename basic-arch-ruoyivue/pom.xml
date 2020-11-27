@@ -195,6 +195,7 @@
         <module>ruoyi-admin</module>
         <module>ruoyi-quartz</module>
         <module>ruoyi-log</module>
+        <module>ruoyi-serial</module>
     </modules>
 
     <build>

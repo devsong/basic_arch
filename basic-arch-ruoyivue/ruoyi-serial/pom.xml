@@ -14,9 +14,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>${ruoyi.groupId}</groupId>
+            <groupId>com.gzs.learn</groupId>
             <artifactId>ruoyi-common</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>

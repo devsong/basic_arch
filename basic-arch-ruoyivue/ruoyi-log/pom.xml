@@ -13,13 +13,13 @@
     <dependencies>
         <!-- 通用工具 -->
         <dependency>
-            <groupId>${ruoyi.groupId}</groupId>
+            <groupId>com.gzs.learn</groupId>
             <artifactId>ruoyi-common</artifactId>
         </dependency>
         
          <!-- 序列号模块 -->
         <dependency>
-            <groupId>${ruoyi.groupId}</groupId>
+            <groupId>com.gzs.learn</groupId>
             <artifactId>ruoyi-serial</artifactId>
             <version>${project.version}</version>
         </dependency>
