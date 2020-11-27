@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.apache.commons.lang3.time.DateUtils;
 
+import com.gzs.learn.inf.PageRequestDto;
 import com.ruoyi.log.dto.PageSearchRequestDto;
 
 /**
@@ -29,6 +30,15 @@ public class DefaultParamUtil {
         if (pageSearchRequestDto.getCreateTimeStart() == null) {
             // 默认查询最近一个月的数据
             pageSearchRequestDto.setCreateTimeStart(DateUtils.addMonths(pageSearchRequestDto.getCreateTimeEnd(), -1));
+        }
+    }
+
+    public static void setDefaultSearchRange(PageRequestDto pageRequestDto) {
+        if (pageRequestDto.getPageNum() == null) {
+            pageRequestDto.setPageNum(1);
+        }
+        if (pageRequestDto.getPageSize() == null) {
+            pageRequestDto.setPageSize(10);
         }
     }
 }

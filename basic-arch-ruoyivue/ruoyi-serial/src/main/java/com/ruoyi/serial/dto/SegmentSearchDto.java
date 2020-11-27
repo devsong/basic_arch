@@ -2,6 +2,8 @@ package com.ruoyi.serial.dto;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gzs.learn.inf.PageRequestDto;
 
@@ -10,7 +12,9 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
+
 public class SegmentSearchDto extends PageRequestDto {
+    private static final String DATE_PATTERN = "yyyy-MM-dd";
 
     /**
      * 
@@ -25,12 +29,14 @@ public class SegmentSearchDto extends PageRequestDto {
     /**
      * 创建时间起始
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createTimeStart;
+    @DateTimeFormat(pattern = DATE_PATTERN)
+    @JsonFormat(pattern = DATE_PATTERN)
+    private Date beginTime;
 
     /**
      * 创建时间结束
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createTimeEnd;
+    @DateTimeFormat(pattern = DATE_PATTERN)
+    @JsonFormat(pattern = DATE_PATTERN)
+    private Date endTime;
 }

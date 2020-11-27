@@ -62,8 +62,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <include refid="Base_Column_List"/>
         FROM 
             serial_alloc 
-        WHERE 
-            biz_tag like concat('%', #{tag},'%')
+        <where>
+            <if test="name != null and name != ''">
+                 biz_tag like concat('%', #{name},'%')
+            </if>
+        </where> 
     </select>
     
     <insert id="saveSerial" parameterType="com.ruoyi.serial.domain.SerialAlloc">

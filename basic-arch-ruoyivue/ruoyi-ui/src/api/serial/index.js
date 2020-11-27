@@ -46,3 +46,12 @@ export function decode(query) {
     params: query
   });
 }
+
+// 导出操作日志
+export function exportBizKey(query) {
+  return request({
+    url: '/api/serial/segment/export',
+    method: 'get',
+    params: query
+  });
+}

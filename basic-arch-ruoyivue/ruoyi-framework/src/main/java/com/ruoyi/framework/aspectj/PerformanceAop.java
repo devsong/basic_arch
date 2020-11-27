@@ -37,6 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class PerformanceAop {
+    private static final int MAX_STR_LEN = 2 << 12;
     private static final String WEB_AOP = "within(" + Constants.SYSTEM_PREFIX + ".web.controller..*)";
     private static final String SERIAL_AOP = "within(" + Constants.SYSTEM_PREFIX + ".serial.controller..*)";
     private static final String GENERATOR_AOP = "within(" + Constants.SYSTEM_PREFIX + ".generator.controller..*)";
@@ -101,6 +102,9 @@ public class PerformanceAop {
 
         String argsJson = (args == null || args.length == 0) ? "" : JSON.toJSONString(args);
         String retJson = (returnValue == null ? "" : JSON.toJSONString(returnValue));
+        argsJson = StringUtils.left(argsJson, MAX_STR_LEN);
+        retJson = StringUtils.left(retJson, MAX_STR_LEN);
+        errorMsg = StringUtils.left(errorMsg, MAX_STR_LEN);
         SysPerfLogDto sysPerfLogDto = SysPerfLogDto.builder().product(ruoYiConfig.getProduct()).groupName(ruoYiConfig.getGroup())
                 .app(ruoYiConfig.getApp()).clazz(clazz).method(methodName).paramsIn(argsJson).paramsOut(retJson).code(code).errmsg(errorMsg)
                 .operatorIp(IpUtil.getLocalIp()).durationEnum(SysPerfLogDurationEnum.BY_MINUTE).executeTimespan((int) elapsed)

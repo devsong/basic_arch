@@ -4,7 +4,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,21 +34,21 @@ public class SerialController {
     }
 
     @RequestMapping(value = "/segment/list")
-    @PreAuthorize("@ss.hasPermi('serial:list')")
-    public PageResponseDto<SerialAlloc> getSegmentList(@RequestBody SegmentSearchDto segmentSearchDto) {
+    // @PreAuthorize("@ss.hasPermi('serial:segment:list')")
+    public PageResponseDto<SerialAlloc> getSegmentList(SegmentSearchDto segmentSearchDto) {
         PageResponseDto<SerialAlloc> pageResponseDto = segmentIdGenService.searchBizKeys(segmentSearchDto);
         return pageResponseDto;
     }
 
     @RequestMapping(value = "/segment/add")
-    @PreAuthorize("@ss.hasPermi('serial:update')")
+    @PreAuthorize("@ss.hasPermi('serial:segment:update')")
     public AjaxResult getSegment(SerialAlloc serialAlloc) {
         boolean success = segmentIdGenService.add(serialAlloc);
         return AjaxResult.success(success);
     }
 
     @RequestMapping(value = "/segment/update_status")
-    @PreAuthorize("@ss.hasPermi('serial:update')")
+    @PreAuthorize("@ss.hasPermi('serial:segment:update')")
     public AjaxResult updateStatus(String key, Integer status) {
         if (status == null || StringUtils.isBlank(key)) {
             throw new SerialException(String.format("params %s,%s is not illegal", key, status));
