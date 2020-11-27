@@ -94,12 +94,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 // 过滤请求
                 .authorizeRequests()
+                // api允许匿名访问
+                // .antMatchers("/api/**").permitAll()
                 // 对于登录login 验证码captchaImage 允许匿名访问
-                .antMatchers("/login", "/captchaImage", "/api/**").anonymous()
-                .antMatchers(HttpMethod.GET, "/*.html", "/**/*.html", "/**/*.css", "/**/*.js").permitAll().antMatchers("/profile/**")
-                .anonymous().antMatchers("/common/download**").anonymous().antMatchers("/common/download/resource**").anonymous()
-                .antMatchers("/swagger-ui.html").anonymous().antMatchers("/swagger-resources/**").anonymous().antMatchers("/webjars/**")
-                .anonymous().antMatchers("/*/api-docs").anonymous().antMatchers("/druid/**").anonymous()
+                .antMatchers("/login", "/captchaImage").anonymous()
+                // 静态资源
+                .antMatchers(HttpMethod.GET, "/*.html", "/**/*.html", "/**/*.css", "/**/*.js").permitAll()
+                //
+                .antMatchers("/profile/**").anonymous()
+                // 下载
+                .antMatchers("/common/download**").anonymous()
+                // 下载
+                .antMatchers("/common/download/resource**").anonymous()
+                // swagger首页
+                .antMatchers("/swagger-ui.html").anonymous()
+                // swagger资源
+                .antMatchers("/swagger-resources/**").anonymous()
+                // swagger jar包资源
+                .antMatchers("/webjars/**").anonymous()
+                // swagger api
+                .antMatchers("/*/api-docs").anonymous()
+                // druid 监控
+                .antMatchers("/druid/**").anonymous()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated().and().headers().frameOptions().disable();
 

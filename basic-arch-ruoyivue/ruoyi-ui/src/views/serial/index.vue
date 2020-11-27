@@ -3,7 +3,7 @@
     <el-form ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
       <el-form-item label="业务key" prop="title">
         <el-input
-          v-model="queryParams.key"
+          v-model="queryParams.name"
           placeholder="请输入业务key"
           clearable
           style="width: 240px;"
@@ -32,6 +32,7 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
+          v-hasPermi="['serial:segment:update']"
           type="primary"
           icon="el-icon-plus"
           size="mini"
@@ -194,7 +195,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        key: undefined
+        name: undefined
       },
       snowflakeForm: {
         id: undefined

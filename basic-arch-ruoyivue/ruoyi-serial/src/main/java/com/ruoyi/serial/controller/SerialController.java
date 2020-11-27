@@ -34,7 +34,7 @@ public class SerialController {
     }
 
     @RequestMapping(value = "/segment/list")
-    // @PreAuthorize("@ss.hasPermi('serial:segment:list')")
+    @PreAuthorize("@ss.hasPermi('serial:segment:list')")
     public PageResponseDto<SerialAlloc> getSegmentList(SegmentSearchDto segmentSearchDto) {
         PageResponseDto<SerialAlloc> pageResponseDto = segmentIdGenService.searchBizKeys(segmentSearchDto);
         return pageResponseDto;
