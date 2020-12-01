@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
-      <el-form-item label="业务key" prop="title">
+      <el-form-item label="业务key" prop="name">
         <el-input
           v-model="queryParams.name"
           placeholder="请输入业务key"
@@ -64,17 +64,15 @@
             v-hasPermi="['serial:segment:update']"
             size="mini"
             type="text"
-            icon="el-icon-view"
+            icon="el-icon-delete"
             @click="handleForbidden(scope.row,scope.index)"
           >禁用</el-button>
-        </template>
 
-        <template slot-scope="scope">
           <el-button
             v-hasPermi="['serial:segment:update']"
             size="mini"
             type="text"
-            icon="el-icon-view"
+            icon="el-icon-delete"
             @click="handleDelete(scope.row,scope.index)"
           >删除</el-button>
         </template>
@@ -90,29 +88,28 @@
     />
 
     <!-- 新增序列号 -->
-    <!--
     <el-dialog title="新增序列号" :visible.sync="open" width="700px" append-to-body>
-      <el-form ref="form" :model="form" label-width="100px" size="mini">
+      <el-form ref="segmentForm" :model="form" label-width="100px" size="mini">
         <el-row>
           <el-col :span="24">
-            <el-form-item label="业务key：">{{ form.bizKey }}</el-form-item>
+            <el-form-item label="业务key：">{{ segmentForm.bizKey }}</el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="maxId：">{{ form.maxId }}</el-form-item>
-            <el-form-item label="步长：">{{ form.step }}</el-form-item>
+            <el-form-item label="maxId：">{{ segmentForm.maxId }}</el-form-item>
+            <el-form-item label="步长：">{{ segmentForm.step }}</el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="描述：">{{ form.method }}</el-form-item>
+            <el-form-item label="描述：">{{ segmentForm.description }}</el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="操作状态：">
-              <div v-if="form.status === 0">正常</div>
-              <div v-else-if="form.status === 1">禁用</div>
-              <div v-else-if="form.status === 2">删除</div>
+              <div v-if="segmentForm.status === 0">正常</div>
+              <div v-else-if="segmentForm.status === 1">禁用</div>
+              <div v-else-if="segmentForm.status === 2">删除</div>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="创建时间：">{{ parseTime(form.createTime) }}</el-form-item>
+            <el-form-item label="创建时间：">{{ parseTime(segmentForm.createTime) }}</el-form-item>
           </el-col>
         </el-row>
       </el-form>
@@ -120,7 +117,7 @@
         <el-button @click="open = false">关 闭</el-button>
       </div>
     </el-dialog>
-    -->
+    <!-- -->
 
     <!-- 序列号解码 -->
     <!--
@@ -165,7 +162,7 @@
 </template>
 
 <script>
-import { list, add, forbidden, remove, decode, exportBizKey } from '@/api/serial/index';
+import { list, add, forbidden, remove, decode, exportBizKey, changeSegmentStatus } from '@/api/serial/index';
 
 export default {
   name: 'Serial',
@@ -191,6 +188,7 @@ export default {
       dateRange: [],
       // 表单参数
       form: {},
+      segmentForm: {},
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -242,8 +240,33 @@ export default {
       this.multiple = !selection.length;
     },
 
+    handleStatusChange(row) {
+      const text = row.status === '0' ? '启用' : '停用';
+      this.$confirm('确认要"' + text + '""' + row.name + '"的业务key?', '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(function() {
+        return changeSegmentStatus(row.id, row.status);
+      }).then(() => {
+        this.msgSuccess(text + '成功');
+      }).catch(function() {
+        row.status = row.status === '0' ? '1' : '0';
+      });
+    },
+
     handleAdd() {
-      add();
+      var data = {
+        bizKey: 'order',
+        maxId: 5000,
+        step: 100,
+        description: 'test otder',
+        status: 0,
+        createTime: 1606735462650
+      };
+      this.segmentForm = data;
+      this.open = true;
+      // add();
     },
 
     /** 禁用 */

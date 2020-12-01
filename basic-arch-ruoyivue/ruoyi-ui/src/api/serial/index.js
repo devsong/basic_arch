@@ -55,3 +55,11 @@ export function exportBizKey(query) {
     params: query
   });
 }
+
+export function changeSegmentStatus(row) {
+  return request({
+    url: '/api/serial/segment/updateStatus',
+    method: 'post',
+    params: row
+  });
+}
