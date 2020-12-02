@@ -2,6 +2,8 @@ package com.ruoyi.serial.domain;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Data
@@ -29,10 +31,12 @@ public class SerialAlloc {
     /**
      * 创建时间
      */
+    @JsonIgnore
     private Date createTime;
     /**
      * 更新时间
      */
+    @JsonIgnore
     private Date updateTime;
 
 }

@@ -24,4 +24,6 @@ public interface SerialAllocMapper {
     int saveSerial(SerialAlloc serialAlloc);
 
     int updateSerialAllocStatus(@Param("tag") String key, @Param("status") Integer status);
+
+    int updateSerialAlloc(SerialAlloc serialAlloc);
 }

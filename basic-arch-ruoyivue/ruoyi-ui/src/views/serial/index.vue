@@ -56,7 +56,16 @@
       <el-table-column label="业务KEY" align="center" prop="key" />
       <el-table-column label="已使用ID" align="center" prop="maxId" />
       <el-table-column label="步长" align="center" prop="step" />
-      <el-table-column label="状态" align="center" prop="status" />
+      <el-table-column label="状态" align="center" prop="status">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.status"
+            active-value="0"
+            inactive-value="1"
+            @change="handleStatusChange(scope.row)"
+          />
+        </template>
+      </el-table-column>
       <el-table-column label="描述信息" align="center" prop="description" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -64,16 +73,16 @@
             v-hasPermi="['serial:segment:update']"
             size="mini"
             type="text"
-            icon="el-icon-delete"
-            @click="handleForbidden(scope.row,scope.index)"
-          >禁用</el-button>
+            icon="el-icon-edit"
+            @click="handleUpdate(scope.row)"
+          >编辑</el-button>
 
           <el-button
             v-hasPermi="['serial:segment:update']"
             size="mini"
             type="text"
             icon="el-icon-delete"
-            @click="handleDelete(scope.row,scope.index)"
+            @click="handleDelete(scope.row)"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -88,32 +97,42 @@
     />
 
     <!-- 新增序列号 -->
-    <el-dialog title="新增序列号" :visible.sync="open" width="700px" append-to-body>
-      <el-form ref="segmentForm" :model="form" label-width="100px" size="mini">
+    <el-dialog :title="title" :visible.sync="open" width="700px" append-to-body>
+      <el-form ref="form" :model="form" label-width="100px" size="mini">
         <el-row>
           <el-col :span="24">
-            <el-form-item label="业务key：">{{ segmentForm.bizKey }}</el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="maxId：">{{ segmentForm.maxId }}</el-form-item>
-            <el-form-item label="步长：">{{ segmentForm.step }}</el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="描述：">{{ segmentForm.description }}</el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="操作状态：">
-              <div v-if="segmentForm.status === 0">正常</div>
-              <div v-else-if="segmentForm.status === 1">禁用</div>
-              <div v-else-if="segmentForm.status === 2">删除</div>
+            <el-form-item label="业务key：" prop="key">
+              <el-input v-model="form.key" placeholder="请输入业务key" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="创建时间：">{{ parseTime(segmentForm.createTime) }}</el-form-item>
+            <el-form-item label="maxId：" prop="maxId">
+              <el-input v-model="form.maxId" placeholder="请输入MaxId" />
+            </el-form-item>
+            <el-form-item label="步长：">
+              <el-input v-model="form.step" placeholder="请输入步长" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="描述：">
+              <el-input v-model="form.description" placeholder="请输入描述" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="操作状态：">
+              <el-radio-group v-model="form.status">
+                <el-radio
+                  v-for="dict in statusOptions"
+                  :key="dict.dictValue"
+                  :label="dict.dictValue"
+                >{{ dict.dictLabel }}</el-radio>
+              </el-radio-group>
+            </el-form-item>
           </el-col>
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="open = false">关 闭</el-button>
       </div>
     </el-dialog>
@@ -162,7 +181,7 @@
 </template>
 
 <script>
-import { list, add, forbidden, remove, decode, exportBizKey, changeSegmentStatus } from '@/api/serial/index';
+import { list, getBizKey, addSegment, updateSegment, changeSegmentStatus, exportBizKey, decode, getSegmentKey, getSnowflake } from '@/api/serial/index';
 
 export default {
   name: 'Serial',
@@ -170,8 +189,12 @@ export default {
     return {
       // 遮罩层
       loading: true,
+      // 添加OR编辑
+      addOrEdit: 'add',
+      // 弹出层标题
+      title: '',
       // 选中数组
-      ids: [],
+      keys: [],
       // 非多个禁用
       multiple: true,
       // 总条数
@@ -188,7 +211,6 @@ export default {
       dateRange: [],
       // 表单参数
       form: {},
-      segmentForm: {},
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -202,6 +224,9 @@ export default {
   },
   created() {
     this.getList();
+    this.getDicts('sys_normal_disable').then(response => {
+      this.statusOptions = response.data;
+    });
   },
   methods: {
     /** 查询登录日志 */
@@ -236,18 +261,18 @@ export default {
 
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.operId);
+      this.keys = selection.map(item => item.key);
       this.multiple = !selection.length;
     },
 
     handleStatusChange(row) {
       const text = row.status === '0' ? '启用' : '停用';
-      this.$confirm('确认要"' + text + '""' + row.name + '"的业务key?', '警告', {
+      this.$confirm('确认要' + text + '"' + row.key + '"的业务key?', '警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(function() {
-        return changeSegmentStatus(row.id, row.status);
+        return changeSegmentStatus(row.key, row.status);
       }).then(() => {
         this.msgSuccess(text + '成功');
       }).catch(function() {
@@ -255,44 +280,59 @@ export default {
       });
     },
 
+    // 新增
     handleAdd() {
-      var data = {
-        bizKey: 'order',
-        maxId: 5000,
-        step: 100,
-        description: 'test otder',
-        status: 0,
-        createTime: 1606735462650
-      };
-      this.segmentForm = data;
       this.open = true;
-      // add();
+      this.addOrEdit = 'add';
+      this.resetForm('form');
+      this.title = '添加序列号';
     },
 
-    /** 禁用 */
-    handleForbidden(row) {
-      const bizKey = row.key || this.ids;
-      this.$confirm('是否确认禁用"' + bizKey + '"的数据项?', '警告', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(function() {
-        return forbidden(bizKey);
-      }).then(() => {
-        this.getList();
-        this.msgSuccess('禁用成功');
-      }).catch(function() {});
+    // 编辑
+    handleUpdate(row) {
+      this.resetForm('form');
+      this.addOrEdit = 'edit';
+      const key = row.key || this.keys;
+      getBizKey(key).then(response => {
+        this.form = response.data;
+        this.open = true;
+        this.title = '修改序列号';
+      });
+    },
+
+    submitForm: function() {
+      this.$refs['form'].validate(valid => {
+        if (valid) {
+          if (this.addOrEdit === 'edit') {
+            updateSegment(this.form).then(response => {
+              if (response.code === 200) {
+                this.msgSuccess('修改成功');
+                this.open = false;
+                this.getList();
+              }
+            });
+          } else {
+            addSegment(this.form).then(response => {
+              if (response.code === 200) {
+                this.msgSuccess('新增成功');
+                this.open = false;
+                this.getList();
+              }
+            });
+          }
+        }
+      });
     },
 
     /** 删除按钮操作 */
     handleDelete(row) {
-      const operIds = row.operId || this.ids;
-      this.$confirm('是否确认删除"' + operIds + '"的数据项?', '警告', {
+      const key = row.key || this.keys;
+      this.$confirm('是否确认删除"' + key + '"的数据项?', '警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(function() {
-        return remove(operIds);
+        return changeSegmentStatus(key, 2);
       }).then(() => {
         this.getList();
         this.msgSuccess('删除成功');

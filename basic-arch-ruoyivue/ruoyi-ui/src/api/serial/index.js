@@ -3,38 +3,56 @@ import request from '@/utils/request';
 // 列表
 export function list(query) {
   return request({
-    url: '/api/serial/segment/list',
+    url: '/serial/segment/list',
     method: 'get',
     params: query
   });
 }
 
+export function getBizKey(bizKey) {
+  return request({
+    url: '/serial/segment/get',
+    method: 'get',
+    params: { 'bizKey': bizKey }
+  });
+}
+
 // 新增
-export function add(form) {
+export function addSegment(form) {
   return request({
-    url: '/api/serial/segment/add',
+    url: '/serial/segment/add',
     method: 'post',
     params: form
   });
 }
 
-// 禁用
-export function forbidden(form) {
-  form.status = 1;
+// 修改
+export function updateSegment(form) {
   return request({
-    url: '/api/serial/segment/update_status',
+    url: '/serial/segment/update',
     method: 'post',
     params: form
   });
 }
 
-// 删除
-export function remove(form) {
-  form.status = 2;
+// 导出操作日志
+export function exportBizKey(query) {
   return request({
-    url: '/api/serial/segment/update_status',
+    url: '/serial/segment/export',
+    method: 'get',
+    params: query
+  });
+}
+
+// 修改状态
+export function changeSegmentStatus(key, status) {
+  return request({
+    url: '/serial/segment/update_status',
     method: 'post',
-    params: form
+    params: {
+      key: key,
+      status: status
+    }
   });
 }
 
@@ -47,19 +65,20 @@ export function decode(query) {
   });
 }
 
-// 导出操作日志
-export function exportBizKey(query) {
+// 获取序列号值
+export function getSegmentKey(key) {
   return request({
-    url: '/api/serial/segment/export',
+    url: '/api/serial/segment',
     method: 'get',
-    params: query
+    params: key
   });
 }
 
-export function changeSegmentStatus(row) {
+// 获取序列号值
+export function getSnowflake(key) {
   return request({
-    url: '/api/serial/segment/updateStatus',
-    method: 'post',
-    params: row
+    url: '/api/serial/snowflake',
+    method: 'get',
+    params: ''
   });
 }

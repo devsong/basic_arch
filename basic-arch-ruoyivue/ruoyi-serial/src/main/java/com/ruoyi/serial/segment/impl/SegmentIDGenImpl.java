@@ -20,19 +20,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import com.gzs.learn.inf.PageResponseDto;
-import com.gzs.learn.inf.PageResponseDto.PageResponse;
 import com.ruoyi.serial.IDGen;
 import com.ruoyi.serial.common.Result;
 import com.ruoyi.serial.common.Status;
 import com.ruoyi.serial.domain.Segment;
 import com.ruoyi.serial.domain.SegmentBuffer;
 import com.ruoyi.serial.domain.SerialAlloc;
-import com.ruoyi.serial.dto.SegmentSearchDto;
+import com.ruoyi.serial.segment.ISerialAllocService;
 import com.ruoyi.serial.segment.SegmentIdGenService;
-import com.ruoyi.serial.segment.SerialAllocService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -69,7 +64,7 @@ public class SegmentIDGenImpl implements IDGen, SegmentIdGenService {
     private Map<String, SegmentBuffer> cache = new ConcurrentHashMap<String, SegmentBuffer>();
 
     @Autowired
-    private SerialAllocService serialAllocService;
+    private ISerialAllocService serialAllocService;
 
     @Autowired
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
@@ -294,30 +289,4 @@ public class SegmentIDGenImpl implements IDGen, SegmentIdGenService {
         }
     }
 
-    @Override
-    public PageResponseDto<SerialAlloc> searchBizKeys(SegmentSearchDto segmentSearchDto) {
-        PageInfo<SerialAlloc> pageInfo = PageHelper.startPage(segmentSearchDto.getPageNum(), segmentSearchDto.getPageSize(), true)
-                .doSelectPageInfo(() -> {
-                    serialAllocService.search(segmentSearchDto);
-                });
-        PageResponse pageResponse = PageResponse.builder().page(segmentSearchDto.getPageNum()).pageSize(segmentSearchDto.getPageSize())
-                .total((int) pageInfo.getTotal()).build();
-        PageResponseDto<SerialAlloc> pageResponseDto = new PageResponseDto<SerialAlloc>();
-        pageResponseDto.setCode(0);
-        pageResponseDto.setPage(pageResponse);
-        pageResponseDto.setData(pageInfo.getList());
-        return pageResponseDto;
-    }
-
-    @Override
-    public boolean add(SerialAlloc serialAlloc) {
-        int row = serialAllocService.saveSerialAlloc(serialAlloc);
-        return row == 1;
-    }
-
-    @Override
-    public boolean updateStatus(String key, Integer status) {
-        int row = serialAllocService.updateStatus(key, status);
-        return row >= 1;
-    }
 }

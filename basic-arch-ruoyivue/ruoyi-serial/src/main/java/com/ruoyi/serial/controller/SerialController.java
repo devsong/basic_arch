@@ -3,47 +3,47 @@ package com.ruoyi.serial.controller;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gzs.learn.inf.PageResponseDto;
 import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.serial.common.Result;
-import com.ruoyi.serial.common.Status;
 import com.ruoyi.serial.domain.SerialAlloc;
-import com.ruoyi.serial.domain.SerialSnowflakeInfo;
 import com.ruoyi.serial.dto.SegmentSearchDto;
 import com.ruoyi.serial.exception.SerialException;
-import com.ruoyi.serial.exception.NoKeyException;
-import com.ruoyi.serial.segment.SegmentIdGenService;
-import com.ruoyi.serial.snowflake.SnowflakeIDGenImpl;
+import com.ruoyi.serial.segment.ISerialAllocService;
 
 @RestController
-@RequestMapping("/api/serial")
+@RequestMapping("/serial")
 public class SerialController {
     @Autowired
-    private SegmentIdGenService segmentIdGenService;
-
-    @Autowired
-    private SnowflakeIDGenImpl snowflakeService;
-
-    @RequestMapping(value = "/segment")
-    public AjaxResult getSegmentId(String key) {
-        return AjaxResult.success(get(key, segmentIdGenService.get(key)));
-    }
+    private ISerialAllocService serialAllocService;
 
     @RequestMapping(value = "/segment/list")
     @PreAuthorize("@ss.hasPermi('serial:segment:list')")
     public PageResponseDto<SerialAlloc> getSegmentList(SegmentSearchDto segmentSearchDto) {
-        PageResponseDto<SerialAlloc> pageResponseDto = segmentIdGenService.searchBizKeys(segmentSearchDto);
+        PageResponseDto<SerialAlloc> pageResponseDto = serialAllocService.searchBizKeys(segmentSearchDto);
         return pageResponseDto;
+    }
+
+    @RequestMapping(value = "/segment/get")
+    @PreAuthorize("@ss.hasPermi('serial:segment:list')")
+    public AjaxResult getSegmen(String bizKey) {
+        SerialAlloc serialAlloc = serialAllocService.getBizKey(bizKey);
+        return AjaxResult.success(serialAlloc);
     }
 
     @RequestMapping(value = "/segment/add")
     @PreAuthorize("@ss.hasPermi('serial:segment:update')")
-    public AjaxResult getSegment(SerialAlloc serialAlloc) {
-        boolean success = segmentIdGenService.add(serialAlloc);
+    public AjaxResult addSegment(SerialAlloc serialAlloc) {
+        boolean success = serialAllocService.add(serialAlloc);
+        return AjaxResult.success(success);
+    }
+
+    @RequestMapping(value = "/segment/update")
+    @PreAuthorize("@ss.hasPermi('serial:segment:update')")
+    public AjaxResult updateSegment(SerialAlloc serialAlloc) {
+        boolean success = serialAllocService.update(serialAlloc);
         return AjaxResult.success(success);
     }
 
@@ -53,30 +53,7 @@ public class SerialController {
         if (status == null || StringUtils.isBlank(key)) {
             throw new SerialException(String.format("params %s,%s is not illegal", key, status));
         }
-        boolean success = segmentIdGenService.updateStatus(key, status);
+        boolean success = serialAllocService.updateStatus(key, status);
         return AjaxResult.success(success);
-    }
-
-    @RequestMapping(value = "/snowflake")
-    public AjaxResult getSnowflakeId(String key) {
-        return AjaxResult.success(get(key, snowflakeService.get(key)));
-    }
-
-    @RequestMapping(value = "/snowflake/decode")
-    public AjaxResult decode(Long id) {
-        SerialSnowflakeInfo decodeSnowflake = snowflakeService.decodeSnowflake(id);
-        return AjaxResult.success(decodeSnowflake);
-    }
-
-    private String get(@PathVariable("key") String key, Result id) {
-        Result result;
-        if (key == null || key.isEmpty()) {
-            throw new NoKeyException();
-        }
-        result = id;
-        if (result.getStatus().equals(Status.EXCEPTION)) {
-            throw new SerialException(result.toString());
-        }
-        return String.valueOf(result.getId());
     }
 }
