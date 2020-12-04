@@ -79,6 +79,8 @@ export function getSnowflake(key) {
   return request({
     url: '/api/serial/snowflake',
     method: 'get',
-    params: ''
+    params: {
+      key:'snowflake'
+    }
   });
 }

@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 <template>
   <div class="app-container">
     <el-form ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
@@ -6,7 +7,7 @@
           v-model="queryParams.name"
           placeholder="请输入业务key"
           clearable
-          style="width: 240px;"
+          style="width: 240px"
           size="small"
           @keyup.enter.native="handleQuery"
         />
@@ -37,17 +38,12 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-        >新增</el-button>
+        >新增
+        </el-button>
       </el-col>
 
       <el-col :span="1.5">
-        <el-button
-          v-hasPermi="['serial:segment:list']"
-          type="warning"
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-        >导出</el-button>
+        <el-button type="primary" size="mini" @click="handleSnowflakeDialog">snowflake </el-button>
       </el-col>
     </el-row>
 
@@ -60,8 +56,8 @@
         <template slot-scope="scope">
           <el-switch
             v-model="scope.row.status"
-            active-value="0"
-            inactive-value="1"
+            :active-value="0"
+            :inactive-value="1"
             @change="handleStatusChange(scope.row)"
           />
         </template>
@@ -75,7 +71,8 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-          >编辑</el-button>
+          >编辑
+          </el-button>
 
           <el-button
             v-hasPermi="['serial:segment:update']"
@@ -83,13 +80,14 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-          >删除</el-button>
+          >删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
 
     <pagination
-      v-show="total>0"
+      v-show="total > 0"
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
@@ -109,24 +107,20 @@
             <el-form-item label="maxId：" prop="maxId">
               <el-input v-model="form.maxId" placeholder="请输入MaxId" />
             </el-form-item>
-            <el-form-item label="步长：">
+            <el-form-item label="步长：" prop="step">
               <el-input v-model="form.step" placeholder="请输入步长" />
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="描述：">
+            <el-form-item label="描述：" prop="description">
               <el-input v-model="form.description" placeholder="请输入描述" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="操作状态：">
-              <el-radio-group v-model="form.status">
-                <el-radio
-                  v-for="dict in statusOptions"
-                  :key="dict.dictValue"
-                  :label="dict.dictValue"
-                >{{ dict.dictLabel }}</el-radio>
-              </el-radio-group>
+            <el-form-item label="操作状态：" prop="status">
+              <template>
+                <el-switch v-model="form.status" :active-value="0" :inactive-value="1" />
+              </template>
             </el-form-item>
           </el-col>
         </el-row>
@@ -136,52 +130,61 @@
         <el-button @click="open = false">关 闭</el-button>
       </div>
     </el-dialog>
-    <!-- -->
 
     <!-- 序列号解码 -->
-    <!--
-    <el-dialog title="解码序列号" :visible.sync="open" width="700px" append-to-body>
-      <el-form ref="snowflakeForm" :model="snowflakeForm" :inline="true" label-width="68px">
+    <el-dialog title="解码序列号" :visible.sync="snowflakeOpen" width="500px" append-to-body>
+      <el-form ref="snowflakeQueryForm" :model="snowflakeQueryForm" :inline="true" :rules="rules" label-width="120px">
         <el-form-item label="序列号" prop="id">
           <el-input
-            v-model="snowflakeForm.id"
+            v-model="snowflakeQueryForm.id"
             placeholder="请输入序列号"
             clearable
-            style="width: 240px;"
+            style="width: 240px"
             size="small"
             @keyup.enter.native="handleSnowflakeQuery"
           />
         </el-form-item>
+
         <el-form-item>
           <el-button type="primary" icon="el-icon-search" size="mini" @click="handleSnowflakeQuery">查询</el-button>
         </el-form-item>
-      </el-form>
 
-      <el-form ref="snowflakeForm" :model="snowflakeForm" label-width="100px" size="mini">
-        <el-row>
+        <el-form-item :visible.sync="snowflakeDecodeOpen" label-width="120px">
           <el-col :span="24">
-            <el-form-item label="时间：">{{ snowflakeForm.time }}</el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="数据中心：">{{ snowflakeForm.dataCenterId }}</el-form-item>
-            <el-form-item label="机器ID：">{{ snowflakeForm.workerId }}</el-form-item>
+            <el-form-item label="时间戳：">{{ snowflakeDecodeForm.timestamp }}</el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="随机序列号：">{{ snowflakeForm.seq }}</el-form-item>
+            <el-form-item label="时间(易读格式)：">{{ snowflakeDecodeForm.time }}</el-form-item>
           </el-col>
-        </el-row>
+          <el-col :span="24">
+            <el-form-item label="数据中心：">{{ snowflakeDecodeForm.dataCenterId }}</el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="机器ID：">{{ snowflakeDecodeForm.workerId }}</el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="随机序列号：">{{ snowflakeDecodeForm.seq }}</el-form-item>
+          </el-col>
+        </el-form-item>
       </el-form>
 
       <div slot="footer" class="dialog-footer">
-        <el-button @click="open = false">关 闭</el-button>
+        <el-button @click="snowflakeOpen = false">关 闭</el-button>
       </div>
     </el-dialog>
-    -->
   </div>
 </template>
 
 <script>
-import { list, getBizKey, addSegment, updateSegment, changeSegmentStatus, exportBizKey, decode, getSegmentKey, getSnowflake } from '@/api/serial/index';
+import {
+  list,
+  getBizKey,
+  addSegment,
+  updateSegment,
+  changeSegmentStatus,
+  decode,
+  getSnowflake
+} from '@/api/serial/index';
 
 export default {
   name: 'Serial',
@@ -217,8 +220,30 @@ export default {
         pageSize: 10,
         name: undefined
       },
-      snowflakeForm: {
+      // snowflake流水号对话框
+      snowflakeOpen: false,
+      // 示例数据
+      snowflakeExample: 0,
+      snowflakeQueryForm: {
         id: undefined
+      },
+      snowflakeDecodeOpen: false,
+      snowflakeDecodeForm: {
+        timestamp: 0,
+        time: '',
+        dataCenterId: 0,
+        workerId: 0,
+        seq: 0
+      },
+      rules: {
+        id: [
+          { required: true, message: 'snowflake流水号不能为空', trigger: 'blur' },
+          {
+            pattern: /^[0-9]*$/,
+            message: '请输入正确的snowflake流水号',
+            trigger: 'blur'
+          }
+        ]
       }
     };
   },
@@ -236,22 +261,15 @@ export default {
         this.list = response.data;
         this.total = response.page.total;
         this.loading = false;
-      }
-      );
+      });
     },
-    // 操作日志状态字典翻译
-    // statusFormat(row, column) {
-    //   return this.selectDictLabel(this.statusOptions, row.status);
-    // },
 
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
       this.getList();
     },
-    // handleSnowflakeQuery(){
-    //     decode(snowflakeForm.id);
-    // }
+
     /** 重置按钮操作 */
     resetQuery() {
       this.dateRange = [];
@@ -266,26 +284,30 @@ export default {
     },
 
     handleStatusChange(row) {
-      const text = row.status === '0' ? '启用' : '停用';
+      const text = row.status == '0' ? '启用' : '停用';
       this.$confirm('确认要' + text + '"' + row.key + '"的业务key?', '警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(function() {
-        return changeSegmentStatus(row.key, row.status);
-      }).then(() => {
-        this.msgSuccess(text + '成功');
-      }).catch(function() {
-        row.status = row.status === '0' ? '1' : '0';
-      });
+      })
+        .then(function() {
+          return changeSegmentStatus(row.key, row.status);
+        })
+        .then(() => {
+          this.msgSuccess(text + '成功');
+          this.getList();
+        })
+        .catch(function() {
+          row.status = row.status == '0' ? '1' : '0';
+        });
     },
 
     // 新增
     handleAdd() {
-      this.open = true;
       this.addOrEdit = 'add';
       this.resetForm('form');
       this.title = '添加序列号';
+      this.open = true;
     },
 
     // 编辑
@@ -295,17 +317,17 @@ export default {
       const key = row.key || this.keys;
       getBizKey(key).then(response => {
         this.form = response.data;
-        this.open = true;
         this.title = '修改序列号';
+        this.open = true;
       });
     },
 
     submitForm: function() {
       this.$refs['form'].validate(valid => {
         if (valid) {
-          if (this.addOrEdit === 'edit') {
+          if (this.addOrEdit == 'edit') {
             updateSegment(this.form).then(response => {
-              if (response.code === 200) {
+              if (response.code == 200) {
                 this.msgSuccess('修改成功');
                 this.open = false;
                 this.getList();
@@ -313,7 +335,7 @@ export default {
             });
           } else {
             addSegment(this.form).then(response => {
-              if (response.code === 200) {
+              if (response.code == 200) {
                 this.msgSuccess('新增成功');
                 this.open = false;
                 this.getList();
@@ -331,26 +353,43 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(function() {
-        return changeSegmentStatus(key, 2);
-      }).then(() => {
-        this.getList();
-        this.msgSuccess('删除成功');
-      }).catch(function() {});
+      })
+        .then(function() {
+          return changeSegmentStatus(key, 2);
+        })
+        .then(() => {
+          this.getList();
+          this.msgSuccess('删除成功');
+        })
+        .catch(function() {});
     },
 
-    /** 导出按钮操作 */
-    handleExport() {
-      const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有业务key数据项?', '警告', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(function() {
-        return exportBizKey(queryParams);
-      }).then(response => {
-        this.download(response.msg);
-      }).catch(function() {});
+    handleSnowflakeDialog() {
+      this.resetForm('snowflakeQueryForm');
+      this.resetForm('snowflakeDecodeForm');
+      // 获取snowflake流水号
+      getSnowflake().then(response => {
+        this.snowflakeQueryForm.id = response.data;
+        // 解码流水号
+        decode(this.snowflakeQueryForm).then(response => {
+          this.snowflakeDecodeOpen = true;
+          this.snowflakeDecodeForm = response.data;
+        });
+        this.snowflakeOpen = true;
+      });
+    },
+
+    // 解码snowflake流水号
+    handleSnowflakeQuery() {
+      this.$refs['snowflakeQueryForm'].validate(valid => {
+        if (valid) {
+          this.snowflakeDecodeOpen = false;
+          decode(this.snowflakeQueryForm).then(response => {
+            this.snowflakeDecodeOpen = true;
+            this.snowflakeDecodeForm = response.data;
+          });
+        }
+      });
     }
   }
 };

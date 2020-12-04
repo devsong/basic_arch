@@ -25,12 +25,12 @@ public class SerialApiController {
 
     @RequestMapping(value = "/segment")
     public AjaxResult getSegmentId(String key) {
-        return AjaxResult.success(get(key, segmentIdGenService.get(key)));
+        return AjaxResult.success("success", get(key, segmentIdGenService.get(key)));
     }
 
     @RequestMapping(value = "/snowflake")
     public AjaxResult getSnowflakeId(String key) {
-        return AjaxResult.success(get(key, snowflakeService.get(key)));
+        return AjaxResult.success("success", get(key, snowflakeService.get(key)));
     }
 
     @RequestMapping(value = "/snowflake/decode")
