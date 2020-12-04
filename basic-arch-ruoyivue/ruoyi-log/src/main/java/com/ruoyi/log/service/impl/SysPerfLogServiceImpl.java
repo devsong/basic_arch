@@ -26,6 +26,7 @@ import com.ruoyi.log.domain.SysPerfLog;
 import com.ruoyi.log.domain.SysPerfLogCountPo;
 import com.ruoyi.log.domain.SysPerfLogMetaPo;
 import com.ruoyi.log.dto.SysPerfLogDto;
+import com.ruoyi.log.dto.SysPerfLogMetaRequestDto;
 import com.ruoyi.log.dto.SysPerfLogSearchDto;
 import com.ruoyi.log.enums.SysPerfLogDurationEnum;
 import com.ruoyi.log.service.ISysPerfLogService;
@@ -254,5 +255,11 @@ public class SysPerfLogServiceImpl implements ISysPerfLogService {
             return exists.get(0);
         }
         return null;
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.LOG_SLAVE)
+    public List<String> selectMetaInfo(SysPerfLogMetaRequestDto sysPerfLogMetaRequestDto) {
+        return sysPerfLogMetaMapper.selectMetaInfo(sysPerfLogMetaRequestDto);
     }
 }

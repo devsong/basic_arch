@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
+    <el-form ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
       <el-form-item label="登录地址" prop="ipaddr">
         <el-input
           v-model="queryParams.ipaddr"
@@ -47,7 +47,7 @@
           range-separator="-"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
-        ></el-date-picker>
+        />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -58,30 +58,30 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
+          v-hasPermi="['monitor:logininfor:remove']"
           type="danger"
           icon="el-icon-delete"
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['monitor:logininfor:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
+          v-hasPermi="['monitor:logininfor:remove']"
           type="danger"
           icon="el-icon-delete"
           size="mini"
           @click="handleClean"
-          v-hasPermi="['monitor:logininfor:remove']"
         >清空</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
+          v-hasPermi="['system:logininfor:export']"
           type="warning"
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['system:logininfor:export']"
         >导出</el-button>
       </el-col>
     </el-row>
@@ -114,10 +114,10 @@
 </template>
 
 <script>
-import { list, delLogininfor, cleanLogininfor, exportLogininfor } from "@/api/monitor/logininfor";
+import { list, delLogininfor, cleanLogininfor, exportLogininfor } from '@/api/monitor/logininfor';
 
 export default {
-  name: "Logininfor",
+  name: 'Logininfor',
   data() {
     return {
       // 遮罩层
@@ -146,7 +146,7 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("sys_common_status").then(response => {
+    this.getDicts('sys_common_status').then(response => {
       this.statusOptions = response.data;
     });
   },
@@ -155,10 +155,10 @@ export default {
     getList() {
       this.loading = true;
       list(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
-          this.list = response.rows;
-          this.total = response.total;
-          this.loading = false;
-        }
+        this.list = response.rows;
+        this.total = response.total;
+        this.loading = false;
+      }
       );
     },
     // 登录状态字典翻译
@@ -173,53 +173,53 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.dateRange = [];
-      this.resetForm("queryForm");
+      this.resetForm('queryForm');
       this.handleQuery();
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.infoId)
-      this.multiple = !selection.length
+      this.ids = selection.map(item => item.infoId);
+      this.multiple = !selection.length;
     },
     /** 删除按钮操作 */
     handleDelete(row) {
       const infoIds = row.infoId || this.ids;
-      this.$confirm('是否确认删除访问编号为"' + infoIds + '"的数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return delLogininfor(infoIds);
-        }).then(() => {
-          this.getList();
-          this.msgSuccess("删除成功");
-        }).catch(function() {});
+      this.$confirm('是否确认删除访问编号为"' + infoIds + '"的数据项?', '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(function() {
+        return delLogininfor(infoIds);
+      }).then(() => {
+        this.getList();
+        this.msgSuccess('删除成功');
+      }).catch(function() {});
     },
     /** 清空按钮操作 */
     handleClean() {
-        this.$confirm('是否确认清空所有登录日志数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return cleanLogininfor();
-        }).then(() => {
-          this.getList();
-          this.msgSuccess("清空成功");
-        }).catch(function() {});
+      this.$confirm('是否确认清空所有登录日志数据项?', '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(function() {
+        return cleanLogininfor();
+      }).then(() => {
+        this.getList();
+        this.msgSuccess('清空成功');
+      }).catch(function() {});
     },
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有操作日志数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return exportLogininfor(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-        }).catch(function() {});
+      this.$confirm('是否确认导出所有操作日志数据项?', '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(function() {
+        return exportLogininfor(queryParams);
+      }).then(response => {
+        this.download(response.msg);
+      }).catch(function() {});
     }
   }
 };

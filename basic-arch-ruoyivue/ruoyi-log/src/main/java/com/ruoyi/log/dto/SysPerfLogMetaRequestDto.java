@@ -1,6 +1,5 @@
 package com.ruoyi.log.dto;
 
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,38 +9,35 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SysPerfLogMetaDto implements java.io.Serializable {
+public class SysPerfLogMetaRequestDto implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
-
+    /**
+     * 层级
+     */
     private String level;
 
     /**
      * 产品线
      */
-    private List<String> product;
+    private String product;
 
     /**
      * 组名
      */
-    private List<String> group;
+    private String group;
 
     /**
      * 应用名
      */
-    private List<String> app;
+    private String app;
 
     /**
      * 类名
      */
-    private List<String> clazz;
+    private String clazz;
 
     /**
      * 方法名
      */
-    private List<String> method;
-
-    /**
-     * 客户端机器ip
-     */
-    private List<String> operatorIp;
+    private String method;
 }

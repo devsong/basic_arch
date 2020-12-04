@@ -86,11 +86,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
-
     <sql id="Base_Column_List">
         pl.id, pl.meta_id,pl.execute_timespan, pl.params_in, pl.params_out,pl.code, pl.errmsg,pl.create_time,pl.timestamp
     </sql>
-    
 
     <select id="searchPerfLogs" resultMap="SysPerfLogResult" parameterType="com.ruoyi.log.dto.SysPerfLogSearchDto">
         select
@@ -101,8 +99,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="id != null">
                 pl.id = #{id}
             </if>
-            <if test="createTimeStart != null  and createTimeEnd != null">
-                and pl.create_time between #{createTimeStart} and #{createTimeEnd}
+            <if test="beginTime != null and endTime != null">
+                and pl.create_time between #{beginTime} and #{endTime}
             </if>
             <if test="product != null and product!=''">
                 and m.product=#{product}
@@ -110,7 +108,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="groupName != null and groupName!=''">
                 and m.group_name=#{groupName}
             </if>
-            <if test="app != null and app!=''">
+            <if test="app != null and app != ''">
                 and m.app=#{app}
             </if>
             <if test="clazz != null and clazz!=''">

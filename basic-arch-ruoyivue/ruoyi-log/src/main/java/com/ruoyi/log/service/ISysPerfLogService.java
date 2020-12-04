@@ -5,6 +5,7 @@ import java.util.List;
 import com.ruoyi.log.domain.SysPerfLog;
 import com.ruoyi.log.domain.SysPerfLogMetaPo;
 import com.ruoyi.log.dto.SysPerfLogDto;
+import com.ruoyi.log.dto.SysPerfLogMetaRequestDto;
 import com.ruoyi.log.dto.SysPerfLogSearchDto;
 
 /**
@@ -67,4 +68,11 @@ public interface ISysPerfLogService {
     boolean insertPerfLog(SysPerfLogDto sysLogDto);
 
     List<SysPerfLogDto> searchPerfLogs(SysPerfLogSearchDto searchDto);
+
+    /**
+     * 获取meta信息
+     * @param sysPerfLogMetaRequestDto
+     * @return
+     */
+    List<String> selectMetaInfo(SysPerfLogMetaRequestDto sysPerfLogMetaRequestDto);
 }

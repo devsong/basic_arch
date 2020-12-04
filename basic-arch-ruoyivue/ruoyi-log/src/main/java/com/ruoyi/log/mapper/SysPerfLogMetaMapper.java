@@ -3,6 +3,7 @@ package com.ruoyi.log.mapper;
 import java.util.List;
 
 import com.ruoyi.log.domain.SysPerfLogMetaPo;
+import com.ruoyi.log.dto.SysPerfLogMetaRequestDto;
 
 public interface SysPerfLogMetaMapper {
 
@@ -19,4 +20,6 @@ public interface SysPerfLogMetaMapper {
     int updateByPrimaryKey(SysPerfLogMetaPo record);
 
     List<SysPerfLogMetaPo> exist(SysPerfLogMetaPo query);
+
+    List<String> selectMetaInfo(SysPerfLogMetaRequestDto perfLogMetaRequestDto);
 }

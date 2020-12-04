@@ -18,18 +18,18 @@ public class DefaultParamUtil {
      * @param requestDto
      */
     public static void setDefaultSearchRange(PageSearchRequestDto pageSearchRequestDto) {
-        if (pageSearchRequestDto.getPage() == null) {
-            pageSearchRequestDto.setPage(1);
+        if (pageSearchRequestDto.getPageNum() == null) {
+            pageSearchRequestDto.setPageNum(1);
         }
         if (pageSearchRequestDto.getPageSize() == null) {
             pageSearchRequestDto.setPageSize(10);
         }
-        if (pageSearchRequestDto.getCreateTimeEnd() == null) {
-            pageSearchRequestDto.setCreateTimeEnd(new Date());
+        if (pageSearchRequestDto.getEndTime() == null) {
+            pageSearchRequestDto.setEndTime(new Date());
         }
-        if (pageSearchRequestDto.getCreateTimeStart() == null) {
+        if (pageSearchRequestDto.getBeginTime() == null) {
             // 默认查询最近一个月的数据
-            pageSearchRequestDto.setCreateTimeStart(DateUtils.addMonths(pageSearchRequestDto.getCreateTimeEnd(), -1));
+            pageSearchRequestDto.setBeginTime(DateUtils.addMonths(pageSearchRequestDto.getEndTime(), -1));
         }
     }
 

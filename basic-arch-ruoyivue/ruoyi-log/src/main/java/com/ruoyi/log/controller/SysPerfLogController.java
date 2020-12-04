@@ -17,6 +17,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.log.domain.SysPerfLog;
 import com.ruoyi.log.dto.SysPerfLogDto;
+import com.ruoyi.log.dto.SysPerfLogMetaRequestDto;
 import com.ruoyi.log.dto.SysPerfLogSearchDto;
 import com.ruoyi.log.service.ISysPerfLogService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
@@ -94,5 +95,11 @@ public class SysPerfLogController extends BaseController{
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids){
         return toAjax(sysPerfLogService.deleteSysPerfLogByIds(ids));
+    }
+    
+    @RequestMapping("meta_info")
+    public AjaxResult metaInfo(SysPerfLogMetaRequestDto sysPerfLogMetaRequestDto) {
+        List<String> result = sysPerfLogService.selectMetaInfo(sysPerfLogMetaRequestDto);
+        return AjaxResult.success(result);
     }
 }

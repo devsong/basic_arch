@@ -15,11 +15,11 @@ public class PageSearchRequestDto implements Serializable {
     /**
      * 日志起始查询时间
      */
-    protected Date createTimeStart;
+    protected Date beginTime;
     /**
      * 日志结束查询时间
      */
-    protected Date createTimeEnd;
+    protected Date endTime;
     /**
      * 操作ip集合
      */
@@ -27,7 +27,7 @@ public class PageSearchRequestDto implements Serializable {
     /**
      * 查询起始页数
      */
-    protected Integer page;
+    protected Integer pageNum;
     /**
      * 页大小
      */

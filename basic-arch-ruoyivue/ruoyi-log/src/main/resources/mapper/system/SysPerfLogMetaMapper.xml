@@ -13,7 +13,6 @@
         <result column="timestamp" jdbcType="TIMESTAMP" property="timestamp" />
     </resultMap>
     
-    
     <sql id="Base_Column_List">
         id, product, group_name, app, clazz, method, operator_ip, create_time, timestamp
     </sql>
@@ -179,6 +178,48 @@
             </if>
             <if test="method != null">
                  and method = #{method}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectMetaInfo" parameterType="com.ruoyi.log.dto.SysPerfLogMetaRequestDto" resultType="java.lang.String">
+        select
+           distinct
+           <if test="level == 1">
+                product
+           </if>
+           <if test="level == 2">
+                ,group
+           </if>
+           <if test="level == 3">
+                ,app,
+           </if>
+           <if test="level == 4">
+                ,clazz
+           </if>
+           <if test="level == 5">
+                ,method
+           </if>
+           <if test="level == 6">
+                ,operator_ip
+           </if>
+        from 
+            sys_perf_log_meta m
+        <where>
+            <if test="product != null and product!=''">
+                and m.product=#{product}
+            </if>
+            <if test="groupName != null and groupName!=''">
+                and m.group_name=#{group}
+            </if>
+            <if test="app != null and app != ''">
+                and m.app=#{app}
+            </if>
+            <if test="clazz != null and clazz!=''">
+                and m.clazz=#{clazz}
+            </if>
+            <if test="method != null and method!=''">
+                and m.method=#{method}
             </if>
         </where>
     </select>

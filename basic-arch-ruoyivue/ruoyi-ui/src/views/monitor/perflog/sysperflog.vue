@@ -1,6 +1,86 @@
 <template>
   <div class="app-container">
     <el-form ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
+
+      <el-form-item label="产品线" prop="product">
+        <el-select v-model="queryParams.product" placeholder="请选择" change="handleProductChange">
+          <el-option
+            v-for="item in option.products"
+            :key="item"
+            :label="item"
+            :value="item"
+          />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="分组" prop="group">
+        <el-select v-model="queryParams.group" placeholder="请选择" change="handleGroupChange">
+          <el-option
+            v-for="item in option.groups"
+            :key="item"
+            :label="item"
+            :value="item"
+          />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="应用" prop="app">
+        <el-select v-model="queryParams.app" placeholder="请选择" change="handleAppChange">
+          <el-option
+            v-for="item in option.apps"
+            :key="item"
+            :label="item"
+            :value="item"
+          />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="类名" prop="clazz">
+        <el-select v-model="queryParams.clazz" placeholder="请选择" change="handleClazzChange">
+          <el-option
+            v-for="item in option.clazzs"
+            :key="item"
+            :label="item"
+            :value="item"
+          />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="方法名" prop="method">
+        <el-select v-model="queryParams.method" placeholder="请选择" change="handleMethodChange">
+          <el-option
+            v-for="item in option.methods"
+            :key="item"
+            :label="item"
+            :value="item"
+          />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="服务IP" prop="operateIp">
+        <el-select v-model="queryParams.operateIp" placeholder="请选择" change="handleOperateIpChange">
+          <el-option
+            v-for="item in option.operateIps"
+            :key="item"
+            :label="item"
+            :value="item"
+          />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="时间" prop="createTime">
+        <el-date-picker
+          v-model="dateRange"
+          size="small"
+          style="width: 320px"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          type="daterange"
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+        />
+      </el-form-item>
+
       <el-form-item label="日志ID" prop="id">
         <el-input
           v-model="queryParams.id"
@@ -10,73 +90,12 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="元数据id" prop="metaId">
-        <el-input
-          v-model="queryParams.metaId"
-          placeholder="请输入元数据id"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="创建时间" prop="createTime">
-        <el-date-picker
-          v-model="queryParams.createTime"
-          clearable
-          size="small"
-          style="width: 200px"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="选择创建时间"
-        />
-      </el-form-item>
+
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
-
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          v-hasPermi="['system:log:add']"
-          type="primary"
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          v-hasPermi="['system:log:edit']"
-          type="success"
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          v-hasPermi="['system:log:remove']"
-          type="danger"
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          v-hasPermi="['system:log:export']"
-          type="warning"
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-        >导出</el-button>
-      </el-col>
-    </el-row>
-
     <el-table
       v-loading="loading"
       class="cell-limit"
@@ -96,24 +115,6 @@
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button
-            v-hasPermi="['system:log:edit']"
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-          >修改</el-button>
-          <el-button
-            v-hasPermi="['system:log:remove']"
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-          >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -156,7 +157,7 @@
 </style>
 
 <script>
-import { listLog, getLog, delLog, addLog, updateLog, exportLog } from '@/api/system/log';
+import { listLog, getLog, delLog, addLog, updateLog, exportLog } from '@/api/monitor/perflog';
 
 export default {
   name: 'Sysperflog',
@@ -178,13 +179,34 @@ export default {
       title: '',
       // 是否显示弹出层
       open: false,
+      // 下拉列表数据
+      option: {
+        // 产品线
+        products: [],
+        // 分组
+        groups: [],
+        // 应用
+        apps: [],
+        // 类名
+        clazzs: [],
+        // 方法名
+        methods: [],
+        // 服务器IP
+        operateIps: []
+      },
+      // 时间筛选
+      dateRange: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
         id: undefined,
-        metaId: undefined,
-        createTime: undefined
+        product: undefined,
+        group: undefined,
+        app: undefined,
+        clazz: undefined,
+        method: undefined,
+        operateIp: undefined
       },
       // 表单参数
       form: {},
@@ -202,7 +224,7 @@ export default {
     /** 查询系统接口日志列表 */
     getList() {
       this.loading = true;
-      listLog(this.queryParams).then(response => {
+      listLog(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
         this.logList = response.rows;
         this.total = response.total;
         this.loading = false;
