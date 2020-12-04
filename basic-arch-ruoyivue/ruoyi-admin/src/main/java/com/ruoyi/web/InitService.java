@@ -15,7 +15,7 @@ import com.gzs.learn.common.util.IpUtil;
 import com.ruoyi.common.config.RuoYiConfig;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.log.domain.SysPerfLogMetaPo;
-import com.ruoyi.log.service.IPerfLogService;
+import com.ruoyi.log.service.ISysPerfLogService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,7 +36,7 @@ public class InitService {
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     @Autowired
-    private IPerfLogService perfLogService;
+    private ISysPerfLogService sysPerfLogService;
 
     @PostConstruct
     public void init() {
@@ -59,7 +59,7 @@ public class InitService {
                             .groupName(ruoYiConfig.getGroup()).app(ruoYiConfig.getApp()).clazz(className).method(methodName)
                             .operatorIp(operatorIp).createTime(new Date()).build();
                     // 异步执行
-                    threadPoolTaskExecutor.submit(() -> perfLogService.insertPerfLogMeta(metaDto));
+                    threadPoolTaskExecutor.submit(() -> sysPerfLogService.insertPerfLogMeta(metaDto));
                 }
             }
         }

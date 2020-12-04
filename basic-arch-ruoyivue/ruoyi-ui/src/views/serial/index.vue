@@ -222,12 +222,9 @@ export default {
       },
       // snowflake流水号对话框
       snowflakeOpen: false,
-      // 示例数据
-      snowflakeExample: 0,
       snowflakeQueryForm: {
         id: undefined
       },
-      snowflakeDecodeOpen: false,
       snowflakeDecodeForm: {
         timestamp: 0,
         time: '',
@@ -289,17 +286,14 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      })
-        .then(function() {
-          return changeSegmentStatus(row.key, row.status);
-        })
-        .then(() => {
-          this.msgSuccess(text + '成功');
-          this.getList();
-        })
-        .catch(function() {
-          row.status = row.status == '0' ? '1' : '0';
-        });
+      }).then(function() {
+        return changeSegmentStatus(row.key, row.status);
+      }).then(() => {
+        this.msgSuccess(text + '成功');
+        this.getList();
+      }).catch(function() {
+        row.status = row.status == '0' ? '1' : '0';
+      });
     },
 
     // 新增
@@ -372,7 +366,6 @@ export default {
         this.snowflakeQueryForm.id = response.data;
         // 解码流水号
         decode(this.snowflakeQueryForm).then(response => {
-          this.snowflakeDecodeOpen = true;
           this.snowflakeDecodeForm = response.data;
         });
         this.snowflakeOpen = true;
@@ -394,4 +387,3 @@ export default {
   }
 };
 </script>
-

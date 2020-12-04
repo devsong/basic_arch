@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.log.mapper.SysPerfLogMapper">
+    <resultMap type="SysPerfLog" id="SysPerfLogResult">
+        <result property="id" column="id" />
+        <result property="metaId" column="meta_id" />
+        <result property="executeTimespan" column="execute_timespan" />
+        <result property="paramsIn" column="params_in" />
+        <result property="paramsOut" column="params_out" />
+        <result property="code" column="code" />
+        <result property="errmsg" column="errmsg" />
+        <result property="createTime" column="create_time" />
+        <result property="timestamp" column="timestamp" />
+    </resultMap>
+
+    <sql id="selectSysPerfLogVo">
+        select id, meta_id, execute_timespan, params_in, params_out, code, errmsg, create_time, timestamp from sys_perf_log
+    </sql>
+
+    <select id="selectSysPerfLogList" parameterType="SysPerfLog" resultMap="SysPerfLogResult">
+        <include refid="selectSysPerfLogVo" />
+        <where>
+            <if test="id != null "> and id = #{id}</if>
+            <if test="metaId != null "> and meta_id = #{metaId}</if>
+            <if
+                test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+        </where>
+    </select>
+
+    <select id="selectSysPerfLogById" parameterType="Long" resultMap="SysPerfLogResult">
+        <include refid="selectSysPerfLogVo" />
+        where id = #{id}
+    </select>
+
+    <insert id="insertSysPerfLog" parameterType="SysPerfLog">
+        insert into sys_perf_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="metaId != null">meta_id,</if>
+            <if test="executeTimespan != null">execute_timespan,</if>
+            <if test="paramsIn != null">params_in,</if>
+            <if test="paramsOut != null">params_out,</if>
+            <if test="code != null">code,</if>
+            <if test="errmsg != null">errmsg,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="timestamp != null">timestamp,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="metaId != null">#{metaId},</if>
+            <if test="executeTimespan != null">#{executeTimespan},</if>
+            <if test="paramsIn != null">#{paramsIn},</if>
+            <if test="paramsOut != null">#{paramsOut},</if>
+            <if test="code != null">#{code},</if>
+            <if test="errmsg != null">#{errmsg},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="timestamp != null">#{timestamp},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysPerfLog" parameterType="SysPerfLog">
+        update sys_perf_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="metaId != null">meta_id = #{metaId},</if>
+            <if test="executeTimespan != null">execute_timespan = #{executeTimespan},</if>
+            <if test="paramsIn != null">params_in = #{paramsIn},</if>
+            <if test="paramsOut != null">params_out = #{paramsOut},</if>
+            <if test="code != null">code = #{code},</if>
+            <if test="errmsg != null">errmsg = #{errmsg},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="timestamp != null">timestamp = #{timestamp},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysPerfLogById" parameterType="Long">
+        delete from sys_perf_log where id = #{id}
+    </delete>
+
+    <delete id="deleteSysPerfLogByIds" parameterType="String">
+        delete from sys_perf_log where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <sql id="Base_Column_List">
+        pl.id, pl.meta_id,pl.execute_timespan, pl.params_in, pl.params_out,pl.code, pl.errmsg,pl.create_time,pl.timestamp
+    </sql>
+    
+
+    <select id="searchPerfLogs" resultMap="SysPerfLogResult" parameterType="com.ruoyi.log.dto.SysPerfLogSearchDto">
+        select
+            <include refid="Base_Column_List" />
+        FROM
+            sys_perf_log pl join sys_perf_log_meta m on pl.meta_id = m.id
+        <where>
+            <if test="id != null">
+                pl.id = #{id}
+            </if>
+            <if test="createTimeStart != null  and createTimeEnd != null">
+                and pl.create_time between #{createTimeStart} and #{createTimeEnd}
+            </if>
+            <if test="product != null and product!=''">
+                and m.product=#{product}
+            </if>
+            <if test="groupName != null and groupName!=''">
+                and m.group_name=#{groupName}
+            </if>
+            <if test="app != null and app!=''">
+                and m.app=#{app}
+            </if>
+            <if test="clazz != null and clazz!=''">
+                and m.clazz=#{clazz}
+            </if>
+            <if test="method != null and method!=''">
+                and m.method=#{method}
+            </if>
+            <if test="operatorIps != null">
+                and m.operator_ip in(
+                <foreach collection="operatorIps" item="item" separator=",">
+                    #{item}
+                </foreach>
+                )
+            </if>
+        </where>
+        order by
+        id desc
+    </select>
+</mapper>

@@ -21,14 +21,14 @@ public class SerialController {
 
     @RequestMapping(value = "/segment/list")
     @PreAuthorize("@ss.hasPermi('serial:segment:list')")
-    public PageResponseDto<SerialAlloc> getSegmentList(SegmentSearchDto segmentSearchDto) {
+    public PageResponseDto<SerialAlloc> list(SegmentSearchDto segmentSearchDto) {
         PageResponseDto<SerialAlloc> pageResponseDto = serialAllocService.searchBizKeys(segmentSearchDto);
         return pageResponseDto;
     }
 
     @RequestMapping(value = "/segment/get")
     @PreAuthorize("@ss.hasPermi('serial:segment:list')")
-    public AjaxResult getSegmen(String bizKey) {
+    public AjaxResult getSegment(String bizKey) {
         SerialAlloc serialAlloc = serialAllocService.getBizKey(bizKey);
         return AjaxResult.success(serialAlloc);
     }
