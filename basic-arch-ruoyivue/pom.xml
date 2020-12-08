@@ -196,6 +196,8 @@
         <module>ruoyi-quartz</module>
         <module>ruoyi-log</module>
         <module>ruoyi-serial</module>
+        <module>ruoyi-wechat</module>
+        <module>ruoyi-payment</module>
     </modules>
 
     <build>
