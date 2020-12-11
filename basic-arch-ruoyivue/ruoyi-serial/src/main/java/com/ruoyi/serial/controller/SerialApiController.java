@@ -50,7 +50,7 @@ public class SerialApiController {
     @RequestMapping(value = "/base32/encode")
     public AjaxResult encodeBase32(Long id) {
         String result = Base32.encodeLongToBase32(id);
-        return AjaxResult.success(result);
+        return AjaxResult.success("success", result);
     }
 
     @RequestMapping(value = "/base62/decode")
@@ -62,7 +62,7 @@ public class SerialApiController {
     @RequestMapping(value = "/base62/encode")
     public AjaxResult encodeBase64(Long id) {
         String result = Base62.fromBase10(id);
-        return AjaxResult.success(result);
+        return AjaxResult.success("success", result);
     }
 
     private String get(@PathVariable("key") String key, Result id) {

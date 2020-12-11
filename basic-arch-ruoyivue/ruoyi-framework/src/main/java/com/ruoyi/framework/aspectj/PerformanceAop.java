@@ -57,6 +57,11 @@ public class PerformanceAop {
         String clazz = sig.getDeclaringTypeName();
         String methodName = currentMethod.getName();
         PerfLog perfLog = getPerfLog(point);
+        boolean recordFlag = true;
+        if (perfLog != null && perfLog.ignore()) {
+            // 指定类不记录日志
+            recordFlag = false;
+        }
         if (perfLog != null) {
             clazz = StringUtils.isNotBlank(perfLog.clazz()) ? perfLog.clazz() : clazz;
             methodName = StringUtils.isNotBlank(perfLog.method()) ? perfLog.method() : methodName;
@@ -77,7 +82,10 @@ public class PerformanceAop {
             // 记录方法调用日志
             stopwatch.stop();
             elapsed = stopwatch.elapsed(TimeUnit.MILLISECONDS);
-            recordPerfLog(clazz, methodName, args, returnValue, exception, elapsed);
+            if (recordFlag) {
+                // 记录日志
+                recordPerfLog(clazz, methodName, args, returnValue, exception, elapsed);
+            }
         }
         return returnValue;
     }

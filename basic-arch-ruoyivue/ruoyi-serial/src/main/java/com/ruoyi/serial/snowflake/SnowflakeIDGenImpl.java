@@ -136,10 +136,10 @@ public class SnowflakeIDGenImpl implements IDGen {
         Date time = new Date(timestamp);
         String timeStr = DateFormatUtils.format(time, "yyyy-MM-dd HH:mm:ss.SSS");
         SerialSnowflakeInfo info = new SerialSnowflakeInfo();
-        info.setSeq(seqId);
-        info.setWorkerId(workerId);
-        info.setDataCenterId(dataCenterId);
-        info.setTimestamp(timestamp);
+        info.setSeq((int) seqId);
+        info.setWorkerId((int) workerId);
+        info.setDataCenterId((int) dataCenterId);
+        info.setTimestamp(timestamp + "");
         info.setTime(timeStr);
         return info;
     }

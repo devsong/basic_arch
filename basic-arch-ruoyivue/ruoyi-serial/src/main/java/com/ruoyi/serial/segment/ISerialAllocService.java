@@ -5,6 +5,7 @@ import java.util.List;
 import com.gzs.learn.inf.PageResponseDto;
 import com.ruoyi.serial.domain.SerialAlloc;
 import com.ruoyi.serial.dto.SegmentSearchDto;
+import com.ruoyi.serial.dto.SerialAllocDto;
 
 public interface ISerialAllocService {
 
@@ -20,7 +21,7 @@ public interface ISerialAllocService {
 
     boolean updateStatus(String key, Integer status);
 
-    PageResponseDto<SerialAlloc> searchBizKeys(SegmentSearchDto segmentSearchDto);
+    PageResponseDto<SerialAllocDto> searchBizKeys(SegmentSearchDto segmentSearchDto);
 
     boolean add(SerialAlloc serialAlloc);
 

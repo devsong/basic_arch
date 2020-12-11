@@ -11,13 +11,13 @@ public class SerialSnowflakeInfo implements Serializable {
      */
     private static final long serialVersionUID = 1L;
     // 时间戳
-    private long timestamp;
+    private String timestamp;
     // 时间字符串格式
     private String time;
     // 数据中心ID
-    private long dataCenterId;
+    private int dataCenterId;
     // workerID
-    private long workerId;
+    private int workerId;
     // 序列号
-    private long seq;
+    private int seq;
 }

@@ -100,21 +100,22 @@
       v-loading="loading"
       class="cell-limit"
       :data="logList"
+      :cell-class-name="tableCellClassName"
       height="500"
       @selection-change="handleSelectionChange"
-      @cell-dbclick="handleCellDbClick"
+      @cell-dblclick="handleCellDbClick"
     >
       <el-table-column type="selection" align="center" width="55" />
       <el-table-column fixed="left" label="日志ID" align="center" width="180"  prop="id" />
       <el-table-column label="产品线" align="center" prop="product" />
       <el-table-column label="服务分组" align="center" prop="groupName" />
       <el-table-column label="应用名" align="center" width="120" prop="app" />
-      <el-table-column label="类名" align="center" width="180" prop="clazz" />
+      <el-table-column label="类名" align="center" width="180" prop="clazz" :show-overflow-tooltip="true" />
       <el-table-column label="方法名" align="center" width="80" prop="method" />
       <el-table-column label="操作IP" align="center" width="120" prop="operatorIp" />
       <el-table-column label="执行时间" align="center" prop="executeTimespan" />
-      <el-table-column label="入参" align="center" prop="paramsIn" />
-      <el-table-column label="出参" align="center" prop="paramsOut" />
+      <el-table-column label="入参" align="center" prop="paramsIn" title="paramsIn" :show-overflow-tooltip="true" />
+      <el-table-column label="出参" align="center" prop="paramsOut" title="paramsOut" :show-overflow-tooltip="true" />
       <el-table-column label="状态码" align="center" prop="code" />
       <el-table-column label="异常信息" align="center" prop="errmsg" />
       <el-table-column fixed="right" label="创建时间" align="center" prop="createTime" width="180"/>
@@ -129,15 +130,9 @@
     />
 
     <!-- 添加或修改系统接口日志对话框 -->
-    <el-dialog title="明细" :visible.sync="open" width="700px" append-to-body>
+    <el-dialog title="明细" :visible.sync="open" width="700px" height="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="业务key：" prop="key">
-              {{ detailMsg }}
-            </el-form-item>
-          </el-col>
-        </el-row>
+        {{ detailMsg }}
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="cancel">取 消</el-button>
@@ -336,13 +331,19 @@ export default {
       }).catch(function() {});
     },
 
+    //
+    tableCellClassName({row,column,rowIndex,columnIndex}){
+      row.index = rowIndex;
+      column.index=columnIndex;
+    },
+
     handleCellDbClick(row, column, cell, event) {
       // 5 6 8列的数据较长,需要弹出对话框显示
-      console.log('execute');
-      if (column === 5 || column === 6 || column === 8) {
-        console.log(JSON.stringify(cell));
+      const index = column.index;
+      if (index === 5 || index === 9 || index === 10) {
+        JSON.stringify(cell);
         this.open = true;
-        // this.detailMsg = cell.text;
+        this.detailMsg = cell.innerText;
       }
     },
 

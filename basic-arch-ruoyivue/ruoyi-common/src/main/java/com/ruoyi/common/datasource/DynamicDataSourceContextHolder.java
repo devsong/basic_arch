@@ -1,13 +1,11 @@
 package com.ruoyi.common.datasource;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * 数据源切换处理
  * 
  * @author guanzhisong
  */
-@Slf4j
+// @Slf4j
 public class DynamicDataSourceContextHolder {
     /**
      * 使用ThreadLocal维护变量，ThreadLocal为每个使用该变量的线程提供独立的变量副本，
@@ -19,7 +17,7 @@ public class DynamicDataSourceContextHolder {
      * 设置数据源的变量
      */
     public static void setDataSourceType(String dsType) {
-        log.info("switch dataSource {}", dsType);
+        // log.info("switch dataSource {}", dsType);
         CONTEXT_HOLDER.set(dsType);
     }
 

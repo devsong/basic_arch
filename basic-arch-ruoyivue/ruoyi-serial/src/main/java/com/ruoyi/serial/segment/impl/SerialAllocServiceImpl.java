@@ -9,12 +9,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 import com.gzs.learn.inf.PageResponseDto;
 import com.gzs.learn.inf.PageResponseDto.PageResponse;
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.enums.DataSourceType;
+import com.ruoyi.common.utils.bean.BeanUtils;
 import com.ruoyi.serial.domain.SerialAlloc;
 import com.ruoyi.serial.dto.SegmentSearchDto;
+import com.ruoyi.serial.dto.SerialAllocDto;
 import com.ruoyi.serial.mapper.SerialAllocMapper;
 import com.ruoyi.serial.segment.ISerialAllocService;
 
@@ -60,17 +63,27 @@ public class SerialAllocServiceImpl implements ISerialAllocService {
     }
 
     @Override
-    public PageResponseDto<SerialAlloc> searchBizKeys(SegmentSearchDto segmentSearchDto) {
+    public PageResponseDto<SerialAllocDto> searchBizKeys(SegmentSearchDto segmentSearchDto) {
         PageInfo<SerialAlloc> pageInfo = PageHelper.startPage(segmentSearchDto.getPageNum(), segmentSearchDto.getPageSize(), true)
                 .doSelectPageInfo(() -> {
                     idAllocMapper.search(segmentSearchDto);
                 });
+        List<SerialAlloc> list = pageInfo.getList();
+        List<SerialAllocDto> result = Lists.newArrayList();
+        for (SerialAlloc serialAlloc : list) {
+            SerialAllocDto dto = new SerialAllocDto();
+            BeanUtils.copyProperties(serialAlloc, dto);
+
+            dto.setMaxId(serialAlloc.getMaxId() + "");
+
+            result.add(dto);
+        }
         PageResponse pageResponse = PageResponse.builder().page(segmentSearchDto.getPageNum()).pageSize(segmentSearchDto.getPageSize())
                 .total((int) pageInfo.getTotal()).build();
-        PageResponseDto<SerialAlloc> pageResponseDto = new PageResponseDto<SerialAlloc>();
+        PageResponseDto<SerialAllocDto> pageResponseDto = new PageResponseDto<>();
         pageResponseDto.setCode(0);
         pageResponseDto.setPage(pageResponse);
-        pageResponseDto.setData(pageInfo.getList());
+        pageResponseDto.setData(result);
         return pageResponseDto;
     }
 

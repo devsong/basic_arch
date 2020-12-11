@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gzs.learn.inf.PageResponseDto;
 import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.utils.bean.BeanUtils;
 import com.ruoyi.serial.domain.SerialAlloc;
 import com.ruoyi.serial.dto.SegmentSearchDto;
+import com.ruoyi.serial.dto.SerialAllocDto;
 import com.ruoyi.serial.exception.SerialException;
 import com.ruoyi.serial.segment.ISerialAllocService;
 
@@ -21,8 +23,8 @@ public class SerialController {
 
     @RequestMapping(value = "/segment/list")
     @PreAuthorize("@ss.hasPermi('serial:segment:list')")
-    public PageResponseDto<SerialAlloc> list(SegmentSearchDto segmentSearchDto) {
-        PageResponseDto<SerialAlloc> pageResponseDto = serialAllocService.searchBizKeys(segmentSearchDto);
+    public PageResponseDto<SerialAllocDto> list(SegmentSearchDto segmentSearchDto) {
+        PageResponseDto<SerialAllocDto> pageResponseDto = serialAllocService.searchBizKeys(segmentSearchDto);
         return pageResponseDto;
     }
 
@@ -30,12 +32,17 @@ public class SerialController {
     @PreAuthorize("@ss.hasPermi('serial:segment:list')")
     public AjaxResult getSegment(String bizKey) {
         SerialAlloc serialAlloc = serialAllocService.getBizKey(bizKey);
-        return AjaxResult.success(serialAlloc);
+        SerialAllocDto dto = new SerialAllocDto();
+        BeanUtils.copyProperties(serialAlloc, dto);
+        return AjaxResult.success(dto);
     }
 
     @RequestMapping(value = "/segment/add")
     @PreAuthorize("@ss.hasPermi('serial:segment:update')")
-    public AjaxResult addSegment(SerialAlloc serialAlloc) {
+    public AjaxResult addSegment(SerialAllocDto serialAllocDto) {
+        SerialAlloc serialAlloc = new SerialAlloc();
+        BeanUtils.copyProperties(serialAllocDto, serialAlloc);
+        serialAlloc.setMaxId(Long.valueOf(serialAllocDto.getMaxId()));
         boolean success = serialAllocService.add(serialAlloc);
         return AjaxResult.success(success);
     }

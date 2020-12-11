@@ -20,11 +20,13 @@ public @interface PerfLog {
      * 类名
      * @return
      */
-    public String clazz() default "";
+    String clazz() default "";
 
     /**
      * 方法名
      * @return
      */
-    public String method() default "";
+    String method() default "";
+
+    boolean ignore() default false;
 }

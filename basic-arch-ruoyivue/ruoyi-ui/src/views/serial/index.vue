@@ -1,7 +1,12 @@
 /* eslint-disable eqeqeq */
 <template>
   <div class="app-container">
-    <el-form ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
+    <el-form
+      ref="queryForm"
+      :model="queryParams"
+      :inline="true"
+      label-width="68px"
+    >
       <el-form-item label="业务key" prop="name">
         <el-input
           v-model="queryParams.name"
@@ -25,8 +30,16 @@
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button
+          type="primary"
+          icon="el-icon-search"
+          size="mini"
+          @click="handleQuery"
+          >搜索</el-button
+        >
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery"
+          >重置</el-button
+        >
       </el-form-item>
     </el-form>
 
@@ -38,24 +51,46 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-        >新增
+          >新增
         </el-button>
       </el-col>
 
       <el-col :span="1.5">
-        <el-button type="primary" icon="el-icon-info" size="mini" @click="handleSnowflakeDialog">snowflake </el-button>
+        <el-button
+          type="primary"
+          icon="el-icon-info"
+          size="mini"
+          @click="handleSnowflakeDialog"
+          >snowflake
+        </el-button>
       </el-col>
 
       <el-col :span="1.5">
-        <el-button type="primary" icon="el-icon-info" size="mini" @click="baseEncodeFlag = true">BASE32/62编码</el-button>
+        <el-button
+          type="primary"
+          icon="el-icon-info"
+          size="mini"
+          @click="base32Flag = true"
+          >BASE32编解码</el-button
+        >
       </el-col>
 
       <el-col :span="1.5">
-        <el-button type="primary" icon="el-icon-info" size="mini" @click="baseDecodeFlag = true">BASE32/62解码</el-button>
+        <el-button
+          type="primary"
+          icon="el-icon-info"
+          size="mini"
+          @click="base62Flag = true"
+          >BASE62编解码</el-button
+        >
       </el-col>
     </el-row>
 
-    <el-table v-loading="loading" :data="list" @selection-change="handleSelectionChange">
+    <el-table
+      v-loading="loading"
+      :data="list"
+      @selection-change="handleSelectionChange"
+    >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="业务KEY" align="center" prop="key" />
       <el-table-column label="已使用ID" align="center" prop="maxId" />
@@ -71,7 +106,11 @@
         </template>
       </el-table-column>
       <el-table-column label="描述信息" align="center" prop="description" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column
+        label="操作"
+        align="center"
+        class-name="small-padding fixed-width"
+      >
         <template slot-scope="scope">
           <el-button
             v-hasPermi="['serial:segment:list']"
@@ -79,7 +118,7 @@
             type="text"
             icon="el-icon-search"
             @click="handleGet(scope.row)"
-          >获取
+            >获取
           </el-button>
           <el-button
             v-hasPermi="['serial:segment:update']"
@@ -87,7 +126,7 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-          >编辑
+            >编辑
           </el-button>
 
           <el-button
@@ -96,7 +135,7 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-          >删除
+            >删除
           </el-button>
         </template>
       </el-table-column>
@@ -135,7 +174,11 @@
           <el-col :span="12">
             <el-form-item label="操作状态：" prop="status">
               <template>
-                <el-switch v-model="form.status" :active-value="0" :inactive-value="1" />
+                <el-switch
+                  v-model="form.status"
+                  :active-value="0"
+                  :inactive-value="1"
+                />
               </template>
             </el-form-item>
           </el-col>
@@ -148,8 +191,19 @@
     </el-dialog>
 
     <!-- 序列号解码 -->
-    <el-dialog title="解码序列号" :visible.sync="snowflakeOpen" width="500px" append-to-body>
-      <el-form ref="snowflakeQueryForm" :model="snowflakeQueryForm" :inline="true" :rules="rules" label-width="120px">
+    <el-dialog
+      title="解码序列号"
+      :visible.sync="snowflakeOpen"
+      width="500px"
+      append-to-body
+    >
+      <el-form
+        ref="snowflakeQueryForm"
+        :model="snowflakeQueryForm"
+        :inline="true"
+        :rules="rules"
+        label-width="120px"
+      >
         <el-form-item label="序列号" prop="id">
           <el-input
             v-model="snowflakeQueryForm.id"
@@ -162,24 +216,40 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search" size="mini" @click="handleSnowflakeQuery">查询</el-button>
+          <el-button
+            type="primary"
+            icon="el-icon-search"
+            size="mini"
+            @click="handleSnowflakeQuery"
+            >查询</el-button
+          >
         </el-form-item>
 
         <el-form-item :visible.sync="snowflakeDecodeOpen" label-width="120px">
           <el-col :span="24">
-            <el-form-item label="时间戳：">{{ snowflakeDecodeForm.timestamp }}</el-form-item>
+            <el-form-item label="时间戳：">{{
+              snowflakeDecodeForm.timestamp
+            }}</el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="时间(易读格式)：">{{ snowflakeDecodeForm.time }}</el-form-item>
+            <el-form-item label="时间(易读格式)：">{{
+              snowflakeDecodeForm.time
+            }}</el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="数据中心：">{{ snowflakeDecodeForm.dataCenterId }}</el-form-item>
+            <el-form-item label="数据中心：">{{
+              snowflakeDecodeForm.dataCenterId
+            }}</el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="机器ID：">{{ snowflakeDecodeForm.workerId }}</el-form-item>
+            <el-form-item label="机器ID：">{{
+              snowflakeDecodeForm.workerId
+            }}</el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="随机序列号：">{{ snowflakeDecodeForm.seq }}</el-form-item>
+            <el-form-item label="随机序列号：">{{
+              snowflakeDecodeForm.seq
+            }}</el-form-item>
           </el-col>
         </el-form-item>
       </el-form>
@@ -189,11 +259,16 @@
       </div>
     </el-dialog>
 
-    <el-dialog title="BASE32编解码" :visible.sync="baseEncodeFlag">
-      <el-form ref="encodeQueryForm" :model="encodeQueryForm" :inline="true" label-width="120px">
+    <el-dialog title="BASE32编解码" :visible.sync="base32Flag">
+      <el-form
+        ref="base32Form"
+        :model="base32Form"
+        :inline="true"
+        label-width="120px"
+      >
         <el-form-item label="编码值" prop="encodeVal">
           <el-input
-            v-model="encodeQueryForm.id"
+            v-model="base32Form.id"
             placeholder="请输入编码值"
             clearable
             style="width: 240px"
@@ -202,34 +277,73 @@
           />
         </el-form-item>
 
+        <el-form-item label="结果：">{{ base32Form.result }}</el-form-item>
+
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search" size="mini" @click="handleEncodeFor32">BASE32编码</el-button>
+          <el-button
+            type="primary"
+            icon="el-icon-search"
+            size="mini"
+            @click="handleEncodeFor32"
+            >BASE32编码</el-button
+          >
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search" size="mini" @click="handleDecodeFor32">BASE32解码</el-button>
+          <el-button
+            type="primary"
+            icon="el-icon-search"
+            size="mini"
+            @click="handleDecodeFor32"
+            >BASE32解码</el-button
+          >
         </el-form-item>
       </el-form>
     </el-dialog>
 
-    <el-dialog title="BASE62编解码" :visible.sync="baseDecodeFlag">
-      <el-form ref="decodeQueryForm" :model="decodeQueryForm" :inline="true" label-width="120px">
-        <el-form-item label="编码值" prop="encodeVal">
-          <el-input
-            v-model="decodeQueryForm.id"
-            placeholder="请输入编码值"
-            clearable
-            style="width: 240px"
-            size="small"
-            @keyup.enter.native="handleDecodeFor32"
-          />
-        </el-form-item>
-
-        <el-form-item>
-          <el-button type="primary" icon="el-icon-search" size="mini" @click="handleEncodeFor62">BASE62编码</el-button>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" icon="el-icon-search" size="mini" @click="handleDecodeFor62">BASE62解码</el-button>
-        </el-form-item>
+    <el-dialog title="BASE62编解码" :visible.sync="base62Flag">
+      <el-form
+        ref="base62Form"
+        :model="base62Form"
+        :inline="true"
+        label-width="120px"
+      >
+        <el-col :span="12">
+          <el-form-item label="编码值" prop="encodeVal">
+            <el-input
+              v-model="base62Form.id"
+              placeholder="请输入编码值"
+              clearable
+              style="width: 240px"
+              size="small"
+              @keyup.enter.native="handleDecodeFor32"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="结果：">{{ base62Form.result }}</el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item>
+            <el-button
+              type="primary"
+              icon="el-icon-search"
+              size="mini"
+              @click="handleEncodeFor62"
+              >BASE62编码</el-button
+            >
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item>
+            <el-button
+              type="primary"
+              icon="el-icon-search"
+              size="mini"
+              @click="handleDecodeFor62"
+              >BASE62解码</el-button
+            >
+          </el-form-item>
+        </el-col>
       </el-form>
     </el-dialog>
   </div>
@@ -249,18 +363,18 @@ import {
   base32decode,
   base62encode,
   base62decode
-} from '@/api/serial/index';
+} from "@/api/serial/index";
 
 export default {
-  name: 'Serial',
+  name: "Serial",
   data() {
     return {
       // 遮罩层
       loading: true,
       // 添加OR编辑
-      addOrEdit: 'add',
+      addOrEdit: "add",
       // 弹出层标题
-      title: '',
+      title: "",
       // 选中数组
       keys: [],
       // 非多个禁用
@@ -290,36 +404,43 @@ export default {
       snowflakeQueryForm: {
         id: undefined
       },
+      snowflakeDecodeOpen: false,
       snowflakeDecodeForm: {
         timestamp: 0,
-        time: '',
+        time: "",
         dataCenterId: 0,
         workerId: 0,
         seq: 0
       },
       rules: {
         id: [
-          { required: true, message: 'snowflake流水号不能为空', trigger: 'blur' },
+          {
+            required: true,
+            message: "snowflake流水号不能为空",
+            trigger: "blur"
+          },
           {
             pattern: /^[0-9]*$/,
-            message: '请输入正确的snowflake流水号',
-            trigger: 'blur'
+            message: "请输入正确的snowflake流水号",
+            trigger: "blur"
           }
         ]
       },
       base32Flag: false,
       base32Form: {
-        id: undefined
+        id: undefined,
+        result: ""
       },
       base62Flag: false,
       base62Form: {
-        id: undefined
+        id: undefined,
+        result: ""
       }
     };
   },
   created() {
     this.getList();
-    this.getDicts('sys_normal_disable').then(response => {
+    this.getDicts("sys_normal_disable").then(response => {
       this.statusOptions = response.data;
     });
   },
@@ -327,11 +448,13 @@ export default {
     /** 查询登录日志 */
     getList() {
       this.loading = true;
-      list(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
-        this.list = response.data;
-        this.total = response.page.total;
-        this.loading = false;
-      });
+      list(this.addDateRange(this.queryParams, this.dateRange)).then(
+        response => {
+          this.list = response.data;
+          this.total = response.page.total;
+          this.loading = false;
+        }
+      );
     },
 
     /** 搜索按钮操作 */
@@ -343,7 +466,7 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.dateRange = [];
-      this.resetForm('queryForm');
+      this.resetForm("queryForm");
       this.handleQuery();
     },
 
@@ -354,26 +477,29 @@ export default {
     },
 
     handleStatusChange(row) {
-      const text = row.status == '0' ? '启用' : '停用';
-      this.$confirm('确认要' + text + '"' + row.key + '"的业务key?', '警告', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(function() {
-        return changeSegmentStatus(row.key, row.status);
-      }).then(() => {
-        this.msgSuccess(text + '成功');
-        this.getList();
-      }).catch(function() {
-        row.status = row.status == '0' ? '1' : '0';
-      });
+      const text = row.status == "0" ? "启用" : "停用";
+      this.$confirm("确认要" + text + '"' + row.key + '"的业务key?', "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(function() {
+          return changeSegmentStatus(row.key, row.status);
+        })
+        .then(() => {
+          this.msgSuccess(text + "成功");
+          this.getList();
+        })
+        .catch(function() {
+          row.status = row.status == "0" ? "1" : "0";
+        });
     },
 
     // 新增
     handleAdd() {
-      this.addOrEdit = 'add';
-      this.resetForm('form');
-      this.title = '添加序列号';
+      this.addOrEdit = "add";
+      this.resetForm("form");
+      this.title = "添加序列号";
       this.open = true;
     },
 
@@ -386,23 +512,23 @@ export default {
 
     // 编辑
     handleUpdate(row) {
-      this.resetForm('form');
-      this.addOrEdit = 'edit';
+      this.resetForm("form");
+      this.addOrEdit = "edit";
       const key = row.key || this.keys;
       getBizKey(key).then(response => {
         this.form = response.data;
-        this.title = '修改序列号';
+        this.title = "修改序列号";
         this.open = true;
       });
     },
 
     submitForm: function() {
-      this.$refs['form'].validate(valid => {
+      this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.addOrEdit == 'edit') {
+          if (this.addOrEdit == "edit") {
             updateSegment(this.form).then(response => {
               if (response.code == 200) {
-                this.msgSuccess('修改成功');
+                this.msgSuccess("修改成功");
                 this.open = false;
                 this.getList();
               }
@@ -410,7 +536,7 @@ export default {
           } else {
             addSegment(this.form).then(response => {
               if (response.code == 200) {
-                this.msgSuccess('新增成功');
+                this.msgSuccess("新增成功");
                 this.open = false;
                 this.getList();
               }
@@ -423,21 +549,21 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const key = row.key || this.keys;
-      this.$confirm('是否确认删除"' + key + '"的数据项?', '警告', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
+      this.$confirm('是否确认删除"' + key + '"的数据项?', "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
       }).then(function() {
         return changeSegmentStatus(key, 2);
-      }).then(() => {
+      }) .then(() => {
         this.getList();
-        this.msgSuccess('删除成功');
+        this.msgSuccess("删除成功");
       }).catch(function() {});
     },
 
     handleSnowflakeDialog() {
-      this.resetForm('snowflakeQueryForm');
-      this.resetForm('snowflakeDecodeForm');
+      this.resetForm("snowflakeQueryForm");
+      this.resetForm("snowflakeDecodeForm");
       // 获取snowflake流水号
       getSnowflake().then(response => {
         this.snowflakeQueryForm.id = response.data;
@@ -451,7 +577,7 @@ export default {
 
     // 解码snowflake流水号
     handleSnowflakeQuery() {
-      this.$refs['snowflakeQueryForm'].validate(valid => {
+      this.$refs["snowflakeQueryForm"].validate(valid => {
         if (valid) {
           this.snowflakeDecodeOpen = false;
           decode(this.snowflakeQueryForm).then(response => {
@@ -464,35 +590,33 @@ export default {
 
     // base32编码
     handleEncodeFor32() {
-      const id = this.encodeQueryForm.id;
+      const id = this.base32Form.id;
       base32encode(id).then(response => {
-        console.log(response.data);
+        this.base32Form.result = response.data;
       });
     },
 
-     // base32解码
+    // base32解码
     handleDecodeFor32() {
-      const id = this.decodeQueryForm.id;
+      const id = this.base32Form.id;
       base32decode(id).then(response => {
-        console.log(response.data);
+        this.base32Form.result = response.data;
       });
     },
 
     // base62编码
     handleEncodeFor62() {
-      const id = this.encodeQueryForm.id;
+      const id = this.base62Form.id;
       base62encode(id).then(response => {
-        console.log(response.data);
+        this.base62Form.result = response.data;
       });
     },
 
-   
-
     // base62解码
     handleDecodeFor62() {
-      const id = this.decodeQueryForm.id;
+      const id = this.base62Form.id;
       base62decode(id).then(response => {
-        console.log(response.data);
+        this.base62Form.result = response.data;
       });
     }
   }
