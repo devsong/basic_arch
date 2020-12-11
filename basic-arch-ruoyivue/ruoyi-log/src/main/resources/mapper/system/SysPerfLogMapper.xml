@@ -96,36 +96,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         FROM
             sys_perf_log pl join sys_perf_log_meta m on pl.meta_id = m.id
         <where>
-            <if test="id != null">
-                pl.id = #{id}
+            <if test="beginTime != null">
+                pl.create_time >= #{beginTime} 
             </if>
-            <if test="beginTime != null and endTime != null">
-                and pl.create_time between #{beginTime} and #{endTime}
+            <if test="endTime != null">
+                and pl.create_time &lt;= #{endTime}
             </if>
-            <if test="product != null and product!=''">
-                and m.product=#{product}
+            <if test='product != null and product != "*"'>
+                and m.product = #{product}
             </if>
-            <if test="groupName != null and groupName!=''">
-                and m.group_name=#{groupName}
+            <if test='group != null and group != "*" '>
+                and m.group_name = #{group}
             </if>
-            <if test="app != null and app != ''">
-                and m.app=#{app}
+            <if test='app != null and app != "*" '>
+                and m.app = #{app}
             </if>
-            <if test="clazz != null and clazz!=''">
-                and m.clazz=#{clazz}
+            <if test='clazz != null and clazz != "*" '>
+                and m.clazz = #{clazz}
             </if>
-            <if test="method != null and method!=''">
-                and m.method=#{method}
+            <if test='method != null and method != "*" '>
+                and m.method = #{method}
             </if>
-            <if test="operatorIps != null">
-                and m.operator_ip in(
-                <foreach collection="operatorIps" item="item" separator=",">
-                    #{item}
-                </foreach>
-                )
+            <if test='operateIp != null and operateIp != "*" '>
+                and m.operator_ip = #{operateIp}
             </if>
         </where>
         order by
-        id desc
+            pl.id desc
     </select>
 </mapper>

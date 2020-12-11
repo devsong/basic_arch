@@ -3,6 +3,7 @@ package com.ruoyi.log.dto;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.log.enums.SysPerfLogDurationEnum;
 
 import lombok.AllArgsConstructor;
@@ -25,9 +26,9 @@ public class SysPerfLogDto implements Serializable {
      */
     private static final long serialVersionUID = 1L;
     /**
-     * id
+     * id,js浮点数限制,long型强制转换为字符串值在前端展示
      */
-    private Long id;
+    private String id;
     /**
      * 产品线
      */
@@ -83,5 +84,6 @@ public class SysPerfLogDto implements Serializable {
     /**
      * 创建时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private Date createTime;
 }

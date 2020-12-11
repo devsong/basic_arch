@@ -70,7 +70,7 @@ export function getSegmentKey(key) {
   return request({
     url: '/api/serial/segment',
     method: 'get',
-    params: key
+    params: { 'key': key }
   });
 }
 
@@ -80,7 +80,47 @@ export function getSnowflake(key) {
     url: '/api/serial/snowflake',
     method: 'get',
     params: {
-      key:'snowflake'
+      key: 'snowflake'
+    }
+  });
+}
+
+export function base62encode(id) {
+  return request({
+    url: '/api/serial/base62/encode',
+    method: 'post',
+    params: {
+      id: id
+    }
+  });
+}
+
+export function base62decode(id) {
+  return request({
+    url: '/api/serial/base62/decode',
+    method: 'get',
+    params: {
+      id: id
+    }
+  });
+}
+
+export function base32decode(id) {
+  return request({
+    url: '/api/serial/base32/encode',
+    method: 'post',
+    params: {
+      id: id
+    }
+  });
+}
+
+export function base32encode(id) {
+  return request({
+    url: '/api/serial/base32/decode',
+    method: 'get',
+    params: {
+      id: id
     }
   });
 }

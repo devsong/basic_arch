@@ -24,4 +24,10 @@ public enum SysPerfLogDurationEnum {
         this.pattern = pattern;
         this.desc = desc;
     }
+
+    @Override
+    public String toString() {
+        // TODO Auto-generated method stub
+        return pattern;
+    }
 }

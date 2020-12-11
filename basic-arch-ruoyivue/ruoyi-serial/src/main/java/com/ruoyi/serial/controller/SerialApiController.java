@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gzs.learn.common.util.Base32;
+import com.gzs.learn.common.util.Base62;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.serial.common.Result;
 import com.ruoyi.serial.common.Status;
@@ -37,6 +39,30 @@ public class SerialApiController {
     public AjaxResult decode(Long id) {
         SerialSnowflakeInfo decodeSnowflake = snowflakeService.decodeSnowflake(id);
         return AjaxResult.success(decodeSnowflake);
+    }
+
+    @RequestMapping(value = "/base32/decode")
+    public AjaxResult decodeBase32(String id) {
+        long result = Base32.decodeBase32ToLong(id);
+        return AjaxResult.success(result);
+    }
+
+    @RequestMapping(value = "/base32/encode")
+    public AjaxResult encodeBase32(Long id) {
+        String result = Base32.encodeLongToBase32(id);
+        return AjaxResult.success(result);
+    }
+
+    @RequestMapping(value = "/base62/decode")
+    public AjaxResult decodeBase64(String id) {
+        long result = Base62.toBase10(id);
+        return AjaxResult.success(result);
+    }
+
+    @RequestMapping(value = "/base62/encode")
+    public AjaxResult encodeBase64(Long id) {
+        String result = Base62.fromBase10(id);
+        return AjaxResult.success(result);
     }
 
     private String get(@PathVariable("key") String key, Result id) {

@@ -23,7 +23,7 @@ public class SysPerfLogSearchDto extends PageSearchRequestDto {
     /**
      * 组名
      */
-    private String groupName;
+    private String group;
     /**
      * 应用名
      */
@@ -37,7 +37,11 @@ public class SysPerfLogSearchDto extends PageSearchRequestDto {
      */
     private String method;
     /**
+     * 操作IP
+     */
+    private String operateIp;
+    /**
      * 日志ID
      */
-    private Long id;
+    private String id;
 }

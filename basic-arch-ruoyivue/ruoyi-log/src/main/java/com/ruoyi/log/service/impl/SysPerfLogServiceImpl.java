@@ -7,12 +7,14 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 
+import com.github.pagehelper.Page;
 import com.google.common.collect.Lists;
 import com.gzs.learn.common.util.BeanUtil;
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.utils.DateUtils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -229,7 +231,16 @@ public class SysPerfLogServiceImpl implements ISysPerfLogService {
     @DataSource(value = DataSourceType.LOG_SLAVE)
     @Override
     public List<SysPerfLogDto> searchPerfLogs(SysPerfLogSearchDto searchDto) {
-        List<SysPerfLog> list = sysPerfLogMapper.searchPerfLogs(searchDto);
+        List<SysPerfLog> list = null;
+        if (StringUtils.isNotBlank(searchDto.getId())) {
+            SysPerfLog sysPerfLog = sysPerfLogMapper.selectSysPerfLogById(Long.parseLong(searchDto.getId()));
+            list = sysPerfLog == null ? Lists.newArrayList() : Lists.newArrayList(sysPerfLog);
+        } else {
+            list = sysPerfLogMapper.searchPerfLogs(searchDto);
+        }
+        if (CollectionUtils.isEmpty(list)) {
+            return Lists.newArrayList();
+        }
         long metaId = list.get(0).getMetaId();
         SysPerfLogMetaPo metaPo = sysPerfLogMetaMapper.selectByPrimaryKey(metaId);
         List<SysPerfLogDto> dtos = Lists.newArrayListWithCapacity(list.size());
@@ -243,7 +254,14 @@ public class SysPerfLogServiceImpl implements ISysPerfLogService {
             dto.setMethod(metaPo.getMethod());
             dto.setOperatorIp(metaPo.getOperatorIp());
         }
-        return dtos;
+        Page<SysPerfLogDto> page = new Page<>(searchDto.getPageNum(), searchDto.getPageSize());
+        if (list instanceof Page) {
+            page.setTotal(((Page<SysPerfLog>) list).getTotal());
+        } else {
+            page.setTotal(list.size());
+        }
+        page.addAll(dtos);
+        return page;
     }
 
     private SysPerfLogMetaPo getExistMetaPo(SysPerfLogDto sysLogDto) {

@@ -20,8 +20,26 @@ public class SysPerfLog extends BaseEntity {
     private Long id;
 
     /** 元数据id */
-    @Excel(name = "元数据id")
+    // @Excel(name = "元数据id")
     private Long metaId;
+
+    @Excel(name = "产品线")
+    private String product;
+
+    @Excel(name = "服务分组")
+    private String group;
+
+    @Excel(name = "应用标识")
+    private String app;
+
+    @Excel(name = "类名")
+    private String clazz;
+
+    @Excel(name = "方法名")
+    private String method;
+
+    @Excel(name = "目标机器IP")
+    private String operateIp;
 
     /** 执行时间 */
     @Excel(name = "执行时间")

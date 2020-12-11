@@ -171,13 +171,13 @@
                 and group_name = #{groupName}
             </if>
             <if test="app != null">
-                 and app = #{app}
+                and app = #{app}
             </if>
             <if test="clazz != null">
-                 and clazz = #{clazz}
+                and clazz = #{clazz}
             </if>
             <if test="method != null">
-                 and method = #{method}
+                and method = #{method}
             </if>
         </where>
     </select>
@@ -185,40 +185,42 @@
     <select id="selectMetaInfo" parameterType="com.ruoyi.log.dto.SysPerfLogMetaRequestDto" resultType="java.lang.String">
         select
            distinct
-           <if test="level == 1">
-                product
-           </if>
-           <if test="level == 2">
-                ,group
-           </if>
-           <if test="level == 3">
-                ,app,
-           </if>
-           <if test="level == 4">
-                ,clazz
-           </if>
-           <if test="level == 5">
-                ,method
-           </if>
-           <if test="level == 6">
-                ,operator_ip
-           </if>
+           <trim suffix="" suffixOverrides=",">
+               <if test="level == 1">
+                    product
+               </if>
+               <if test="level == 2">
+                    group_name
+               </if>
+               <if test="level == 3">
+                    app
+               </if>
+               <if test="level == 4">
+                    clazz
+               </if>
+               <if test="level == 5">
+                    method
+               </if>
+               <if test="level == 6">
+                    operator_ip
+               </if>
+           </trim>
         from 
             sys_perf_log_meta m
         <where>
-            <if test="product != null and product!=''">
+            <if test='product != null and product != "*"'>
                 and m.product=#{product}
             </if>
-            <if test="groupName != null and groupName!=''">
+            <if test='group != null and group != "*"'>
                 and m.group_name=#{group}
             </if>
-            <if test="app != null and app != ''">
+            <if test='app != null and app != "*"'>
                 and m.app=#{app}
             </if>
-            <if test="clazz != null and clazz!=''">
+            <if test='clazz != null and clazz != "*"'>
                 and m.clazz=#{clazz}
             </if>
-            <if test="method != null and method!=''">
+            <if test='method != null and method != "*"'>
                 and m.method=#{method}
             </if>
         </where>
