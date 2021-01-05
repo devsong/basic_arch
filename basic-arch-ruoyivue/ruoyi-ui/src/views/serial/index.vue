@@ -277,8 +277,6 @@
           />
         </el-form-item>
 
-        <el-form-item label="结果：">{{ base32Form.result }}</el-form-item>
-
         <el-form-item>
           <el-button
             type="primary"
@@ -288,6 +286,7 @@
             >BASE32编码</el-button
           >
         </el-form-item>
+
         <el-form-item>
           <el-button
             type="primary"
@@ -297,6 +296,8 @@
             >BASE32解码</el-button
           >
         </el-form-item>
+        
+        <el-form-item label="结果：">{{ base32Form.result }}</el-form-item>
       </el-form>
     </el-dialog>
 
@@ -307,43 +308,35 @@
         :inline="true"
         label-width="120px"
       >
-        <el-col :span="12">
-          <el-form-item label="编码值" prop="encodeVal">
-            <el-input
-              v-model="base62Form.id"
-              placeholder="请输入编码值"
-              clearable
-              style="width: 240px"
-              size="small"
-              @keyup.enter.native="handleDecodeFor32"
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="结果：">{{ base62Form.result }}</el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item>
-            <el-button
-              type="primary"
-              icon="el-icon-search"
-              size="mini"
-              @click="handleEncodeFor62"
-              >BASE62编码</el-button
-            >
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item>
-            <el-button
-              type="primary"
-              icon="el-icon-search"
-              size="mini"
-              @click="handleDecodeFor62"
-              >BASE62解码</el-button
-            >
-          </el-form-item>
-        </el-col>
+        <el-form-item label="编码值" prop="encodeVal">
+          <el-input
+            v-model="base62Form.id"
+            placeholder="请输入编码值"
+            clearable
+            style="width: 240px"
+            size="small"
+            @keyup.enter.native="handleDecodeFor32"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            type="primary"
+            icon="el-icon-search"
+            size="mini"
+            @click="handleEncodeFor62"
+            >BASE62编码</el-button
+          >
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            type="primary"
+            icon="el-icon-search"
+            size="mini"
+            @click="handleDecodeFor62"
+            >BASE62解码</el-button
+          >
+        </el-form-item>
+        <el-form-item label="结果：">{{ base62Form.result }}</el-form-item>
       </el-form>
     </el-dialog>
   </div>
