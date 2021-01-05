@@ -34,6 +34,7 @@ public class SerialController {
         SerialAlloc serialAlloc = serialAllocService.getBizKey(bizKey);
         SerialAllocDto dto = new SerialAllocDto();
         BeanUtils.copyProperties(serialAlloc, dto);
+        dto.setMaxId(serialAlloc.getMaxId() + "");
         return AjaxResult.success(dto);
     }
 

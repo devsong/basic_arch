@@ -1,18 +1,14 @@
 package com.ruoyi.serial.dto;
 
 import java.util.Date;
-
 import org.springframework.format.annotation.DateTimeFormat;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gzs.learn.inf.PageRequestDto;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-
 public class SegmentSearchDto extends PageRequestDto {
     private static final String DATE_PATTERN = "yyyy-MM-dd";
 
