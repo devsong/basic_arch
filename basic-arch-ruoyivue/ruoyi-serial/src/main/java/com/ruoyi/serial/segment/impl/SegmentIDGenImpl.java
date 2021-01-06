@@ -9,17 +9,15 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
-
 import javax.annotation.PostConstruct;
-
 import org.perf4j.StopWatch;
 import org.perf4j.slf4j.Slf4JStopWatch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
-
 import com.ruoyi.serial.IDGen;
 import com.ruoyi.serial.common.Result;
 import com.ruoyi.serial.common.Status;
@@ -28,12 +26,13 @@ import com.ruoyi.serial.domain.SegmentBuffer;
 import com.ruoyi.serial.domain.SerialAlloc;
 import com.ruoyi.serial.segment.ISerialAllocService;
 import com.ruoyi.serial.segment.SegmentIdGenService;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
 public class SegmentIDGenImpl implements IDGen, SegmentIdGenService {
+    // 左移最长位数
+    private static final int MAX_SHIFT = 4;
     /**
      * IDCache未初始化成功时的异常码
      */
@@ -55,7 +54,8 @@ public class SegmentIDGenImpl implements IDGen, SegmentIdGenService {
      */
     private static final long SEGMENT_DURATION = 15 * 60 * 1000L;
 
-    // private ExecutorService service = new ThreadPoolExecutor(5, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS, new
+    // private ExecutorService service = new ThreadPoolExecutor(5, Integer.MAX_VALUE, 60L,
+    // TimeUnit.SECONDS, new
     // SynchronousQueue<Runnable>(),
     // new NamedThreadFactory("thread-segment-update"));
 
@@ -176,11 +176,13 @@ public class SegmentIDGenImpl implements IDGen, SegmentIdGenService {
         if (!buffer.isInitOk()) {
             serialAlloc = serialAllocService.updateMaxIdAndGetSerialAlloc(key);
             buffer.setStep(serialAlloc.getStep());
+            buffer.setRandomLen(serialAlloc.getRandomLen());
             buffer.setMinStep(serialAlloc.getStep());
         } else if (buffer.getUpdateTimestamp() == 0) {
             serialAlloc = serialAllocService.updateMaxIdAndGetSerialAlloc(key);
             buffer.setUpdateTimestamp(System.currentTimeMillis());
             buffer.setStep(serialAlloc.getStep());
+            buffer.setRandomLen(serialAlloc.getRandomLen());
             buffer.setMinStep(serialAlloc.getStep());// leafAlloc中的step为DB中的step
         } else {
             long duration = System.currentTimeMillis() - buffer.getUpdateTimestamp();
@@ -204,6 +206,7 @@ public class SegmentIDGenImpl implements IDGen, SegmentIdGenService {
             serialAlloc = serialAllocService.updateMaxIdByCustomStepAndGetLeafAlloc(temp);
             buffer.setUpdateTimestamp(System.currentTimeMillis());
             buffer.setStep(nextStep);
+            buffer.setRandomLen(serialAlloc.getRandomLen());
             buffer.setMinStep(serialAlloc.getStep());// leafAlloc的step为DB中的step
         }
         // must set value before set max
@@ -211,6 +214,7 @@ public class SegmentIDGenImpl implements IDGen, SegmentIdGenService {
         segment.getValue().set(value);
         segment.setMax(serialAlloc.getMaxId());
         segment.setStep(buffer.getStep());
+        segment.setRandomLen(serialAlloc.getRandomLen());
         sw.stop("updateSegmentFromDb", key + " " + segment);
     }
 
@@ -247,7 +251,17 @@ public class SegmentIDGenImpl implements IDGen, SegmentIdGenService {
                 }
                 long value = segment.getValue().getAndIncrement();
                 if (value < segment.getMax()) {
-                    return new Result(value, Status.SUCCESS);
+                    int shift = segment.getRandomLen() < MAX_SHIFT ? segment.getRandomLen() : MAX_SHIFT;
+                    if (shift <= 0) {
+                        return new Result(value, Status.SUCCESS);
+                    }
+                    // 混淆
+                    int low = (int) Math.pow(10, shift - 1);
+                    int high = (int) Math.pow(10, shift) - 1;
+                    int random = ThreadLocalRandom.current().nextInt(low, high);
+                    // 十进制运算，得出的数字与maxid相比更为直观
+                    long newVal = value * (int) Math.pow(10, shift) + random;
+                    return new Result(newVal, Status.SUCCESS);
                 }
             } finally {
                 buffer.rLock().unlock();
@@ -258,7 +272,17 @@ public class SegmentIDGenImpl implements IDGen, SegmentIdGenService {
                 final Segment segment = buffer.getCurrent();
                 long value = segment.getValue().getAndIncrement();
                 if (value < segment.getMax()) {
-                    return new Result(value, Status.SUCCESS);
+                    int shift = segment.getRandomLen() < MAX_SHIFT ? segment.getRandomLen() : MAX_SHIFT;
+                    if (shift <= 0) {
+                        return new Result(value, Status.SUCCESS);
+                    }
+                    // 混淆
+                    int low = (int) Math.pow(10, shift - 1);
+                    int high = (int) Math.pow(10, shift) - 1;
+                    int random = ThreadLocalRandom.current().nextInt(low, high);
+                    // 十进制运算，得出的数字与maxid相比更为直观
+                    long newVal = value * (int) Math.pow(10, shift) + random;
+                    return new Result(newVal, Status.SUCCESS);
                 }
                 if (buffer.isNextReady()) {
                     buffer.switchPos();

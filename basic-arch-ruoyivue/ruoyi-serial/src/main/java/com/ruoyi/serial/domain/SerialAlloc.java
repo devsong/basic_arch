@@ -21,6 +21,10 @@ public class SerialAlloc {
      */
     private int step;
     /**
+     * 尾部随机数位数
+     */
+    private int randomLen;
+    /**
      * 描述
      */
     private String description;

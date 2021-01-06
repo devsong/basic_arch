@@ -95,6 +95,7 @@
       <el-table-column label="业务KEY" align="center" prop="key" />
       <el-table-column label="已使用ID" align="center" prop="maxId" />
       <el-table-column label="步长" align="center" prop="step" />
+      <el-table-column label="随机数" align="center" prop="randomLen" />
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
           <el-switch
@@ -164,6 +165,11 @@
             </el-form-item>
             <el-form-item label="步长：" prop="step">
               <el-input v-model="form.step" placeholder="请输入步长" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="尾部随机数位数：" prop="randomLen">
+              <el-input v-model="form.randomLen" placeholder="尾部随机数位数" />
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -296,7 +302,7 @@
             >BASE32解码</el-button
           >
         </el-form-item>
-        
+
         <el-form-item label="结果：">{{ base32Form.result }}</el-form-item>
       </el-form>
     </el-dialog>

@@ -7,6 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <id column="biz_tag" property="key" jdbcType="VARCHAR"/>
         <result column="max_id" property="maxId" jdbcType="BIGINT"/>
         <result column="step" property="step" jdbcType="INTEGER"/>
+        <result column="random_len" property="randomLen" jdbcType="INTEGER"/>
         <result column="description" property="description" jdbcType="VARCHAR"/>
         <result column="status" property="status" jdbcType="INTEGER"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
@@ -14,7 +15,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
     
     <sql id="Base_Column_List">
-        biz_tag, max_id, step,description,status,create_time,update_time
+        biz_tag, max_id, step,random_len,description,status,create_time,update_time
     </sql>
     
     
@@ -63,12 +64,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="saveSerial" parameterType="com.ruoyi.serial.domain.SerialAlloc">
         insert into serial_alloc
         (
-            biz_tag, max_id, step,status,
+            biz_tag, max_id, step,random_len,status,
             description,create_time
         )
         values
         (
-            #{key,jdbcType=VARCHAR},#{maxId,jdbcType=BIGINT},#{step,jdbcType=INTEGER},#{status,jdbcType=INTEGER},
+            #{key,jdbcType=VARCHAR},#{maxId,jdbcType=BIGINT},#{step,jdbcType=INTEGER},#{randomLen,jdbcType=INTEGER},#{status,jdbcType=INTEGER},
             #{description,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP}
         )
     </insert>
@@ -81,6 +82,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
             <if test="step != null">
                 step=#{step},
+            </if>
+            <if test="randomLen != null">
+                random_len=#{randomLen},
             </if>
             <if test="maxId != null">
                 max_id=#{maxId},

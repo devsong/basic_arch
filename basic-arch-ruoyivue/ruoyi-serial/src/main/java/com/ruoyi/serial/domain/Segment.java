@@ -6,6 +6,7 @@ public class Segment {
     private AtomicLong value = new AtomicLong(0);
     private volatile long max;
     private volatile int step;
+    private volatile int randomLen;
     private SegmentBuffer buffer;
 
     public Segment(SegmentBuffer buffer) {
@@ -34,6 +35,14 @@ public class Segment {
 
     public void setStep(int step) {
         this.step = step;
+    }
+
+    public int getRandomLen() {
+        return randomLen;
+    }
+
+    public void setRandomLen(int randomLen) {
+        this.randomLen = randomLen;
     }
 
     public SegmentBuffer getBuffer() {

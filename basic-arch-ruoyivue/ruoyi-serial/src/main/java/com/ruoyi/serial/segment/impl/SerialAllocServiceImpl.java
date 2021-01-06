@@ -63,6 +63,7 @@ public class SerialAllocServiceImpl implements ISerialAllocService {
     }
 
     @Override
+    @DataSource(DataSourceType.SLAVE)
     public PageResponseDto<SerialAllocDto> searchBizKeys(SegmentSearchDto segmentSearchDto) {
         PageInfo<SerialAlloc> pageInfo = PageHelper.startPage(segmentSearchDto.getPageNum(), segmentSearchDto.getPageSize(), true)
                 .doSelectPageInfo(() -> {
