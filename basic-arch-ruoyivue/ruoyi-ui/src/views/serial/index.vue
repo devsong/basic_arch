@@ -111,6 +111,8 @@
         label="操作"
         align="center"
         class-name="small-padding fixed-width"
+        fixed="right"
+        width="180"
       >
         <template slot-scope="scope">
           <el-button
@@ -444,7 +446,6 @@ export default {
     });
   },
   methods: {
-    /** 查询登录日志 */
     getList() {
       this.loading = true;
       list(this.addDateRange(this.queryParams, this.dateRange)).then(
@@ -481,17 +482,14 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      })
-        .then(function() {
-          return changeSegmentStatus(row.key, row.status);
-        })
-        .then(() => {
-          this.msgSuccess(text + "成功");
-          this.getList();
-        })
-        .catch(function() {
-          row.status = row.status == "0" ? "1" : "0";
-        });
+      }).then(function() {
+        return changeSegmentStatus(row.key, row.status);
+      }).then(() => {
+        this.msgSuccess(text + "成功");
+        this.getList();
+      }).catch(function() {
+        row.status = row.status == "0" ? "1" : "0";
+      });
     },
 
     // 新增
