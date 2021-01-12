@@ -65,7 +65,7 @@ spring:
   # redis 配置
   redis:
     # 地址
-    host: localhost
+    host: local.redis.com
     # 端口，默认为6379
     port: 6379
     # 密码
@@ -125,7 +125,7 @@ xss:
   urlPatterns: /system/*,/monitor/*,/tool/*
   
 zk:
-  server: 127.0.0.1:2181
+  server: local.zookeeper.com:2181
   
 serial:
   name: serial

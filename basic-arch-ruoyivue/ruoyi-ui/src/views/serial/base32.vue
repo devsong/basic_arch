@@ -1,43 +1,46 @@
 <template>
-  <el-dialog title="BASE32编解码">
-    <el-form
-      :inline="true"
-      :model="base32Form"
-      label-width="120px"
-      ref="base32Form"
-    >
-      <el-form-item label="编码值" prop="encodeVal">
-        <el-input
-          @keyup.enter.native="handleEncodeFor32"
-          clearable
-          placeholder="请输入编码值"
-          size="small"
-          style="width: 240px"
-          v-model="base32Form.id"
-        />
-      </el-form-item>
+  <el-form :inline="true" :model="base32Form" label-width="120px" ref="base32Form">
+    <el-row>
+      <el-col :span="24">
+        <el-form-item label="编码值" prop="encodeVal">
+          <el-input
+            @keyup.enter.native="handleEncodeFor32"
+            clearable
+            placeholder="请输入编码值"
+            size="small"
+            style="width: 240px"
+            v-model="base32Form.id"
+          />
+        </el-form-item>
+      </el-col>
 
-      <el-form-item>
-        <el-button
-          @click="handleEncodeFor32"
-          icon="el-icon-search"
-          size="mini"
-          type="primary"
-        >BASE32编码</el-button>
-      </el-form-item>
+      <el-col :span="24">
+        <el-form-item label="结果：">{{ base32Form.result }}</el-form-item>
+      </el-col>
 
-      <el-form-item>
-        <el-button
-          @click="handleDecodeFor32"
-          icon="el-icon-search"
-          size="mini"
-          type="primary"
-        >BASE32解码</el-button>
-      </el-form-item>
+      <el-col :span="8" :offset="4">
+        <el-form-item>
+          <el-button
+            @click="handleEncodeFor32"
+            icon="el-icon-search"
+            size="mini"
+            type="primary"
+          >BASE32编码</el-button>
+        </el-form-item>
+      </el-col>
 
-      <el-form-item label="结果：">{{ base32Form.result }}</el-form-item>
-    </el-form>
-  </el-dialog>
+      <el-col :span="8">
+        <el-form-item>
+          <el-button
+            @click="handleDecodeFor32"
+            icon="el-icon-search"
+            size="mini"
+            type="primary"
+          >BASE32解码</el-button>
+        </el-form-item>
+      </el-col>
+    </el-row>
+  </el-form>
 </template>
 
 <script>
@@ -52,7 +55,13 @@ export default {
       }
     };
   },
+  created() {
+    this.init();
+  },
   methods: {
+    init() {
+      this.resetForm("base32Form");
+    },
     // base32编码
     handleEncodeFor32() {
       const id = this.base32Form.id;

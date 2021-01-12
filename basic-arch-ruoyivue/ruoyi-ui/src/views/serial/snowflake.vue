@@ -1,6 +1,5 @@
 <template>
-  <!-- 序列号解码 -->
-  <el-dialog append-to-body title="解码序列号" width="500px">
+  <div>
     <el-form
       :inline="true"
       :model="snowflakeQueryForm"
@@ -20,37 +19,35 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button
-          @click="handleSnowflakeQuery"
-          icon="el-icon-search"
-          size="mini"
-          type="primary"
-        >查询</el-button>
-      </el-form-item>
-
-      <el-form-item :visible.sync="snowflakeDecodeOpen" label-width="120px">
-        <el-col :span="24">
-          <el-form-item label="时间戳：">{{ snowflakeDecodeForm.timestamp }}</el-form-item>
-        </el-col>
-        <el-col :span="24">
-          <el-form-item label="时间(易读格式)：">{{ snowflakeDecodeForm.time }}</el-form-item>
-        </el-col>
-        <el-col :span="24">
-          <el-form-item label="数据中心：">{{ snowflakeDecodeForm.dataCenterId }}</el-form-item>
-        </el-col>
-        <el-col :span="24">
-          <el-form-item label="机器ID：">{{ snowflakeDecodeForm.workerId }}</el-form-item>
-        </el-col>
-        <el-col :span="24">
-          <el-form-item label="随机序列号：">{{ snowflakeDecodeForm.seq }}</el-form-item>
-        </el-col>
+        <el-button @click="handleSnowflakeQuery" icon="el-icon-search" size="mini" type="primary">查询</el-button>
       </el-form-item>
     </el-form>
 
-    <div class="dialog-footer" slot="footer">
-      <el-button @click="snowflakeOpen = false">关 闭</el-button>
-    </div>
-  </el-dialog>
+    <el-form
+      :inline="true"
+      :model="snowflakeDecodeForm"
+      label-width="120px"
+      ref="snowflakeDecodeForm"
+    >
+      <el-form-item :visible.sync="snowflakeDecodeOpen" label-width="120px">
+        <el-col :span="24">
+          <el-form-item label="时间戳：" prop="timestamp">{{ snowflakeDecodeForm.timestamp }}</el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="时间(易读格式)：" prop="time">{{ snowflakeDecodeForm.time }}</el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="数据中心：" prop="dataCenterId">{{ snowflakeDecodeForm.dataCenterId }}</el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="机器ID：" prop="workerId">{{ snowflakeDecodeForm.workerId }}</el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="随机序列号：" prop="seq">{{ snowflakeDecodeForm.seq }}</el-form-item>
+        </el-col>
+      </el-form-item>
+    </el-form>
+  </div>
 </template>
 
 <script>
@@ -87,23 +84,22 @@ export default {
       }
     };
   },
-  created: {
-    // this.init();
+  created() {
+    this.reset();
   },
   methods: {
     // 解码snowflake流水号
     handleSnowflakeQuery() {
       this.$refs['snowflakeQueryForm'].validate(valid => {
         if (valid) {
-          this.snowflakeDecodeOpen = false;
+          this.resetForm("snowflakeDecodeForm")
           decode(this.snowflakeQueryForm).then(response => {
-            this.snowflakeDecodeOpen = true;
             this.snowflakeDecodeForm = response.data;
           });
         }
       });
     },
-    init() {
+    reset() {
       this.resetForm('snowflakeQueryForm');
       this.resetForm('snowflakeDecodeForm');
       // 获取snowflake流水号
@@ -113,10 +109,8 @@ export default {
         decode(this.snowflakeQueryForm).then(response => {
           this.snowflakeDecodeForm = response.data;
         });
-        this.snowflakeDecodeOpen = true;
       });
     }
-  },
-  watch: {}
+  }
 };
 </script>
