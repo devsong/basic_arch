@@ -162,11 +162,11 @@
       <snowflake-dialog ref="snowflakeDialog"></snowflake-dialog>
     </el-dialog>
 
-    <el-dialog append-to-body title="解码序列号" width="500px" :visible.sync="base32Flag" @close="base32Flag=false">
+    <el-dialog append-to-body title="编解码Base32" width="500px" :visible.sync="base32Flag" @close="closeBase32Dialog">
       <base32-dialog ref="base32Dialog"></base32-dialog>
     </el-dialog>
 
-    <el-dialog append-to-body title="解码序列号" width="500px" :visible.sync="base62Flag" @close="base62Flag=false">
+    <el-dialog append-to-body title="编解码Base62" width="500px" :visible.sync="base62Flag" @close="closeBase62Dialog">
       <base62-dialog ref="base62Dialog"></base62-dialog>
     </el-dialog>
   </div>
@@ -272,20 +272,20 @@ export default {
       });
     },
 
-    // 新增
-    handleAdd() {
-      this.addOrEdit = "add";
-      this.resetForm("form");
-      this.title = "添加序列号";
-      this.open = true;
-    },
-
     // 获取
     handleGet(row) {
       const key = row.key || this.keys;
       getSegmentKey(key).then((response) => {
         this.msgSuccess(response.data);
       });
+    },
+
+    // 新增
+    handleAdd() {
+      this.addOrEdit = "add";
+      this.resetForm("form");
+      this.title = "添加序列号";
+      this.open = true;
     },
 
     // 编辑
@@ -352,10 +352,20 @@ export default {
       this.base32Flag = true;
     },
 
+    closeBase32Dialog(){
+      this.base32Flag = false;
+      this.$$refs.base32Dialog.reset();
+    },
+
     /**打开base62对话框 */
     openBase62() {
       this.base62Flag = true;
-    }
+    },
+
+    closeBase62Dialog(){
+      this.base62Flag = false;
+      this.$$refs.base62Dialog.reset();
+    },
 
   },
 };

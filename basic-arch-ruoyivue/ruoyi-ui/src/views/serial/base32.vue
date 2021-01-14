@@ -56,10 +56,10 @@ export default {
     };
   },
   created() {
-    this.init();
+    this.reset();
   },
   methods: {
-    init() {
+    reset() {
       this.resetForm("base32Form");
     },
     // base32编码
