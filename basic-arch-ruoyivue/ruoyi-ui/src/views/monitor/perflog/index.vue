@@ -1,70 +1,59 @@
 <template>
   <div class="app-container">
     <el-form ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
-
       <el-form-item label="产品线" prop="product">
-        <el-select filterable v-model="queryParams.product" placeholder="请选择" @change="handleProductChange">
-          <el-option
-            v-for="item in option.products"
-            :key="item"
-            :label="item"
-            :value="item"
-          />
+        <el-select
+          filterable
+          v-model="queryParams.product"
+          placeholder="请选择"
+          @change="handleProductChange"
+        >
+          <el-option v-for="item in option.products" :key="item" :label="item" :value="item" />
         </el-select>
       </el-form-item>
 
       <el-form-item label="分组" prop="group">
-        <el-select filterable v-model="queryParams.group" placeholder="请选择" @change="handleGroupChange">
-          <el-option
-            v-for="item in option.groups"
-            :key="item"
-            :label="item"
-            :value="item"
-          />
+        <el-select
+          filterable
+          v-model="queryParams.group"
+          placeholder="请选择"
+          @change="handleGroupChange"
+        >
+          <el-option v-for="item in option.groups" :key="item" :label="item" :value="item" />
         </el-select>
       </el-form-item>
 
       <el-form-item label="应用" prop="app">
         <el-select filterable v-model="queryParams.app" placeholder="请选择" @change="handleAppChange">
-          <el-option
-            v-for="item in option.apps"
-            :key="item"
-            :label="item"
-            :value="item"
-          />
+          <el-option v-for="item in option.apps" :key="item" :label="item" :value="item" />
         </el-select>
       </el-form-item>
 
       <el-form-item label="类名" prop="clazz">
-        <el-select filterable v-model="queryParams.clazz" placeholder="请选择" @change="handleClazzChange">
-          <el-option
-            v-for="item in option.clazzs"
-            :key="item"
-            :label="item"
-            :value="item"
-          />
+        <el-select
+          filterable
+          v-model="queryParams.clazz"
+          placeholder="请选择"
+          @change="handleClazzChange"
+        >
+          <el-option v-for="item in option.clazzs" :key="item" :label="item" :value="item" />
         </el-select>
       </el-form-item>
 
       <el-form-item label="方法名" prop="method">
-        <el-select filterable v-model="queryParams.method" placeholder="请选择" @change="handleMethodChange">
-          <el-option
-            v-for="item in option.methods"
-            :key="item"
-            :label="item"
-            :value="item"
-          />
+        <el-select
+          filterable
+          v-model="queryParams.method"
+          placeholder="请选择"
+          @change="handleMethodChange"
+        >
+          <el-option v-for="item in option.methods" :key="item" :label="item" :value="item" />
         </el-select>
       </el-form-item>
 
       <el-form-item label="服务IP" prop="operateIp">
         <el-select filterable v-model="queryParams.operateIp" placeholder="请选择">
-          <el-option
-            v-for="item in option.operateIps"
-            :key="item"
-            :label="item"
-            :value="item"
-          />
+          <el-option v-for="item in option.operateIps" :key="item" :label="item" :value="item" />
         </el-select>
       </el-form-item>
 
@@ -106,19 +95,38 @@
       @cell-dblclick="handleCellDbClick"
     >
       <el-table-column type="selection" align="center" width="55" />
-      <el-table-column fixed="left" label="日志ID" align="center" width="180"  prop="id" />
+      <el-table-column fixed="left" label="日志ID" align="center" width="180" prop="id" />
       <el-table-column label="产品线" align="center" prop="product" />
       <el-table-column label="服务分组" align="center" prop="groupName" />
       <el-table-column label="应用名" align="center" width="120" prop="app" />
-      <el-table-column label="类名" align="center" width="180" prop="clazz" :show-overflow-tooltip="true" />
+      <el-table-column
+        label="类名"
+        align="center"
+        width="180"
+        prop="clazz"
+        title="clazz"
+        :show-overflow-tooltip="true"
+      />
       <el-table-column label="方法名" align="center" width="80" prop="method" />
       <el-table-column label="操作IP" align="center" width="120" prop="operatorIp" />
       <el-table-column label="执行时间" align="center" prop="executeTimespan" />
-      <el-table-column label="入参" align="center" prop="paramsIn" title="paramsIn" :show-overflow-tooltip="true" />
-      <el-table-column label="出参" align="center" prop="paramsOut" title="paramsOut" :show-overflow-tooltip="true" />
+      <el-table-column
+        label="入参"
+        align="center"
+        prop="paramsIn"
+        title="paramsIn"
+        :show-overflow-tooltip="true"
+      />
+      <el-table-column
+        label="出参"
+        align="center"
+        prop="paramsOut"
+        title="paramsOut"
+        :show-overflow-tooltip="true"
+      />
       <el-table-column label="状态码" align="center" prop="code" />
       <el-table-column label="异常信息" align="center" prop="errmsg" />
-      <el-table-column fixed="right" label="创建时间" align="center" prop="createTime" width="180"/>
+      <el-table-column fixed="right" label="创建时间" align="center" prop="createTime" width="180" />
     </el-table>
 
     <pagination
@@ -131,9 +139,7 @@
 
     <!-- 添加或修改系统接口日志对话框 -->
     <el-dialog title="明细" :visible.sync="open" width="700px" height="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        {{ detailMsg }}
-      </el-form>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">{{ detailMsg }}</el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="cancel">取 消</el-button>
       </div>
@@ -141,18 +147,18 @@
   </div>
 </template>
 
-<style lang="scss">
-  .cell-limit tr td .cell{
-    overflow : hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;      /*可以显示的行数，超出部分用...表示 */
-    -webkit-box-orient: vertical;
-  }
+<style lang="scss" scope>
+.cell-limit tr td .cell {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /*可以显示的行数，超出部分用...表示 */
+  -webkit-box-orient: vertical;
+}
 </style>
 
 <script>
-import { listLog, getLog, delLog, addLog, updateLog, exportLog,getMetaLog } from '@/api/monitor/perflog';
+import { listLog, getLog, delLog, addLog, updateLog, exportLog, getMetaLog } from '@/api/monitor/perflog';
 
 export default {
   name: 'Sysperflog',
@@ -202,7 +208,7 @@ export default {
         clazz: undefined,
         method: undefined,
         operateIp: undefined,
-        level:undefined
+        level: undefined
       },
       // 表单参数
       form: {},
@@ -280,7 +286,7 @@ export default {
       });
     },
     /** 提交按钮 */
-    submitForm: function() {
+    submitForm: function () {
       this.$refs['form'].validate(valid => {
         if (valid) {
           if (this.form.id != undefined) {
@@ -310,12 +316,12 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(function() {
+      }).then(function () {
         return delLog(ids);
       }).then(() => {
         this.getList();
         this.msgSuccess('删除成功');
-      }).catch(function() {});
+      }).catch(function () { });
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -324,21 +330,21 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(function() {
+      }).then(function () {
         return exportLog(queryParams);
       }).then(response => {
         this.download(response.msg);
-      }).catch(function() {});
+      }).catch(function () { });
     },
 
     //
-    tableCellClassName({row,column,rowIndex,columnIndex}){
+    tableCellClassName({ row, column, rowIndex, columnIndex }) {
       row.index = rowIndex;
-      column.index=columnIndex;
+      column.index = columnIndex;
     },
 
     handleCellDbClick(row, column, cell, event) {
-      // 5 6 8列的数据较长,需要弹出对话框显示
+      // 5 9 10列的数据较长,需要弹出对话框显示
       const index = column.index;
       if (index === 5 || index === 9 || index === 10) {
         JSON.stringify(cell);
@@ -348,81 +354,81 @@ export default {
     },
 
     // 获取产品线
-    getProducts(){
-      const query={
-        level:1
+    getProducts() {
+      const query = {
+        level: 1
       };
-      getMetaLog(query).then(response=>{
+      getMetaLog(query).then(response => {
         this.option.products = response.data;
         this.option.products.push('*');
       });
     },
 
     // 产品线
-    handleProductChange(){
+    handleProductChange() {
       const query = {
-        level:2,
-        product:this.queryParams.product
+        level: 2,
+        product: this.queryParams.product
       };
-      getMetaLog(query).then(response=>{
+      getMetaLog(query).then(response => {
         this.option.groups = response.data;
         this.option.groups.push('*');
       });
     },
 
     // 服务组
-    handleGroupChange(){
+    handleGroupChange() {
       const query = {
-        level:3,
-        product:this.queryParams.product,
-        group:this.queryParams.group
+        level: 3,
+        product: this.queryParams.product,
+        group: this.queryParams.group
       };
-      getMetaLog(query).then(response=>{
+      getMetaLog(query).then(response => {
         this.option.apps = response.data;
         this.option.apps.push('*');
       });
     },
 
     // 应用
-    handleAppChange(){
+    handleAppChange() {
       const query = {
-        level:4,
-        product:this.queryParams.product,
-        group:this.queryParams.group,
-        app:this.queryParams.app
+        level: 4,
+        product: this.queryParams.product,
+        group: this.queryParams.group,
+        app: this.queryParams.app
       };
-      getMetaLog(query).then(response=>{
+      getMetaLog(query).then(response => {
         this.option.clazzs = response.data;
         this.option.clazzs.push('*');
       });
     },
 
     // 方法
-    handleClazzChange(){
+    handleClazzChange() {
       this.queryParams.level = 5;
       const query = {
-        level:5,
-        product:this.queryParams.product,
-        group:this.queryParams.group,
-        app:this.queryParams.app,
-        clazz:this.queryParams.clazz
+        level: 5,
+        product: this.queryParams.product,
+        group: this.queryParams.group,
+        app: this.queryParams.app,
+        clazz: this.queryParams.clazz
       };
-      getMetaLog(query).then(response=>{
+      getMetaLog(query).then(response => {
         this.option.methods = response.data;
         this.option.methods.push('*');
       });
     },
 
     // ip
-    handleMethodChange(){
-     const query = {
-        level:6,
-        product:this.queryParams.product,
-        group:this.queryParams.group,
-        app:this.queryParams.app,
-        method:this.queryParams.method
+    handleMethodChange() {
+      const query = {
+        level: 6,
+        product: this.queryParams.product,
+        group: this.queryParams.group,
+        app: this.queryParams.app,
+        method: this.queryParams.method
       };
-      getMetaLog(query).then(response=>{
+      getMetaLog(query).then(response => {
         this.option.operateIps = response.data;
         this.option.operateIps.push('*');
       });

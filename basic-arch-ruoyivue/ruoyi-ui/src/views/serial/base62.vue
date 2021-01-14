@@ -1,8 +1,8 @@
 <template>
-  <el-form :inline="true" :model="base62Form" label-width="120px" ref="base62Form">
+  <el-form :inline="true" :model="base62Form"  label-width="120px" ref="base62Form">
     <el-row>
       <el-col :span="24">
-        <el-form-item label="编码值" prop="encodeVal">
+        <el-form-item label="编码值" prop="id">
           <el-input
             @keyup.enter.native="handleDecodeFor62"
             clearable
@@ -15,7 +15,7 @@
       </el-col>
 
       <el-col :span="24">
-        <el-form-item label="结果：">{{ base62Form.result }}</el-form-item>
+        <el-form-item label="结果：" prop="result">{{ base62Form.result }}</el-form-item>
       </el-col>
 
       <el-col :span="8" :offset="4">
@@ -55,12 +55,12 @@ export default {
       }
     };
   },
-  created(){
+  created() {
     this.reset();
   },
   methods: {
-    reset(){
-        this.resetForm("base62Form");
+    reset() {
+      this.resetForm("base62Form");
     },
     // base62编码
     handleEncodeFor62() {

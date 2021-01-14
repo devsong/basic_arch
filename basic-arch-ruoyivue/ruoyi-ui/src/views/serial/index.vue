@@ -343,10 +343,12 @@ export default {
     openSnowflake() {
       this.snowflakeFlag = true;
     },
+
     closeSnowflake(){
       this.snowflakeFlag = false;
       this.$refs.snowflakeDialog.reset();
     },
+
     /**打开base32对话框 */
     openBase32() {
       this.base32Flag = true;
@@ -354,7 +356,7 @@ export default {
 
     closeBase32Dialog(){
       this.base32Flag = false;
-      this.$$refs.base32Dialog.reset();
+      this.$refs.base32Dialog.reset();
     },
 
     /**打开base62对话框 */
@@ -364,7 +366,7 @@ export default {
 
     closeBase62Dialog(){
       this.base62Flag = false;
-      this.$$refs.base62Dialog.reset();
+      this.$refs.base62Dialog.reset();
     },
 
   },

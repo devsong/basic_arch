@@ -2,7 +2,7 @@
   <el-form :inline="true" :model="base32Form" label-width="120px" ref="base32Form">
     <el-row>
       <el-col :span="24">
-        <el-form-item label="编码值" prop="encodeVal">
+        <el-form-item label="编码值" prop="id">
           <el-input
             @keyup.enter.native="handleEncodeFor32"
             clearable
@@ -15,7 +15,7 @@
       </el-col>
 
       <el-col :span="24">
-        <el-form-item label="结果：">{{ base32Form.result }}</el-form-item>
+        <el-form-item label="结果：" prop="result">{{ base32Form.result }}</el-form-item>
       </el-col>
 
       <el-col :span="8" :offset="4">

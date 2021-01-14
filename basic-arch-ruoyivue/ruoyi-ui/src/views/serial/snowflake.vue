@@ -92,7 +92,6 @@ export default {
     handleSnowflakeQuery() {
       this.$refs['snowflakeQueryForm'].validate(valid => {
         if (valid) {
-          this.resetForm("snowflakeDecodeForm")
           decode(this.snowflakeQueryForm).then(response => {
             this.snowflakeDecodeForm = response.data;
           });
