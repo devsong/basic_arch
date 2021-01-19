@@ -1,13 +1,13 @@
 # ************************************************************
 # Sequel Pro SQL dump
-# Version 5425
+# Version 4541
 #
-# https://www.sequelpro.com/
+# http://www.sequelpro.com/
 # https://github.com/sequelpro/sequelpro
 #
-# Host: localdb.mysql.com (MySQL 5.7.26-log)
+# Host: 127.0.0.1 (MySQL 5.7.32-log)
 # Database: ruoyi_vue
-# Generation Time: 2020-11-27 11:17:49 +0000
+# Generation Time: 2021-01-19 02:32:44 +0000
 # ************************************************************
 
 
@@ -15,7 +15,6 @@
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
-SET NAMES utf8mb4;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
@@ -92,6 +91,7 @@ CREATE TABLE `serial_alloc` (
   `biz_tag` varchar(128) NOT NULL DEFAULT '' COMMENT '业务Key',
   `max_id` bigint(20) NOT NULL DEFAULT '1' COMMENT '最大已使用ID',
   `step` int(11) NOT NULL COMMENT '步长',
+  `random_len` int(11) NOT NULL DEFAULT '0' COMMENT '尾部随机数位数',
   `description` varchar(256) NOT NULL DEFAULT '' COMMENT '描述',
   `status` int(11) NOT NULL DEFAULT '0' COMMENT '状态(0 正常 1 禁用 2 删除)',
   `create_time` datetime NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '创建时间',
@@ -102,10 +102,10 @@ CREATE TABLE `serial_alloc` (
 LOCK TABLES `serial_alloc` WRITE;
 /*!40000 ALTER TABLE `serial_alloc` DISABLE KEYS */;
 
-INSERT INTO `serial_alloc` (`biz_tag`, `max_id`, `step`, `description`, `status`, `create_time`, `update_time`)
+INSERT INTO `serial_alloc` (`biz_tag`, `max_id`, `step`, `random_len`, `description`, `status`, `create_time`, `update_time`)
 VALUES
-	('order',10005000,1000,'订单测试',0,'2000-01-01 00:00:00','2020-11-27 18:23:25'),
-	('test',10005000,1000,'订单测试',0,'2000-01-01 00:00:00','2020-11-27 18:23:25');
+	('order',10011000,1000,2,'订单测试',0,'2000-01-01 00:00:00','2021-01-07 11:02:01'),
+	('test',10007000,1000,0,'订单测试',0,'2000-01-01 00:00:00','2021-01-07 11:02:14');
 
 /*!40000 ALTER TABLE `serial_alloc` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -436,7 +436,8 @@ VALUES
 	(1060,'生成代码',114,5,'#','',1,'F','0','0','tool:gen:code','#','admin','2018-03-16 11:33:00','ry','2018-03-16 11:33:00',''),
 	(1061,'序列号',0,4,'serial',NULL,1,'M','0','0','','number','admin','2020-11-26 16:28:59','admin','2020-11-27 09:04:21',''),
 	(1062,'序列号列表',1061,1,'list','serial/index',1,'C','0','0','serial:segment:list','list','admin','2020-11-26 16:36:35','admin','2020-11-27 15:56:59',''),
-	(1063,'修改序列',1062,1,'',NULL,1,'F','0','0','serial:segment:update','#','admin','2020-11-27 10:22:44','admin','2020-11-27 15:56:36','');
+	(1063,'修改序列',1062,1,'',NULL,1,'F','0','0','serial:segment:update','#','admin','2020-11-27 10:22:44','admin','2020-11-27 15:56:36',''),
+	(1064,'日志详情',2,1,'monitor/perflog','monitor/perflog/index',1,'C','0','0','monitor:perflog:list','druid','admin','2021-01-14 18:56:55','admin','2021-01-14 19:03:31','');
 
 /*!40000 ALTER TABLE `sys_menu` ENABLE KEYS */;
 UNLOCK TABLES;
